@@ -1,6 +1,4 @@
 package com.mygdx.game.Actors.GameObjects;
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,24 +17,23 @@ import com.mygdx.game.Actors.Characters.Player.Player;
 public class PowerUp extends Actor {
 
     public enum PowerUpState { ACTIVE, INACTIVE }
-
-    private PowerUpState powerUpState = PowerUpState.INACTIVE;
-
+    private PowerUpState powerUpState       = PowerUpState.INACTIVE;
 
     private final Sprite powerUpSprite;
     private final Vector2 startPosition;
 
     // Sounds
     private final Sound powerUpSound;
-    private boolean playPowerUpSound = false;
+    private boolean playPowerUpSound        = false;
 
     private final Sound powerDownSound;
-    private boolean playPowerDownSound = false;
+    private boolean playPowerDownSound      = false;
 
 
-    private float timePeriod = 0;
+    private float timePeriod                = 0;
     // Power Up will last for 20 secs
-    private int powerUpTimeDuration = 20;
+    private int powerUpTimeDuration         = 20;
+
 
     // ===================================================================================================================
 
@@ -45,8 +42,8 @@ public class PowerUp extends Actor {
         powerUpSprite = new Sprite(new Texture(filePath));
         startPosition = new Vector2();
 
-        powerUpSound = Gdx.audio.newSound(Gdx.files.internal(powerUpSoundPath));
-        powerDownSound = Gdx.audio.newSound(Gdx.files.internal(powerDownSoundPath));
+        powerUpSound    = Gdx.audio.newSound(Gdx.files.internal(powerUpSoundPath));
+        powerDownSound  = Gdx.audio.newSound(Gdx.files.internal(powerDownSoundPath));
     }
 
     // ===================================================================================================================
@@ -56,7 +53,7 @@ public class PowerUp extends Actor {
 
         if(powerUpState == PowerUpState.INACTIVE) {
             batch.draw(powerUpSprite.getTexture(), powerUpSprite.getX(), powerUpSprite.getY(),
-                    powerUpSprite.getWidth(), powerUpSprite.getHeight());
+                        powerUpSprite.getWidth(), powerUpSprite.getHeight());
         }
     }
 
@@ -112,11 +109,18 @@ public class PowerUp extends Actor {
 
         if(player.getSprite().getBoundingRectangle().overlaps(powerUpSprite.getBoundingRectangle())) {
             powerUpState = PowerUpState.ACTIVE;
-            player.setPowerUp(true);
+            player.setWeaponType(Player.WeaponType.RIFLE);
+//            player.setWeapon();
+//            player.setRifle();
+//            player.setPowerUp(true);
         }
 
         if(powerUpState == PowerUpState.INACTIVE) {
-            player.setPowerUp(false);
+            player.setWeaponType(Player.WeaponType.HANDGUN);
+//            player.setWeapon();
+//            player.setWeapon(player.setWeaponType(Player.WeaponType.HANDGUN));
+//            player.setHandgun();
+//            player.setPowerUp(false);
         }
     }
 

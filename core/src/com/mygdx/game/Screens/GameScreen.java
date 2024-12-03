@@ -7,9 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.mygdx.game.Actors.Particle;
+import com.mygdx.game.Actors.Projectile;
 import com.mygdx.game.Game.GameHelper;
 import com.mygdx.game.Game.GameStateController;
 import com.mygdx.game.UI.UIController;
+
+import java.util.ArrayList;
 
 
 /*
@@ -94,7 +98,7 @@ public class GameScreen implements Screen {
             if (stage != null) {
                 stage.act(delta);
                 gameStateController.getLevelFactory().getCurrentLevel().renderMap(gameStateController.getPlayer());
-
+                ArrayList<Particle> particles =  gameStateController.getPlayer().getProjectileSpawner().getParticles();
 
                 // ----------------- ** Render the bounding boxes. ** Very useful for debugging ** ---------------------
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -105,7 +109,15 @@ public class GameScreen implements Screen {
 //                shapeRenderer.rect(uiController.getUICounters().getKillCounter().getX(), uiController.getUICounters().getKillCounter().getY(),
 //                        uiController.getUICounters().getKillCounter().getWidth(), uiController.getUICounters().getKillCounter().getHeight());
 //
-//                shapeRenderer.rect(gameStateController.getPlayer().getProjectile().getProjectileSprite().getX(),
+
+                for(Particle particle : particles) {
+                    shapeRenderer.rect(particle.getSprite().getX(),
+                            particle.getSprite().getY(),
+                            particle.getSprite().getWidth(),
+                            particle.getSprite().getHeight());
+
+                }
+//                shapeRenderer.rect(gameStateController.getPlayer().getProjectileSpawner().getProjectiles()Sprite().getX(),
 //                        gameStateController.getPlayer().getProjectile().getProjectileSprite().getY(),
 //                        gameStateController.getPlayer().getProjectile().getProjectileSprite().getWidth(),
 //                        gameStateController.getPlayer().getProjectile().getProjectileSprite().getHeight());

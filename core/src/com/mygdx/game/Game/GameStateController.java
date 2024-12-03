@@ -28,8 +28,8 @@ public class GameStateController {
     private String keyboardControl      = "0";
 
     public enum GameState { PLAYING, RESTART, GAMEOVER }
-
     private GameState gameState = GameState.PLAYING;
+
     private Player player;
     private EnemyFactory enemyFactory;
     private Enemy randomEnemy;
@@ -53,11 +53,11 @@ public class GameStateController {
         levelFactory    = new LevelFactory();
         levelFactory.createCurrentLevel();
 
-        player = new Player();
+        player          = new Player();
 
-        enemyFactory = new EnemyFactory();
+        enemyFactory    = new EnemyFactory();
         // Have to spawn an enemy at the start so that newEnemy() has something to remove from the stage
-        randomEnemy = enemyFactory.spawnRandomEnemy();
+        randomEnemy     = enemyFactory.spawnRandomEnemy();
 
         stage.addActor(player);
         stage.addActor(randomEnemy);
@@ -110,7 +110,6 @@ public class GameStateController {
 
         switch (gameState) {
             case PLAYING:
-
                 // If all lives are lost it is game over
                 if (playerLives <= 0) {
                     gameState = GameState.GAMEOVER;
@@ -203,18 +202,6 @@ public class GameStateController {
                 randomEnemy.setAIStates(player);
                 levelFactory.getGameObjects().getLevelEnd().setAIStates(player);
 
-                // If the player projectile hits the enemies bounding box and the player is attacking, the player has attacked the enemy.
-//                if (player.getPlayerProjectile().getProjectileSprite().getBoundingRectangle()
-//                        .overlaps(randomEnemy.getSprite().getBoundingRectangle())) {
-//                    if (player.getPlayerProjectile().getProjectileState() == Projectile.ProjectileState.FIRING) {
-//                        // If the enemy is alive when it has been hit the projectile is reset and the enemy checks how much damage it received.
-//                        if (randomEnemy.getIsAlive()) {
-//                            player.getPlayerProjectile().setProjectileState(Projectile.ProjectileState.RESET);
-//                            randomEnemy.healthCheck(player.getDamage());
-//                        }
-//                    }
-//                }
-
                 // If the enemy has died, remove from the stage and respawn a new enemy.
                 if (randomEnemy.getCharacterState() == Character.CharacterState.DEAD) {
 
@@ -234,7 +221,6 @@ public class GameStateController {
                 break;
 
             // -------------------------------------------------------------------------------------
-
             case RESTART:
                 newLevel();
                 break;
@@ -252,7 +238,7 @@ public class GameStateController {
 
         if (player.getIsGrounded()) {
             // Set the player to running and move the player to the new position.
-            player.setDirection(Player.Direction.LEFT);
+            player.setDirection(Character.Direction.LEFT);
             player.setCharacterState(Character.CharacterState.MOVING);
 
             if (!start) {
@@ -268,12 +254,12 @@ public class GameStateController {
                 randomEnemy.compensateCamera(player.getPositionAmount().x);
                 levelFactory.getGameObjects().compensateCamera(player.getPositionAmount().x);
 
-                player.getProjectileSpawner().compensateCamera(-player.getPositionAmount().x);
-//
-//                // Guard to make sure this isn't null
-//                if (randomEnemy.getHasProjectile()) {
-//                    randomEnemy.getProjectile().compensateCamera(player.getPositionAmount().x);
-//                }
+                player.getProjectileSpawner().compensateCamera(player.getPositionAmount().x);
+
+                // Check that the enemy has a projectile
+                if (randomEnemy.getProjectileSpawner() != null) {
+                    randomEnemy.getProjectileSpawner().compensateCamera(player.getPositionAmount().x);
+                }
             }
         }
     }
@@ -284,7 +270,7 @@ public class GameStateController {
 
         if (player.getIsGrounded()) {
             // Set the player to running and move the player to the new position.
-            player.setDirection(Player.Direction.RIGHT);
+            player.setDirection(Character.Direction.RIGHT);
             player.setCharacterState(Character.CharacterState.MOVING);
 
             // Move the player
@@ -300,10 +286,10 @@ public class GameStateController {
 
             player.getProjectileSpawner().compensateCamera(-player.getPositionAmount().x);
 
-//            // Guard to make sure this isn't null
-//            if (randomEnemy.getHasProjectile()) {
-//                randomEnemy.getProjectile().compensateCamera(-player.getPositionAmount().x);
-//            }
+            // Check that the enemy has a projectile
+            if (randomEnemy.getProjectileSpawner() != null) {
+                randomEnemy.getProjectileSpawner().compensateCamera(-player.getPositionAmount().x);
+            }
         }
     }
 
@@ -331,7 +317,7 @@ public class GameStateController {
         // Defeat the enemies, collect the treasure
         if (enemiesKilled >= levelFactory.getCurrentLevel().getEnemyKilledExitThreshold()) {
             // Rescue the levelEnd
-            if(levelFactory.getGameObjects().getLevelEnd().getIsEndReached()){
+            if(levelFactory.getGameObjects().getLevelEnd().getIsEndReached()) {
                 MyGdxGame.startScreen.setVictoryScreen1();
             }
         }
@@ -357,6 +343,7 @@ public class GameStateController {
         return new Vector2();
     }
 
+    // ===================================================================================================================
 
     // Listener for Keyboard controls
     private class MyInputListener extends InputListener {

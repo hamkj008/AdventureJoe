@@ -1,6 +1,5 @@
 package com.mygdx.game.Actors;
-
-
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,7 +19,6 @@ import com.mygdx.game.Screens.GameScreen;
 public class Projectile extends Actor {
 
     public enum ProjectileState { START, FIRING }
-
     private ProjectileState projectileState = ProjectileState.START;
     private com.mygdx.game.Actors.Characters.Character.Direction direction;
 
@@ -35,24 +33,28 @@ public class Projectile extends Actor {
     private final Vector2 projectileStartWithOffset;
     private final Vector2 PROJECTILE_MOVEMENT;
     private boolean projectileActive = false;
+    private boolean projectileHit = false;
 
     private final Sound firingSound;
     private boolean playFiringSound = true;
 
+    private final Particle particle;
+
 
     // ===================================================================================================================
 
-    public Projectile(com.mygdx.game.Actors.Characters.Character owner, com.mygdx.game.Actors.Characters.Character overlapCharacter, String texturePath, String firingSoundPath, Vector2 projectileStartPosition, Vector2 offset) {
+    public Projectile(com.mygdx.game.Actors.Characters.Character owner, com.mygdx.game.Actors.Characters.Character overlapCharacter, String texturePath, String firingSoundPath, Vector2 projectileStartPosition) {
 
         this.owner                      = owner;
         this.overlapCharacter           = overlapCharacter;
         textureRegion                   = new TextureRegion(new Texture(texturePath));
         projectileSprite                = new Sprite(textureRegion);
         this.projectileStartPosition    = projectileStartPosition;
-        this.offset                     = offset;
+        offset                          = new Vector2();
         projectileStartWithOffset       = new Vector2();
         PROJECTILE_MOVEMENT             = new Vector2();
         firingSound                     = Gdx.audio.newSound(Gdx.files.internal(firingSoundPath));
+        particle                        = new Particle();
     }
 
     // ===================================================================================================================
@@ -62,22 +64,12 @@ public class Projectile extends Actor {
      */
     @Override
     public void draw(Batch batch, float alpha) {
-//        Gdx.app.log("debug", "projectile/draw");
+        Gdx.app.log("draw", "projectile/draw");
 
-        if (projectileState == ProjectileState.FIRING) {
-            if (direction == com.mygdx.game.Actors.Characters.Character.Direction.LEFT) {
-                if (!textureRegion.isFlipX()) {
-                    textureRegion.flip(true, false);
-                }
-            }
-            if (direction == com.mygdx.game.Actors.Characters.Character.Direction.RIGHT) {
-                if (textureRegion.isFlipX()) {
-                    textureRegion.flip(true,false);
-                }
-            }
-            batch.draw(textureRegion, projectileSprite.getX(), projectileSprite.getY(),
-                    projectileSprite.getWidth(), projectileSprite.getHeight());
-        }
+        GameScreen.getInstance().getHelper().flipSprite(direction, textureRegion);
+
+        batch.draw(textureRegion, projectileSprite.getX(), projectileSprite.getY(),
+                projectileSprite.getWidth(), projectileSprite.getHeight());
     }
 
     // ===================================================================================================================
@@ -86,6 +78,14 @@ public class Projectile extends Actor {
     public void act(float delta) {
 
         setProjectileBounds();   // Monitor out of bounds
+
+        // If the projectile hits a character, the characters position is updated so the particle can be drawn on the position.
+//        if(projectileHit) {
+        particle.getSprite().setPosition(GameScreen.getInstance().getHelper().getCenteredSpritePosition(overlapCharacter.getSprite()).x,
+                GameScreen.getInstance().getHelper().getCenteredSpritePosition(overlapCharacter.getSprite()).y);
+//        }
+
+
         switchState();          // Monitor state switch
     }
 
@@ -118,16 +118,22 @@ public class Projectile extends Actor {
 
     // If the projectile goes off screen or hits a character it is inactive.
     public void setProjectileBounds() {
+
         if(getProjectileSprite().getX() > Gdx.graphics.getWidth()) {
             projectileActive = false;
         }
-        if(getProjectileSprite().getX() < 0) {
+        else if(getProjectileSprite().getX() < 0) {
             projectileActive = false;
         }
 
         if(this.projectileSprite.getBoundingRectangle().overlaps(overlapCharacter.getSprite().getBoundingRectangle())) {
             if(this.projectileState == Projectile.ProjectileState.FIRING && overlapCharacter.getIsAlive()) {
+
                 overlapCharacter.healthCheck(owner.getDamage());
+
+                // Spawn a particle where the overlap occurred
+                projectileHit = true;
+                particle.spawnParticle();
                 projectileActive = false;
             }
         }
@@ -135,11 +141,12 @@ public class Projectile extends Actor {
 
     // ===================================================================================================================
 
-    /*
-     Takes the movement speeds and direction, uses Game Helper to apply deltaTime, then finds the new position for the sprite to move to
-     and translates to the new position.
-     */
+    /**
+     * Takes the movement speeds and direction, uses Game Helper to apply deltaTime, then finds the new position for the sprite to move to
+     * and translates to the new position.
+     **/
     public void moveProjectile() {
+
         if(direction == com.mygdx.game.Actors.Characters.Character.Direction.LEFT) {
             PROJECTILE_MOVEMENT.x = GameScreen.getInstance().getHelper().setMovement(-movementSpeedX);
         }
@@ -197,7 +204,7 @@ public class Projectile extends Actor {
 
     public boolean getProjectileActive() { return projectileActive; }
 
-    public void setProjectileActive(boolean projectileActive) {
-        this.projectileActive = projectileActive;
-    }
+    public void setProjectileActive(boolean projectileActive) { this.projectileActive = projectileActive; }
+
+    public Particle getParticle() { return particle; }
 }

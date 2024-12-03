@@ -1,6 +1,4 @@
 package com.mygdx.game.Actors.Characters;
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -9,8 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Actors.Characters.Player.Player;
-import com.mygdx.game.Actors.Particle;
+import com.mygdx.game.Actors.ProjectileSpawner;
 import com.mygdx.game.Screens.GameScreen;
+import java.util.HashMap;
+import java.util.Map;
+
 
 
 /**
@@ -25,23 +26,18 @@ public class Character extends Actor {
     private CharacterState characterState = CharacterState.IDLE;
 
     // ---- CHARACTER STATS -------------------------
-    private boolean isAlive = true;
-    private Direction direction = Direction.LEFT;
+    private boolean isAlive                     = true;
+    private Direction direction                 = Direction.LEFT;
 
-    private final int Max_Health = 100;
-    private int health = Max_Health;
+    private final int Max_Health                = 100;
+    private int health                          = Max_Health;
+    private int damage                          = 20;
     private int CURRENT_MOVEMENT_SPEED;
-    private int damage = 20;
-
-//    private Projectile projectile;
-//    private boolean hasProjectile = false;
 
     // ---- SPRITES -------------------------
     private final Sprite sprite;
     private final Vector2 startPosition;
-    // The amount that a sprite will be translated by to reach its new position
-    private final Vector2 positionAmount;
-
+    private final Vector2 positionAmount;   // The amount that a sprite will be translated by to reach its new position
 
     // ---- ANIMATION -------------------------
     private TextureRegion currentFrame;
@@ -51,8 +47,8 @@ public class Character extends Actor {
 
     private float characterGroundLevel;
 
-    // particle
-    protected Particle particles;
+    private ProjectileSpawner projectileSpawner = null;
+    private final Map<String, Vector2> projectileOffset;
 
 
     // ===================================================================================================================
@@ -64,10 +60,11 @@ public class Character extends Actor {
         currentFrame            = new TextureRegion();
         startPosition           = new Vector2();
         positionAmount          = new Vector2();
-        particles               = new Particle();
-
         characterGroundLevel    = GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getGroundLevel();
         startPosition.y         = characterGroundLevel;
+        projectileOffset = new HashMap<>();
+        projectileOffset.put("leftOffset", new Vector2());
+        projectileOffset.put("rightOffset", new Vector2());
     }
 
     // ===================================================================================================================
@@ -86,72 +83,50 @@ public class Character extends Actor {
 
     // ===================================================================================================================
 
-//    public void spawnProjectile(Character overlapCharacter, String texturePath, String firingSoundPath, Vector2 size, float movementSpeed) {
-//
-//        projectile = new Projectile(this, overlapCharacter,
-//                texturePath, firingSoundPath);
-//        hasProjectile = true;
-//
-//        projectile.getProjectileSprite().setSize(size.x, size.y);
-//        projectile.setMovementSpeedX(movementSpeed);
-//
-//        projectile.getProjectileStartPosition().x = getSprite().getX();
-//        projectile.getProjectileStartPosition().y = getSprite().getY();
-//        projectile.setProjectileState(Projectile.ProjectileState.START);
-////        projectile.setProjectileState(Projectile.ProjectileState.FIRING);
-//    }
+    public void spawnProjectile() {}
 
-    /*
-    The default drawing method. It flips the sprites to face the correct direction.
-    Child classes that may need to override this will still have a call to super to access this method.
-     */
+    // ===================================================================================================================
+
+    /**
+    * The default drawing method. It flips the sprites to face the correct direction.
+    * Child classes that may need to override this will still have a call to super to access this method.
+     **/
     @Override
     public void draw(Batch batch, float alpha) {
+//        Gdx.app.log("draw", "character draw");
 
-        // Flips the sprite according to the correct direction.
-        if (direction == Direction.LEFT) {
-            if(!currentFrame.isFlipX()) {
-                currentFrame.flip(true, false);
-            }
-        }
+        GameScreen.getInstance().getHelper().flipSprite(direction, currentFrame);
 
-        if (direction == Direction.RIGHT) {
-            if(currentFrame.isFlipX()) {
-                currentFrame.flip(true, false);
-            }
-        }
         batch.draw(currentFrame, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
-        this.particles.render(batch);
 
-        /*
-         Once a projectile has been reset this is polled to find out the direction the character is facing and apply that direction to the projectile.
-         Once a projectile has been fired, the projectile direction has already been locked in, so it maintains the correct direction once it has been fired.
-         Otherwise you see the projectile change direction mid flight if the player does.
-         */
-//        if(hasProjectile) {
-//            if(projectile.getProjectileState() == Projectile.ProjectileState.START) {
-//
-//                //Offsets are added to the projectile start position (in projectile reset state) for the projectile to emit from the correct spot on the player.
-//                if (direction == Direction.LEFT) {
-//                    projectile.getOffset().set(0, 100);
-//                    projectile.setDirection(Direction.LEFT);
-//                }
-//                if (direction == Direction.RIGHT) {
-//                    projectile.getOffset().set(200, 100);
-//                    projectile.setDirection(Direction.RIGHT);
-//                }
-//            }
-//            projectile.draw(batch, alpha);
-//        }
+        if(projectileSpawner != null) {
+            projectileSpawner.draw(batch, alpha);
+        }
 
     }
 
     // ===================================================================================================================
 
-    /*
-     Processes animations for both looping and non looping versions. Non looping resets the state time so that it only plays once.
-     Applies separate state time to each version so that they don't interfere with each other when the non looping resets.
-     */
+    @Override
+    public void act(float delta) {
+
+        if(projectileSpawner != null) {
+            if (getCharacterState() == CharacterState.ATTACKING && projectileSpawner.getCanSpawn()) {
+                spawnProjectile();
+            }
+            else {
+                projectileSpawner.timerElapsed();
+            }
+            projectileSpawner.act(delta);
+        }
+    }
+
+    // ===================================================================================================================
+
+    /**
+     * Processes animations for both looping and non looping versions. Non looping resets the state time so that it only plays once.
+     * Applies separate state time to each version so that they don't interfere with each other when the non looping resets.
+     **/
     public boolean nonLoopingAnimation(Animation<TextureRegion> animation) {
 
         nonLoopingStateTime += Gdx.graphics.getDeltaTime();
@@ -176,27 +151,17 @@ public class Character extends Actor {
 
     // ===================================================================================================================
 
-    // Finds and returns the centre of the sprite for when this is needed.
-    public Vector2 getCenteredSpritePosition() {
-        float x = sprite.getX() + (sprite.getWidth() / 2);
-        float y = sprite.getY() + (sprite.getHeight() / 2);
-
-        return new Vector2(x, y);
-    }
-
-    // -----------------------------------------------------------
-
     // Finds out how far away the player is from the enemy sprite.
     public float distanceFromPlayer(Player player) {
-        return getCenteredSpritePosition().dst(player.getCenteredSpritePosition());
+        return GameScreen.getInstance().getHelper().getCenteredSpritePosition(this.getSprite()).dst(GameScreen.getInstance().getHelper().getCenteredSpritePosition(player.getSprite()));
     }
 
     // ===================================================================================================================
 
-    /* A characters movement speed * delta time gives a position amount.
+    /** A characters movement speed * delta time gives a position amount.
     * This is the amount of distance that the sprite has to travel to to reach the new position.
     * The sprites are then translated to the new position given by the position amount
-    */
+    **/
     public void moveCharacter() {
 
         positionAmount.x = GameScreen.getInstance().getHelper().setMovement(CURRENT_MOVEMENT_SPEED);
@@ -212,12 +177,12 @@ public class Character extends Actor {
 
     // ===================================================================================================================
 
-    /*
+    /**
      * Moves the characters in the opposite direction to oppose the cameras movement,
      * giving the impression that they are not moving if they are static objects.
      * Characters that are moving also do not have the cameras movement added to their own.
      * All "compensate" methods do this.
-     */
+     **/
     public void compensateCamera(float cameraPositionAmount) {
 
         sprite.translate(cameraPositionAmount, positionAmount.y);
@@ -225,28 +190,23 @@ public class Character extends Actor {
 
     // ===================================================================================================================
 
-//    @Override
     public void dispose() {
-//        projectile.dispose();
+        Gdx.app.log("dispose", "playerDispose");
 
+        if(projectileSpawner != null) {
+            projectileSpawner.dispose();
+        }
     }
 
-    // ---------- GETTERS AND SETTERS -------------------------------------
+    // ================================== GETTERS AND SETTERS ====================================================================
+
     public boolean getIsAlive() { return isAlive; }
 
     public void setIsAlive(boolean alive) { isAlive = alive; }
 
     public CharacterState getCharacterState() { return characterState; }
 
-    public void setCharacterState(CharacterState characterState) {
-        this.characterState = characterState;
-    }
-
-//    public Projectile getProjectile() { return projectile; }
-//
-//    public void setProjectile(Projectile projectile) {
-//        this.projectile = projectile;
-//    }
+    public void setCharacterState(CharacterState characterState) { this.characterState = characterState; }
 
     public Direction getDirection() { return direction; }
 
@@ -278,8 +238,10 @@ public class Character extends Actor {
         this.characterGroundLevel = groundLevel;
         startPosition.y = characterGroundLevel;
     }
-//
-//    public boolean getHasProjectile() { return hasProjectile; }
-//
-//    public void setHasProjectile(boolean hasProjectile) { this.hasProjectile = hasProjectile; }
+
+    public ProjectileSpawner getProjectileSpawner() { return projectileSpawner; }
+
+    public void setProjectileSpawner(ProjectileSpawner projectileSpawner) { this.projectileSpawner = projectileSpawner; }
+
+    public Map<String, Vector2> getProjectileOffset() { return projectileOffset; }
 }

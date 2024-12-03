@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Actors.Characters.Player.Player;
+import com.mygdx.game.Screens.GameScreen;
 
 
 /**
@@ -194,8 +195,10 @@ public class LevelCreator {
         if(player.getIsGrounded() && player.getPlayerLevel() > player.getCharacterGroundLevel()) {
 
             // If the player moves off the platform to the left or right
-            if (player.getCenteredSpritePosition().x < currentPlatform.getX() ||
-                    player.getCenteredSpritePosition().x > currentPlatform.getX() + currentPlatform.getWidth()) {
+            if (GameScreen.getInstance().getHelper().getCenteredSpritePosition(player.getSprite()).x < currentPlatform.getX() - 10 ||
+
+                    (GameScreen.getInstance().getHelper().getCenteredSpritePosition(player.getSprite()).x >
+                            currentPlatform.getX() + currentPlatform.getWidth() + 10)) {
                 player.setCharacterState(Character.CharacterState.FALLING);
             }
         }

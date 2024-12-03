@@ -1,6 +1,4 @@
 package com.mygdx.game.Actors.Characters.Enemies;
-
-
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -8,34 +6,28 @@ import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Screens.GameScreen;
 
+
 /**
  * The parent class for all enemies. Inherits from the Character super class.
  */
 public class Enemy extends Character {
 
-
     // ---- STATES -------------------------
-//    public enum EnemyState { IDLE, MOVING, JUMPING, ATTACKING, HURT, DYING, DEAD }
     public enum MovingState { WALKING, RUNNING }
     public enum AttackState { MELEE, PROJECTILE }
 
-//    private EnemyState enemyState   = EnemyState.MOVING;
-    private MovingState movingState = MovingState.WALKING;
-    private AttackState attackState = AttackState.MELEE;
+    private MovingState movingState         = MovingState.WALKING;
+    private AttackState attackState         = AttackState.MELEE;
 
     // Stats
     private String name;
 
-    private int walkingSpeed = 100;
-    private int runningSpeed = 200;
-    private final int jumpingSpeed = 200;
-    private final int fallingSpeed = 200;
+    private int walkingSpeed                = 100;
+    private int runningSpeed                = 200;
+    private final int jumpingSpeed          = 200;
+    private final int fallingSpeed          = 200;
 
     private boolean hasRunningState;
-//    private boolean hasProjectile;
-
-//    private Projectile enemyProjectile;
-
 
     // ===================================================================================================================
 
@@ -44,11 +36,6 @@ public class Enemy extends Character {
         // All enemies start facing left.
         super.setDirection(Direction.LEFT);
     }
-
-    // ===================================================================================================================
-
-//    public Projectile getEnemyProjectile() { return this.enemyProjectile; }
-
 
     // ===================================================================================================================
 
@@ -110,18 +97,18 @@ public class Enemy extends Character {
 
             case HURT:
                 super.setCURRENT_MOVEMENT_SPEED(0);
-                if (super.nonLoopingAnimation(hurtAnimation)) {
 
-                    particleAppeared();
+                if (super.nonLoopingAnimation(hurtAnimation)) {
+//                    particleAppeared();
                     super.setCharacterState(CharacterState.MOVING);;
                 }
                 break;
 
             case DYING:
                 super.setCURRENT_MOVEMENT_SPEED(0);
-                if (super.nonLoopingAnimation(dyingAnimation)) {
 
-                    particleAppeared();
+                if (super.nonLoopingAnimation(dyingAnimation)) {
+//                    super.getParticle().spawnParticle(getCenteredSpritePosition());
                     killEnemy();
                 }
                 break;
@@ -130,16 +117,15 @@ public class Enemy extends Character {
 
     // ===================================================================================================================
 
-    public void particleAppeared(){
-
-        // TODO: the currentFrame position is not right
-        int touchX = (int) getSprite().getX() ;
-        int touchY = (int) getSprite().getY() + 50;
-
-
-        this.particles.spawn();
-        this.particles.position = new Vector2(touchX, touchY);
-    }
+//    public void particleAppeared(){
+//
+//        // TODO: the currentFrame position is not right
+//        int touchX = (int) getCenteredSpritePosition().getX() ;
+//        int touchY = (int) getCenteredSpritePosition().getY() + 50;
+//
+//        this.particle.spawnParticle();
+//        this.particle.getPosition().set(new Vector2(touchX, touchY));
+//    }
 
     // ===================================================================================================================
 
@@ -160,7 +146,7 @@ public class Enemy extends Character {
      * A set of default AI states that all enemies will share for some basic behaviour.
      * AI states specific to each enemy can be added in the enemies respective classes,
      * by overriding completely, or in conjunction with a call to super.
-     */
+     **/
     public void setAIStates(Player player) {
 
         if (player.getIsAlive()) {
@@ -180,39 +166,27 @@ public class Enemy extends Character {
 
             // The enemy will turn around if the player goes past it.
             // It will continue to travel for a short distance before it does so, to avoid the facing both directions at the same time bug.
-            if ((player.getCenteredSpritePosition().x - 200) > getCenteredSpritePosition().x && distanceFromPlayer(player) < 1000) {
+            if ((GameScreen.getInstance().getHelper().getCenteredSpritePosition(player.getSprite()).x - 200) >
+                    GameScreen.getInstance().getHelper().getCenteredSpritePosition(getSprite()).x && distanceFromPlayer(player) < 1000) {
                 setDirection(Direction.RIGHT);
             }
-            else if ((player.getCenteredSpritePosition().x + 200) < getCenteredSpritePosition().x && distanceFromPlayer(player) < 1000) {
+            else if ((GameScreen.getInstance().getHelper().getCenteredSpritePosition(player.getSprite()).x + 200) <
+                    GameScreen.getInstance().getHelper().getCenteredSpritePosition(getSprite()).x && distanceFromPlayer(player) < 1000) {
                 setDirection(Direction.LEFT);
             }
 
             // If the enemy goes off screen it is reset.
-            if (super.getCenteredSpritePosition().x < -100) {
+            if (GameScreen.getInstance().getHelper().getCenteredSpritePosition(getSprite()).x < -100) {
                 reset();
             }
         }
     }
 
-    // ===================================================================================================================
+    // ======================================= GETTERS AND SETTERS ==========================================================
 
-
-//    public void dispose() {
-//        if(hasProjectile) {
-//            enemyProjectile.dispose();
-//        }
-//    }
-
-    // ===================================================================================================================
-
-    // ---------- GETTERS AND SETTERS -------------------------------------
     public String getName() { return name; }
 
     public void setName(String name) { this.name = name; }
-
-//    public EnemyState getEnemyState() { return enemyState; }
-//
-//    public void setEnemyState(EnemyState enemyState) { this.enemyState = enemyState; }
 
     public MovingState getMovingState() { return movingState; }
 
@@ -231,8 +205,4 @@ public class Enemy extends Character {
     public void setRunningSpeed(int runningSpeed) { this.runningSpeed = runningSpeed; }
 
     public void setHasRunningState(boolean hasRunningState) { this.hasRunningState = hasRunningState; }
-
-//    public boolean getHasProjectile() { return hasProjectile; }
-//
-//    public void setHasProjectile(boolean hasProjectile) { this.hasProjectile = hasProjectile; }
 }

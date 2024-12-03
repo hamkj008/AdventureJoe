@@ -2,7 +2,10 @@ package com.mygdx.game.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Actors.Characters.Character;
 
 
 public class GameHelper {
@@ -48,4 +51,29 @@ public class GameHelper {
 
         return movementSpeed * deltaTime;
     }
+
+    // ===================================================================================================================
+
+    // Finds and returns the centre of the sprite for when this is needed.
+    public Vector2 getCenteredSpritePosition(Sprite sprite) {
+        float x = sprite.getX() + (sprite.getWidth() / 2);
+        float y = sprite.getY() + (sprite.getHeight() / 2);
+
+        return new Vector2(x, y);
+    }
+
+    // ===================================================================================================================
+
+    public void flipSprite(Character.Direction direction, TextureRegion currentFrame) {
+        // Flips the sprite according to the correct direction.
+        if (direction == Character.Direction.LEFT && !currentFrame.isFlipX()) {
+            currentFrame.flip(true, false);
+        }
+
+        else if (direction == Character.Direction.RIGHT && currentFrame.isFlipX()) {
+            currentFrame.flip(true, false);
+        }
+    }
+
+    // ===================================================================================================================
 }

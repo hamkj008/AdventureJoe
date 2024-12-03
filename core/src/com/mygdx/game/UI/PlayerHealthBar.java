@@ -7,23 +7,23 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class PlayerHealthBar {
 
-    private final Sprite playerHealthBarBackground;
     private final Sprite playerHealthBar;
     private final Texture healthBarImage;
-    private final Texture healthBarBackgroundImage;
+//    private final Sprite playerHealthBarBackground;
+//    private final Texture healthBarBackgroundImage;
 
     // ===================================================================================================================
 
     public PlayerHealthBar(){
 
-        healthBarBackgroundImage    = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Background.png");
-        playerHealthBarBackground   = new Sprite(healthBarBackgroundImage);
         healthBarImage              = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Green.png");
         playerHealthBar             = new Sprite(healthBarImage);
+//        healthBarBackgroundImage    = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Background.png");
+//        playerHealthBarBackground   = new Sprite(healthBarBackgroundImage);
 
         // TODO: need a better way to set the position
         playerHealthBar.setPosition(150, Gdx.graphics.getHeight() - healthBarImage.getHeight() - 40);
-        playerHealthBarBackground.setPosition(0,Gdx.graphics.getHeight() - healthBarBackgroundImage.getHeight());
+//        playerHealthBarBackground.setPosition(0,Gdx.graphics.getHeight() - healthBarBackgroundImage.getHeight());
     }
 
 
@@ -35,9 +35,10 @@ public class PlayerHealthBar {
 
     // ===================================================================================================================
 
-    public void draw(Batch batch){
-        playerHealthBarBackground.draw(batch);
+    public void draw(Batch batch) {
+
         playerHealthBar.draw(batch);
+//        playerHealthBarBackground.draw(batch);
     }
 
     // ===================================================================================================================
@@ -51,8 +52,8 @@ public class PlayerHealthBar {
     public void dispose() {
         Gdx.app.log("dispose", "PlayerHealthBarDispose");
 
-        healthBarBackgroundImage.dispose();
         healthBarImage.dispose();
+//        healthBarBackgroundImage.dispose();
     }
 
 

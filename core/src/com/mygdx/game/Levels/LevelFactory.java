@@ -26,8 +26,8 @@ public class LevelFactory {
 
     public void createLevel1() {
 
-        int[] background = {0, 1, 2, 3, 4};
-        int[] foreground = {5, 6, 7, 8, 9, 10, 11};
+        int[] background = { 0, 1, 2, 3, 4 };
+        int[] foreground = { 5, 6, 7, 8, 9, 10, 11 };
         currentLevel = new LevelCreator();
         currentLevel.createLevel("Levels/Level1/Level1-MyPhone.tmx", foreground, background, 4);
 
@@ -35,7 +35,6 @@ public class LevelFactory {
         currentLevelObjects.getPowerUp().getStartPosition().set(1300, 800);
         currentLevelObjects.configureChest(Chest.ChestType.Chest01, 2500, 800);
         currentLevelObjects.getLevelEnd().setGoalType(LevelEnd.GoalType.BABY);
-//        currentLevelObjects.getLevelEnd().setCharacterGroundLevel(currentLevel.getGroundLevel());
 
         currentLevel.setEnemyKilledExitThreshold(3);
     }

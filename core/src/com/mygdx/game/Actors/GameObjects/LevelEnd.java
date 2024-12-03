@@ -1,25 +1,20 @@
 package com.mygdx.game.Actors.GameObjects;
-
-
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Game.GameStateController;
 import com.mygdx.game.Screens.GameScreen;
 
+
 public class LevelEnd extends Character {
 
     public enum GoalType    { PRINCESS, BABY }
     public enum GoalState   { IDLE, SPELL }
 
-    private GoalType goalType   = GoalType.BABY;
-    private GoalState goalState = GoalState.IDLE;
-
-    private final Direction direction = Direction.LEFT;
-
-    private boolean endReached = false;
+    private GoalType goalType       = GoalType.BABY;
+    private GoalState goalState     = GoalState.IDLE;
+    private boolean endReached      = false;
 
 
     // ---- ANIMATIONS CONTAINERS -------------------------
@@ -43,7 +38,6 @@ public class LevelEnd extends Character {
         super.getStartPosition().x = 5000;
         super.getSprite().setX(getStartPosition().x);
 
-
         // ---- ANIMATIONS -------------------------
         // Load all animation frames into animation objects using Game Helper.
         princessIdleAnimation   = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Princess/Idle Blinking.png", 8, 3, 24);
@@ -56,16 +50,7 @@ public class LevelEnd extends Character {
     // ===================================================================================================================
 
     @Override
-    public void draw(Batch batch, float alpha) {
-
-        super.draw(batch, alpha);
-    }
-
-    // ===================================================================================================================
-
-    @Override
     public void act(float delta) {
-
         switchStates();
     }
 
@@ -86,7 +71,7 @@ public class LevelEnd extends Character {
             spellAnimation = princessSpellAnimation;
         }
 
-        if (goalType == GoalType.BABY) {
+        else if (goalType == GoalType.BABY) {
             idleAnimation = babyIdleAnimation;
             spellAnimation = babySpellAnimation;
         }
@@ -94,9 +79,10 @@ public class LevelEnd extends Character {
         if(goalState == GoalState.IDLE) {
             super.loopingAnimation(idleAnimation);
         }
+
         if(goalState == GoalState.SPELL) {
             if(super.nonLoopingAnimation(spellAnimation)) {
-                // changeLevel()
+                // change level
                 endReached = true;
             }
         }
@@ -107,15 +93,13 @@ public class LevelEnd extends Character {
     // Adds additional AI states specific to this enemy, primarily its Attack state
     public void setAIStates(Player player) {
 
-        if (player.getIsAlive()) {
-
-            // The enemy is meant to turn around if the player goes past it.
-            // ** Bugs ** At the moment with the camera movement this is prevented from happening
-            if (player.getCenteredSpritePosition().x > getCenteredSpritePosition().x && distanceFromPlayer(player) < 1000) {
-                setDirection(Direction.RIGHT);
-            } else {
-                setDirection(Direction.LEFT);
-            }
+        if ((GameScreen.getInstance().getHelper().getCenteredSpritePosition(player.getSprite()).x - 200) >
+                GameScreen.getInstance().getHelper().getCenteredSpritePosition(getSprite()).x && distanceFromPlayer(player) < 1000) {
+            super.setDirection(Direction.RIGHT);
+        }
+        else if ((GameScreen.getInstance().getHelper().getCenteredSpritePosition(player.getSprite()).x + 200) <
+                GameScreen.getInstance().getHelper().getCenteredSpritePosition(getSprite()).x && distanceFromPlayer(player) < 1000) {
+            super.setDirection(Direction.LEFT);
         }
 
         // ----- End Level Condition -------------------
@@ -134,5 +118,4 @@ public class LevelEnd extends Character {
     public GoalType getGoalType() { return goalType; }
 
     public void setGoalType(GoalType goalType) { this.goalType = goalType; }
-
 }

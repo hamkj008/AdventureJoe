@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 
 public class EnemyFactory {
 
+    @SuppressWarnings("FieldCanBeLocal")
     private Enemy enemy;
 
     private final String[] enemyArray = {

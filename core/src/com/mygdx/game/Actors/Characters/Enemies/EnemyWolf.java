@@ -1,6 +1,4 @@
 package com.mygdx.game.Actors.Characters.Enemies;
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,7 +10,6 @@ import com.mygdx.game.Screens.GameScreen;
  */
 public class EnemyWolf extends Enemy {
 
-
     // ---- ANIMATIONS -------------------------
     private final Animation<TextureRegion> idleAnimation;
     private final Animation<TextureRegion> walkingAnimation;
@@ -22,6 +19,7 @@ public class EnemyWolf extends Enemy {
     private final Animation<TextureRegion> dyingAnimation;
 
 
+    // ===================================================================================================================
 
     public EnemyWolf() {
 
@@ -33,8 +31,6 @@ public class EnemyWolf extends Enemy {
         super.setAttackState(AttackState.MELEE);
         super.setHasRunningState(true);
 
-
-
         // ---- ANIMATIONS -------------------------
         // Load all animation frames into animation objects using Game Helper.
         idleAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Tiny Wolf 02/Idle.png", 4, 3, 12);
@@ -43,29 +39,27 @@ public class EnemyWolf extends Enemy {
         attackingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Tiny Wolf 02/Attacking.png", 4, 3, 12);
         hurtAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Tiny Wolf 02/Hurt.png", 4, 3, 12);
         dyingAnimation = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Tiny Wolf 02/Dying.png", 4, 3, 12);
-
     }
 
+    // ===================================================================================================================
 
     @Override
     public void act(float delta) {
-
         switchCustomStates();
     }
 
+    // ===================================================================================================================
 
-    /*
-     First handles default states with a call to super.switchStates in Enemy class.
-     Then custom states are specified. Not all enemies have these states, they are specific to the enemy.
-     */
+    /**
+     * First handles default states with a call to super.switchStates in Enemy class.
+     * Then custom states are specified. Not all enemies have these states, they are specific to the enemy.
+     **/
     public void switchCustomStates() {
 
         // Switch states in Enemy class has a set of default behaviours for standard animations.
         super.switchStates(idleAnimation, walkingAnimation, hurtAnimation, dyingAnimation);
 
-
         // --- Custom states ------
-
         if(super.getCharacterState() == CharacterState.MOVING) {
             if (super.getMovingState() == MovingState.RUNNING) {
                 super.setCURRENT_MOVEMENT_SPEED(getRunningSpeed());
