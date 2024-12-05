@@ -5,12 +5,17 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.Actors.Characters.Character;
+
 
 
 public class GameHelper {
 
     float deltaTime;
+    private static boolean isLogScheduled   = false;
+    private static String logTag            = "DefaultTag";
+    private static String logMessage        = "DefaultMessage";
 
     // ===================================================================================================================
 
@@ -24,8 +29,8 @@ public class GameHelper {
      **/
     public Animation<TextureRegion> processAnimation(String texturePath, int sheetCols, int sheetRows, int maxFrames) {
 
-        Texture texture = new Texture(texturePath);
-        TextureRegion[][] temp = TextureRegion.split(texture, texture.getWidth() / sheetCols, texture.getHeight() / sheetRows);
+        Texture texture                 = new Texture(texturePath);
+        TextureRegion[][] temp          = TextureRegion.split(texture, texture.getWidth() / sheetCols, texture.getHeight() / sheetRows);
         TextureRegion[] animationFrames = new TextureRegion[maxFrames];
 
         int index = 0;
@@ -65,6 +70,7 @@ public class GameHelper {
     // ===================================================================================================================
 
     public void flipSprite(Character.Direction direction, TextureRegion currentFrame) {
+
         // Flips the sprite according to the correct direction.
         if (direction == Character.Direction.LEFT && !currentFrame.isFlipX()) {
             currentFrame.flip(true, false);
@@ -76,4 +82,20 @@ public class GameHelper {
     }
 
     // ===================================================================================================================
+
+    public static void delayLog(float intervalSeconds, String tag, String message) {
+
+        logTag      = tag; // Update log tag
+        logMessage  = message; // Update log message
+
+        if (!isLogScheduled) {
+            isLogScheduled = true;
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    Gdx.app.log(logTag, logMessage);
+                }
+            }, 0, intervalSeconds); // Delay of 0 seconds, repeats every intervalSeconds
+        }
+    }
 }

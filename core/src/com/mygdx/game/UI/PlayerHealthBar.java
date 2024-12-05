@@ -16,13 +16,12 @@ public class PlayerHealthBar {
 
     public PlayerHealthBar(){
 
-        healthBarImage              = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Green.png");
+        healthBarImage              = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Red.png");
         playerHealthBar             = new Sprite(healthBarImage);
 //        healthBarBackgroundImage    = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Background.png");
 //        playerHealthBarBackground   = new Sprite(healthBarBackgroundImage);
 
-        // TODO: need a better way to set the position
-        playerHealthBar.setPosition(150, Gdx.graphics.getHeight() - healthBarImage.getHeight() - 40);
+        playerHealthBar.setPosition(50, Gdx.graphics.getHeight() - healthBarImage.getHeight() - 20);
 //        playerHealthBarBackground.setPosition(0,Gdx.graphics.getHeight() - healthBarBackgroundImage.getHeight());
     }
 

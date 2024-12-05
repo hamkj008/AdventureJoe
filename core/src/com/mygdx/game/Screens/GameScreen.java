@@ -31,6 +31,9 @@ public class GameScreen implements Screen {
 
     private static GameScreen INSTANCE = null;
 
+    private final float debugFrameDuration = 1.0f / 5.0f; // 5 FPS for debugging
+    private float accumulatedDelta;
+
     // ===================================================================================================================
 
 
@@ -91,6 +94,13 @@ public class GameScreen implements Screen {
 
         update();
 
+        accumulatedDelta += delta;
+
+        if (accumulatedDelta >= debugFrameDuration) {
+            accumulatedDelta = 0;
+            Gdx.app.log("", "");
+        }
+
         try {
             // Check the stage for null actors
             checkStageForNull(stage);
@@ -98,25 +108,18 @@ public class GameScreen implements Screen {
             if (stage != null) {
                 stage.act(delta);
                 gameStateController.getLevelFactory().getCurrentLevel().renderMap(gameStateController.getPlayer());
-                ArrayList<Particle> particles =  gameStateController.getPlayer().getProjectileSpawner().getParticles();
+
+                ArrayList<Particle> particles = gameStateController.getPlayer().getProjectileSpawner().getParticles();
 
                 // ----------------- ** Render the bounding boxes. ** Very useful for debugging ** ---------------------
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-                shapeRenderer.rect(gameStateController.getPlayer().getSprite().getX(), gameStateController.getPlayer().getSprite().getY(),
-                        gameStateController.getPlayer().getSprite().getWidth(), gameStateController.getPlayer().getSprite().getHeight());
+//                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//
+//                shapeRenderer.rect(gameStateController.getPlayer().getSprite().getX(), gameStateController.getPlayer().getSprite().getY(),
+//                        gameStateController.getPlayer().getSprite().getWidth(), gameStateController.getPlayer().getSprite().getHeight());
 
 //                shapeRenderer.rect(uiController.getUICounters().getKillCounter().getX(), uiController.getUICounters().getKillCounter().getY(),
 //                        uiController.getUICounters().getKillCounter().getWidth(), uiController.getUICounters().getKillCounter().getHeight());
-//
 
-                for(Particle particle : particles) {
-                    shapeRenderer.rect(particle.getSprite().getX(),
-                            particle.getSprite().getY(),
-                            particle.getSprite().getWidth(),
-                            particle.getSprite().getHeight());
-
-                }
 //                shapeRenderer.rect(gameStateController.getPlayer().getProjectileSpawner().getProjectiles()Sprite().getX(),
 //                        gameStateController.getPlayer().getProjectile().getProjectileSprite().getY(),
 //                        gameStateController.getPlayer().getProjectile().getProjectileSprite().getWidth(),
@@ -134,24 +137,36 @@ public class GameScreen implements Screen {
 //                        gameStateController.getLevelFactory().getGameObjects().getLevelEnd().getSprite().getY(),
 //                        gameStateController.getLevelFactory().getGameObjects().getLevelEnd().getSprite().getWidth(),
 //                        gameStateController.getLevelFactory().getGameObjects().getLevelEnd().getSprite().getHeight());
+
+//                for (int i = 0; i < gameStateController.getLevelFactory().getGameObjects().getCoinList().size(); i++) {
+//                    shapeRenderer.rect(gameStateController.getLevelFactory().getGameObjects().getCoinList().get(i).getSprite().getX(),
+//                            gameStateController.getLevelFactory().getGameObjects().getCoinList().get(i).getSprite().getY(),
+//                            gameStateController.getLevelFactory().getGameObjects().getCoinList().get(i).getSprite().getWidth(),
+//                            gameStateController.getLevelFactory().getGameObjects().getCoinList().get(i).getSprite().getHeight());
+//                }
 //
-//                for (int i = 0; i < levelFactory.getCurrentLevel().getCollisionSprites1().length; i++) {
-//                    shapeRenderer.rect(levelFactory.getCurrentLevel().getCollisionSprites1()[i].getX(),
-//                            levelFactory.getCurrentLevel().getCollisionSprites1()[i].getY(),
-//                            levelFactory.getCurrentLevel().getCollisionSprites1()[i].getWidth(),
-//                            levelFactory.getCurrentLevel().getCollisionSprites1()[i].getHeight());
-//                    shapeRenderer.rect(levelFactory.getCurrentLevel().getCollisionSprites2()[i].getX(),
-//                            levelFactory.getCurrentLevel().getCollisionSprites2()[i].getY(),
-//                            levelFactory.getCurrentLevel().getCollisionSprites2()[i].getWidth(),
-//                            levelFactory.getCurrentLevel().getCollisionSprites2()[i].getHeight());
+//                    shapeRenderer.rect(GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites1()[3].getX(),
+//                            GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites1()[3].getY(),
+//                            GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites1()[3].getWidth(),
+//                            GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites1()[3].getHeight());
+
+//                for (int i = 0; i < GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites1().length; i++) {
+//                    shapeRenderer.rect(GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites1()[i].getX(),
+//                            GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites1()[i].getY(),
+//                            GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites1()[i].getWidth(),
+//                            GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites1()[i].getHeight());
+//                    shapeRenderer.rect(GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites2()[i].getX(),
+//                            GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites2()[i].getY(),
+//                            GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites2()[i].getWidth(),
+//                            GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getCollisionSprites2()[i].getHeight());
 //                }
 //                shapeRenderer.rect(levelFactory.getCurrentLevel().getGroundRectangle().getX(),
 //                        levelFactory.getCurrentLevel().getGroundRectangle().getY(),
 //                        levelFactory.getCurrentLevel().getGroundRectangle().getWidth(),
 //                        levelFactory.getCurrentLevel().getGroundRectangle().getHeight());
 //
-                shapeRenderer.setColor(Color.RED);
-                shapeRenderer.end();
+//                shapeRenderer.setColor(Color.RED);
+//                shapeRenderer.end();
                 // ----------------------------------------------------------------------------------------------------
 
                 // Render the stage actors
@@ -199,7 +214,8 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         Gdx.app.log("dispose", "GameScreenDispose");
-        // MyGDXGame only calls a screens create method if setScreen().
+
+        // MyGDXGame only calls a screens create method if it has been used in setScreen().
         // If a screens create method has not executed the stage may be null
         if(stage != null) {
             gameStateController.dispose();

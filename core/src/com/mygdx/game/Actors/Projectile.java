@@ -80,11 +80,10 @@ public class Projectile extends Actor {
         setProjectileBounds();   // Monitor out of bounds
 
         // If the projectile hits a character, the characters position is updated so the particle can be drawn on the position.
-//        if(projectileHit) {
-        particle.getSprite().setPosition(GameScreen.getInstance().getHelper().getCenteredSpritePosition(overlapCharacter.getSprite()).x,
+        if(projectileHit) {
+            particle.getSprite().setPosition(GameScreen.getInstance().getHelper().getCenteredSpritePosition(overlapCharacter.getSprite()).x,
                 GameScreen.getInstance().getHelper().getCenteredSpritePosition(overlapCharacter.getSprite()).y);
-//        }
-
+        }
 
         switchState();          // Monitor state switch
     }

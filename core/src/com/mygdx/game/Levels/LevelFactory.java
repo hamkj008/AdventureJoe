@@ -1,8 +1,8 @@
 package com.mygdx.game.Levels;
-import com.mygdx.game.Actors.GameObjects.Chest;
 import com.mygdx.game.Actors.GameObjects.GameObjects;
 import com.mygdx.game.Actors.GameObjects.LevelEnd;
 import com.mygdx.game.Game.MyGdxGame;
+
 
 
 /**
@@ -16,11 +16,13 @@ public class LevelFactory {
 
     private LevelCreator currentLevel;
     private GameObjects currentLevelObjects;
-
+    private static float currentGroundLevel;
 
     // ===================================================================================================================
 
-    public LevelFactory() { currentLevel = new LevelCreator(); }
+    public LevelFactory() {
+        currentLevel = new LevelCreator();
+    }
 
     // ===================================================================================================================
 
@@ -29,11 +31,10 @@ public class LevelFactory {
         int[] background = { 0, 1, 2, 3, 4 };
         int[] foreground = { 5, 6, 7, 8, 9, 10, 11 };
         currentLevel = new LevelCreator();
-        currentLevel.createLevel("Levels/Level1/Level1-MyPhone.tmx", foreground, background, 4);
+        currentLevel.createLevel("Levels/Level1/Level1-MyPhone.tmx", foreground, background, 4, 20000);
+        currentGroundLevel = currentLevel.getGroundLevel();
 
-        currentLevelObjects = new GameObjects();
-        currentLevelObjects.getPowerUp().getStartPosition().set(1300, 800);
-        currentLevelObjects.configureChest(Chest.ChestType.Chest01, 2500, 800);
+        currentLevelObjects = new GameObjects(20, 4, 2, currentLevel.getLevelXBoundary());
         currentLevelObjects.getLevelEnd().setGoalType(LevelEnd.GoalType.BABY);
 
         currentLevel.setEnemyKilledExitThreshold(3);
@@ -46,11 +47,9 @@ public class LevelFactory {
         int[] background = { 0, 1 };
         int[] foreground = { 2, 3, 4, 5, 6, 7, 8 };
         currentLevel = new LevelCreator();
-        currentLevel.createLevel("Levels/Level3/Level3.tmx", foreground, background, 3);
+        currentLevel.createLevel("Levels/Level3/Level3.tmx", foreground, background, 3, 100);
 
-        currentLevelObjects = new GameObjects();
-        currentLevelObjects.getPowerUp().getStartPosition().set(2400, 600);
-        currentLevelObjects.configureChest(Chest.ChestType.Chest02, 500, 600);
+        currentLevelObjects = new GameObjects(20, 4, 2, currentLevel.getLevelXBoundary());
         currentLevelObjects.getLevelEnd().setGoalType(LevelEnd.GoalType.PRINCESS);
 
         currentLevel.setEnemyKilledExitThreshold(5);
@@ -67,6 +66,7 @@ public class LevelFactory {
             createLevel2();
         }
     }
+
     // ===================================================================================================================
 
     public void dispose() {
@@ -79,4 +79,6 @@ public class LevelFactory {
     public LevelCreator getCurrentLevel() { return currentLevel; }
 
     public GameObjects getGameObjects() { return currentLevelObjects; }
+
+    public static float getCurrentGroundLevel() { return currentGroundLevel; }
 }

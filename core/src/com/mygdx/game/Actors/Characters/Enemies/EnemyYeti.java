@@ -8,6 +8,7 @@ import com.mygdx.game.Actors.ProjectileSpawner;
 import com.mygdx.game.Screens.GameScreen;
 
 
+
 /**
  * Yeti has a projectile attack and a melee attack
  */
@@ -54,7 +55,7 @@ public class EnemyYeti extends Enemy {
         hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Hurt.png", 4, 3, 12);
         dyingAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Dying.png", 4, 3, 12);
 
-        super.getProjectileOffset().put("leftOffset", new Vector2(100, 0));
+        super.getProjectileOffset().put("leftOffset", new Vector2(-10, 100));
         super.getProjectileOffset().put("rightOffset", new Vector2(200, 100));
         super.setProjectileSpawner(new ProjectileSpawner("Game Objects/Cartoon Yeti_Snow Ball.png", "Audio/Sounds/shot.mp3",
                 new Vector2(70, 50), projectileReloadSpeed));
@@ -98,7 +99,6 @@ public class EnemyYeti extends Enemy {
             }
         }
         if(super.getCharacterState() == CharacterState.ATTACKING) {
-
             super.setCURRENT_MOVEMENT_SPEED(0);
 
             if (super.getAttackState() == AttackState.MELEE) {
@@ -107,6 +107,8 @@ public class EnemyYeti extends Enemy {
                     checkDamage();
                     // Set the state to enter into after animation has played.
                     super.setCharacterState(CharacterState.MOVING);
+                    startTimer = true;
+                    canChange = false;
                 }
             }
             if (super.getAttackState() == AttackState.PROJECTILE) {
@@ -114,8 +116,13 @@ public class EnemyYeti extends Enemy {
                 if (super.nonLoopingAnimation(throwingAnimation)) {
                     // Set the state to enter into after animation has played.
                     super.setCharacterState(CharacterState.MOVING);
+                    startTimer = true;
+                    canChange = false;
                 }
             }
+        }
+        if(startTimer) {
+            super.setTimer();
         }
     }
 
@@ -128,9 +135,10 @@ public class EnemyYeti extends Enemy {
         super.setAIStates(player);
 
         // The yeti has a projectile attack and a melee attack. If it is far enough away from the player it uses the projectile attack.
-        if (distanceFromPlayer(player) > 700 && distanceFromPlayer(player) < 1000) {
+        if ( distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 700 && canChange) {
             setAttackState(AttackState.PROJECTILE);
             super.setCharacterState(CharacterState.ATTACKING);
+            super.getProjectileSpawner().setStartTimer(true);
         }
         else {
             // If it is close enough to the player, it uses the melee attack

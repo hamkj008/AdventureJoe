@@ -1,7 +1,6 @@
 package com.mygdx.game.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,6 +10,7 @@ import com.mygdx.game.Actors.Characters.Enemies.EnemyFactory;
 import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Levels.LevelFactory;
 import com.mygdx.game.UI.UIController;
+
 
 
 /**
@@ -96,7 +96,8 @@ public class GameStateController {
     public void newEnemy() {
 
         randomEnemy.remove();
-        randomEnemy = enemyFactory.spawnRandomEnemy();
+        randomEnemy = enemyFactory.createEnemyYeti();
+//        randomEnemy = enemyFactory.spawnRandomEnemy();
         randomEnemy.reset();
         stage.addActor(randomEnemy);
     }
@@ -152,7 +153,8 @@ public class GameStateController {
                         movePlayerLeft();
                     }
                     // Move Right
-                    if (uiController.getUIControlsOverlay().getRightButton().isDown() && player.getCharacterState() != Character.CharacterState.FALLING) {
+                    if (uiController.getUIControlsOverlay().getRightButton().isDown() && player.getCharacterState() != Character.CharacterState.FALLING
+                     && mapPosition < levelFactory.getCurrentLevel().getLevelXBoundary()) {
                         movePlayerRight();
                     }
                     // Jump
@@ -161,14 +163,8 @@ public class GameStateController {
                     }
                     // Shoot
                     if (uiController.getUIControlsOverlay().getShootButton().isDown()) {
-//                        playerShoot();
-                        if (player.getIsGrounded()) {
-                            player.setCharacterState(Character.CharacterState.ATTACKING);
-                        }
+                        playerShoot();
                     }
-//                    else {
-//                        player.setCharacterState(Character.CharacterState.IDLE);
-//                    }
                 }
                 // If the screen is no longer being touched while the character is running, the
                 // running immediately stops and is idle.
@@ -268,7 +264,7 @@ public class GameStateController {
 
     public void movePlayerRight() {
 
-        if (player.getIsGrounded()) {
+        if (player.getIsGrounded() && player.getSprite().getX() < levelFactory.getCurrentLevel().getLevelXBoundary()) {
             // Set the player to running and move the player to the new position.
             player.setDirection(Character.Direction.RIGHT);
             player.setCharacterState(Character.CharacterState.MOVING);
@@ -306,6 +302,7 @@ public class GameStateController {
 
         if (player.getIsGrounded()) {
             player.setCharacterState(Character.CharacterState.ATTACKING);
+            player.getProjectileSpawner().setStartTimer(true);
         }
     }
 
@@ -334,13 +331,6 @@ public class GameStateController {
             Gdx.graphics.setContinuousRendering(true);
             Gdx.graphics.requestRendering();
         }
-    }
-
-    // ===================================================================================================================
-
-    public static Vector2 createRandomPosition() {
-
-        return new Vector2();
     }
 
     // ===================================================================================================================

@@ -1,10 +1,11 @@
 package com.mygdx.game.Actors.Characters.Enemies;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Screens.GameScreen;
+
 
 
 /**
@@ -29,12 +30,19 @@ public class Enemy extends Character {
 
     private boolean hasRunningState;
 
+    public float stateDuration = 2;
+    private float timePeriod                        = 0f;
+    public float timer;
+    public boolean startTimer                      = false;
+    public boolean canChange                        = true;
+
     // ===================================================================================================================
 
     public Enemy() {
 
         // All enemies start facing left.
         super.setDirection(Direction.LEFT);
+        timer = stateDuration;
     }
 
     // ===================================================================================================================
@@ -60,8 +68,28 @@ public class Enemy extends Character {
 
         super.setIsAlive(true);
         super.setHealth(getMax_Health());
-        super.setCharacterState(CharacterState.MOVING);
+        super.setCharacterState(CharacterState.MOVING);         // Sets the default starting state to MOVING
         super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
+    }
+
+    // ===================================================================================================================
+
+    // Timer to control how quickly projectiles can spawn (the reload time)
+    public void setTimer() {
+
+        timePeriod += Gdx.graphics.getDeltaTime();
+
+        if(timePeriod >= 1) {
+            timePeriod = 0;
+            timer -= 1f;
+
+            if (timer <= 0) {
+                timer       = stateDuration;
+                canChange    = true;
+                startTimer = false;
+                Gdx.app.log("newtimer", "timerFinished");
+            }
+        }
     }
 
     // ===================================================================================================================
@@ -83,7 +111,6 @@ public class Enemy extends Character {
 
             case IDLE:
                 super.setCURRENT_MOVEMENT_SPEED(0);
-                super.moveCharacter();
                 super.loopingAnimation(idleAnimation);
                 break;
 
@@ -99,8 +126,7 @@ public class Enemy extends Character {
                 super.setCURRENT_MOVEMENT_SPEED(0);
 
                 if (super.nonLoopingAnimation(hurtAnimation)) {
-//                    particleAppeared();
-                    super.setCharacterState(CharacterState.MOVING);;
+                    super.setCharacterState(CharacterState.MOVING);
                 }
                 break;
 
@@ -108,24 +134,11 @@ public class Enemy extends Character {
                 super.setCURRENT_MOVEMENT_SPEED(0);
 
                 if (super.nonLoopingAnimation(dyingAnimation)) {
-//                    super.getParticle().spawnParticle(getCenteredSpritePosition());
                     killEnemy();
                 }
                 break;
         }
     }
-
-    // ===================================================================================================================
-
-//    public void particleAppeared(){
-//
-//        // TODO: the currentFrame position is not right
-//        int touchX = (int) getCenteredSpritePosition().getX() ;
-//        int touchY = (int) getCenteredSpritePosition().getY() + 50;
-//
-//        this.particle.spawnParticle();
-//        this.particle.getPosition().set(new Vector2(touchX, touchY));
-//    }
 
     // ===================================================================================================================
 

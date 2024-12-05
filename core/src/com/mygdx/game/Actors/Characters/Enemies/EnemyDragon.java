@@ -8,6 +8,7 @@ import com.mygdx.game.Actors.ProjectileSpawner;
 import com.mygdx.game.Screens.GameScreen;
 
 
+
 /**
  * Dragon has a projectile attack
  */
@@ -45,8 +46,8 @@ public class EnemyDragon extends Enemy {
         hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Hurt.png", 3, 6, 18);
         dyingAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Dying.png", 3, 3, 9);
 
-        super.getProjectileOffset().put("leftOffset", new Vector2(100, 0));
-        super.getProjectileOffset().put("rightOffset", new Vector2(200, 100));
+        super.getProjectileOffset().put("leftOffset", new Vector2(-10, 90));
+        super.getProjectileOffset().put("rightOffset", new Vector2(200, 90));
         super.setProjectileSpawner(new ProjectileSpawner("Game Objects/DragonProjectile.png", "Audio/Sounds/shot.mp3",
                 new Vector2(70, 50), projectileReloadSpeed));
         super.getProjectileSpawner().setMovementSpeed(projectileMovementSpeed);
@@ -85,7 +86,13 @@ public class EnemyDragon extends Enemy {
             super.setCURRENT_MOVEMENT_SPEED(0);
             if (super.nonLoopingAnimation(attackingAnimation)) {
                 super.setCharacterState(CharacterState.MOVING);
+                startTimer = true;
+                canChange = false;
             }
+        }
+
+        if(startTimer) {
+            super.setTimer();
         }
     }
 
@@ -97,8 +104,10 @@ public class EnemyDragon extends Enemy {
         super.setAIStates(player);
 
         // The dragon fires at the enemy wherever it is
-        if (distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 500) {
+        if (distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 500 && canChange) {
+
             super.setCharacterState(CharacterState.ATTACKING);
+            super.getProjectileSpawner().setStartTimer(true);
         }
     }
 }

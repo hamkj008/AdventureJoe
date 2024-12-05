@@ -1,5 +1,4 @@
 package com.mygdx.game.Actors.GameObjects;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -9,7 +8,7 @@ import com.mygdx.game.Actors.Characters.Player.Player;
 
 
 /**
- * Abstract super class for chests. Provides the template to make chests.
+ * A Treasure chest collectible that can be collected by the player.
  */
 public class Chest extends Actor {
 
@@ -17,10 +16,10 @@ public class Chest extends Actor {
     private final ChestType chestType = ChestType.Chest01;
 
     // Chest animations
-    protected Sprite[] animations = new Sprite[4];
+    protected Sprite[] animations;
     private int animationIndex;
 
-    protected int value ;
+    private int value = 0;
 
     private final Sound chestCollectedSound;
     private boolean playChestCollectedSound = false;
@@ -37,7 +36,9 @@ public class Chest extends Actor {
     // ===================================================================================================================
 
     public Chest() {
-        this.chestCollectedSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Chest.mp3"));
+
+        animations          = new Sprite[4];
+        chestCollectedSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Chest.mp3"));
     }
 
     // ===================================================================================================================
@@ -55,6 +56,7 @@ public class Chest extends Actor {
 
     // ===================================================================================================================
 
+    @Override
     public void act(float delta) {
         elapsedTime += delta;
 
@@ -68,7 +70,8 @@ public class Chest extends Actor {
 
     // ===================================================================================================================
 
-    public void draw(Batch batch){
+    @Override
+    public void draw(Batch batch, float alpha){
 
         if(animationIndex < (animations.length - 1)) {
             animations[animationIndex].draw(batch);
@@ -103,16 +106,7 @@ public class Chest extends Actor {
 
     // ===================================================================================================================
 
-    public Sprite getCurrentSprite(){
-        if (animationIndex < animations.length){
-            return animations[animationIndex];
-        }
-        return null;
-    }
-
-    // ===================================================================================================================
-
-    public void setAnimations(int positionX, int positionY) {
+    public void setAnimations(float positionX, float positionY) {
 
         for (Sprite sprite : animations){
             sprite.setPosition(positionX,positionY);
@@ -123,9 +117,11 @@ public class Chest extends Actor {
     // ===================================================================================================================
 
     public void dispose(){
+
         this.chestCollectedSound.dispose();
     }
 
     // ===================================================================================================================
 
+    public void setValue(int value) { this.value = value; }
 }

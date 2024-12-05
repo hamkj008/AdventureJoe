@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Game.GameStateController;
+import com.mygdx.game.Levels.LevelFactory;
 import com.mygdx.game.Screens.GameScreen;
 
 
@@ -16,11 +17,9 @@ public class LevelEnd extends Character {
     private GoalState goalState     = GoalState.IDLE;
     private boolean endReached      = false;
 
-
     // ---- ANIMATIONS CONTAINERS -------------------------
     private Animation<TextureRegion> idleAnimation;
     private Animation<TextureRegion> spellAnimation;
-
 
     // ---- ANIMATIONS -------------------------
     private final Animation<TextureRegion> princessIdleAnimation;
@@ -35,7 +34,7 @@ public class LevelEnd extends Character {
 
         // Initialize size and start position
         super.setDirection(Direction.LEFT);
-        super.getStartPosition().x = 5000;
+        super.getStartPosition().x = GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getLevelXBoundary();
         super.getSprite().setX(getStartPosition().x);
 
         // ---- ANIMATIONS -------------------------

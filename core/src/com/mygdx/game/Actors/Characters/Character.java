@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Actors.ProjectileSpawner;
+import com.mygdx.game.Levels.LevelFactory;
 import com.mygdx.game.Screens.GameScreen;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,8 +46,6 @@ public class Character extends Actor {
     private float loopingStateTime;
     private float nonLoopingStateTime;
 
-    private float characterGroundLevel;
-
     private ProjectileSpawner projectileSpawner = null;
     private final Map<String, Vector2> projectileOffset;
 
@@ -60,9 +59,8 @@ public class Character extends Actor {
         currentFrame            = new TextureRegion();
         startPosition           = new Vector2();
         positionAmount          = new Vector2();
-        characterGroundLevel    = GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getGroundLevel();
-        startPosition.y         = characterGroundLevel;
-        projectileOffset = new HashMap<>();
+        startPosition.y         = LevelFactory.getCurrentGroundLevel();     // Characters cannot be created before the level
+        projectileOffset        = new HashMap<>();
         projectileOffset.put("leftOffset", new Vector2());
         projectileOffset.put("rightOffset", new Vector2());
     }
@@ -93,16 +91,19 @@ public class Character extends Actor {
      **/
     @Override
     public void draw(Batch batch, float alpha) {
-//        Gdx.app.log("draw", "character draw");
 
         GameScreen.getInstance().getHelper().flipSprite(direction, currentFrame);
 
-        batch.draw(currentFrame, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+        if(currentFrame != null && sprite != null) {
+            batch.draw(currentFrame, sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
+        }
+        else {
+            Gdx.app.log("error", "Error: a character is null in draw");
+        }
 
         if(projectileSpawner != null) {
             projectileSpawner.draw(batch, alpha);
         }
-
     }
 
     // ===================================================================================================================
@@ -110,12 +111,16 @@ public class Character extends Actor {
     @Override
     public void act(float delta) {
 
+        Gdx.app.log("timer", "" + projectileSpawner.getStartTimer());
         if(projectileSpawner != null) {
-            if (getCharacterState() == CharacterState.ATTACKING && projectileSpawner.getCanSpawn()) {
+
+            if (characterState == Character.CharacterState.ATTACKING && projectileSpawner.getCanSpawn()) {
                 spawnProjectile();
+                Gdx.app.log("newtimer", "spawnProjectile");
             }
-            else {
-                projectileSpawner.timerElapsed();
+
+            if(projectileSpawner.getStartTimer()) {
+                projectileSpawner.setTimer();
             }
             projectileSpawner.act(delta);
         }
@@ -231,13 +236,6 @@ public class Character extends Actor {
     public Vector2 getStartPosition() { return startPosition; }
 
     public Vector2 getPositionAmount() { return positionAmount; }
-
-    public float getCharacterGroundLevel() { return characterGroundLevel; }
-
-    public void setCharacterGroundLevel(float groundLevel) {
-        this.characterGroundLevel = groundLevel;
-        startPosition.y = characterGroundLevel;
-    }
 
     public ProjectileSpawner getProjectileSpawner() { return projectileSpawner; }
 

@@ -4,7 +4,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Actors.Characters.Player.Player;
 
@@ -16,11 +15,10 @@ import com.mygdx.game.Actors.Characters.Player.Player;
  */
 public class PowerUp extends Actor {
 
-    public enum PowerUpState { ACTIVE, INACTIVE }
-    private PowerUpState powerUpState       = PowerUpState.INACTIVE;
+    public enum PowerUpState {ACTIVE, INACTIVE}
+    private PowerUpState powerUpState = PowerUpState.INACTIVE;
 
-    private final Sprite powerUpSprite;
-    private final Vector2 startPosition;
+    private final Sprite sprite;
 
     // Sounds
     private final Sound powerUpSound;
@@ -29,7 +27,6 @@ public class PowerUp extends Actor {
     private final Sound powerDownSound;
     private boolean playPowerDownSound      = false;
 
-
     private float timePeriod                = 0;
     // Power Up will last for 20 secs
     private int powerUpTimeDuration         = 20;
@@ -37,13 +34,12 @@ public class PowerUp extends Actor {
 
     // ===================================================================================================================
 
-    public PowerUp(String filePath, String powerUpSoundPath, String powerDownSoundPath) {
+    public PowerUp() {
 
-        powerUpSprite = new Sprite(new Texture(filePath));
-        startPosition = new Vector2();
+        sprite = new Sprite(new Texture("Game Objects/Powerup_Diamond.png"));
 
-        powerUpSound    = Gdx.audio.newSound(Gdx.files.internal(powerUpSoundPath));
-        powerDownSound  = Gdx.audio.newSound(Gdx.files.internal(powerDownSoundPath));
+        powerUpSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/PowerUp.mp3"));
+        powerDownSound = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/PowerDown.mp3"));
     }
 
     // ===================================================================================================================
@@ -51,9 +47,9 @@ public class PowerUp extends Actor {
     @Override
     public void draw(Batch batch, float alpha) {
 
-        if(powerUpState == PowerUpState.INACTIVE) {
-            batch.draw(powerUpSprite.getTexture(), powerUpSprite.getX(), powerUpSprite.getY(),
-                        powerUpSprite.getWidth(), powerUpSprite.getHeight());
+        if (powerUpState == PowerUpState.INACTIVE) {
+            batch.draw(sprite.getTexture(), sprite.getX(), sprite.getY(),
+                    sprite.getWidth(), sprite.getHeight());
         }
     }
 
@@ -65,11 +61,11 @@ public class PowerUp extends Actor {
         timePeriod += delta;
 
         // Countdown for Power Up duration
-        if(timePeriod > 1) {
+        if (timePeriod > 1) {
             timePeriod = 0;
             powerUpTimeDuration -= 1;
 
-            if(powerUpTimeDuration == 0) {
+            if (powerUpTimeDuration == 0) {
                 powerUpState = PowerUpState.INACTIVE;
                 powerUpTimeDuration = 20;
             }
@@ -99,7 +95,7 @@ public class PowerUp extends Actor {
     // ===================================================================================================================
 
     public void reset() {
-        powerUpSprite.setPosition(startPosition.x, startPosition.y);
+//        sprite.setPosition(startPosition.x, startPosition.y);
     }
 
     // ===================================================================================================================
@@ -107,27 +103,26 @@ public class PowerUp extends Actor {
     // Check for collisions
     public void checkCollided(Player player) {
 
-        if(player.getSprite().getBoundingRectangle().overlaps(powerUpSprite.getBoundingRectangle())) {
+        if (player.getSprite().getBoundingRectangle().overlaps(sprite.getBoundingRectangle())) {
             powerUpState = PowerUpState.ACTIVE;
-            player.setWeaponType(Player.WeaponType.RIFLE);
-//            player.setWeapon();
-//            player.setRifle();
-//            player.setPowerUp(true);
+            // Notify the player to change the weapon type
+            if(player.getWeaponType() != Player.WeaponType.RIFLE) {
+                player.setWeapon(Player.WeaponType.RIFLE);
+            }
         }
 
-        if(powerUpState == PowerUpState.INACTIVE) {
-            player.setWeaponType(Player.WeaponType.HANDGUN);
-//            player.setWeapon();
-//            player.setWeapon(player.setWeaponType(Player.WeaponType.HANDGUN));
-//            player.setHandgun();
-//            player.setPowerUp(false);
+        if (powerUpState == PowerUpState.INACTIVE) {
+            if(player.getWeaponType() != Player.WeaponType.HANDGUN) {
+                // Notify the player to change the weapon type
+                player.setWeapon(Player.WeaponType.HANDGUN);
+            }
         }
     }
 
     // ===================================================================================================================
 
     public void playPowerUpSound() {
-        if(playPowerUpSound) {
+        if (playPowerUpSound) {
             powerUpSound.play();
             playPowerUpSound = false;
         }
@@ -136,7 +131,7 @@ public class PowerUp extends Actor {
     // ===================================================================================================================
 
     public void playPowerDownSound() {
-        if(playPowerDownSound) {
+        if (playPowerDownSound) {
             powerDownSound.play();
             playPowerDownSound = false;
         }
@@ -147,7 +142,7 @@ public class PowerUp extends Actor {
     // Moves the power up in the opposite direction to the players camera movement, giving the appearance of being a static object.
     public void compensateCamera(float cameraPositionAmount) {
 
-       powerUpSprite.translate(cameraPositionAmount, 0);
+        sprite.translate(cameraPositionAmount, 0);
     }
 
     // ===================================================================================================================
@@ -159,5 +154,5 @@ public class PowerUp extends Actor {
 
     // ===================================================================================================================
 
-    public Vector2 getStartPosition() { return startPosition; }
+    public Sprite getSprite() { return sprite; }
 }

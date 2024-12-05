@@ -59,7 +59,6 @@ public class EnemyDevilGuy extends Enemy {
         // Switch states in Enemy class has a set of default behaviours for standard animations.
         super.switchStates(idleAnimation, walkingAnimation, hurtAnimation, dyingAnimation);
 
-
         // --- Custom states ------
         if(super.getCharacterState() == CharacterState.MOVING) {
             if (super.getMovingState() == MovingState.RUNNING) {

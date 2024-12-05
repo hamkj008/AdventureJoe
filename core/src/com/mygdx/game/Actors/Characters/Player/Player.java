@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Actors.ProjectileSpawner;
 import com.mygdx.game.Game.GameStateController;
+import com.mygdx.game.Levels.LevelFactory;
 import com.mygdx.game.Screens.GameScreen;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,47 +25,17 @@ public class Player extends Character {
     private final int jumpingSpeed          = 600;
     private final int fallingSpeed          = 800;
 
-    // Point where the state switches from jumping to falling
-    private final int terminal_Velocity     = 500;
+    private final int terminal_Velocity     = 500;          // Point where the state switches from jumping to falling
 
-    // Guard that acts as a check to prevent other states from being enacted before the jump has finished.
-    private boolean grounded                = true;
+    private boolean grounded                = true;         // Guard that acts as a check to prevent other states from being enacted before the jump has finished.
+    private float playerLevel;                              // Stores the current y coordinate of the player to know if on a platform
 
-    private float playerLevel;
-
-    public enum WeaponType { HANDGUN, RIFLE };
+    public enum WeaponType { HANDGUN, RIFLE }
     private WeaponType weaponType = WeaponType.HANDGUN;
-
-    // ---- STATE ANIMATIONS -------------------------
-    private Animation<TextureRegion> idleAnimation;
-    private Animation<TextureRegion> runningAnimation;
-    private Animation<TextureRegion> jumpingStartAnimation;
-    private Animation<TextureRegion> jumpingLoopAnimation;
-    private Animation<TextureRegion> attackingAnimation;
-    private Animation<TextureRegion> hurtAnimation;
-    private Animation<TextureRegion> dyingAnimation;
-
-//
-//    // ---- ALL ANIMATIONS -------------------------
-//    private Animation<TextureRegion> idleHandgunAnimation;
-//    private Animation<TextureRegion> idleRifleAnimation;
-//    private Animation<TextureRegion> runningHandgunAnimation;
-//    private Animation<TextureRegion> runningRifleAnimation;
-//    private Animation<TextureRegion> jumpingStartHandgunAnimation;
-//    private Animation<TextureRegion> jumpingStartRifleAnimation;
-//    private Animation<TextureRegion> jumpingLoopHandgunAnimation;
-//    private Animation<TextureRegion> jumpingLoopRifleAnimation;
-//    private Animation<TextureRegion> attackingHandgunAnimation;
-//    private Animation<TextureRegion> attackingRifleAnimation;
-//    private Animation<TextureRegion> hurtHandgunAnimation;
-//    private Animation<TextureRegion> hurtRifleAnimation;
-//    private Animation<TextureRegion> dyingHandgunAnimation;
-//    private Animation<TextureRegion> dyingRifleAnimation;
 
     private Map<String, Animation<TextureRegion>> weaponAnimations;
     private final Map<String, Animation<TextureRegion>> rifleAnimations;
     private final Map<String, Animation<TextureRegion>> handgunAnimations;
-
 
     private final Sound jumpSound;
     private boolean playJumpSound = true;
@@ -77,11 +47,11 @@ public class Player extends Character {
     private boolean playDieSound = true;
 
     private final float handgunSpeed          = 500f;
-    private final float handgunReloadSpeed    = 2f;
+    private final float handgunReloadSpeed    = 1f;
     private final int handgunDamage           = 20;
 
-    private final float rifleSpeed            = 1200f;
-    private final float rifleReloadSpeed      = 0.6f; // Increments of 0.2
+    private final float rifleSpeed            = 1000f;
+    private final float rifleReloadSpeed      = 0.4f;       // Increments of 0.2
     private final int rifleDamage             = 35;
 
     // ===================================================================================================================
@@ -90,9 +60,8 @@ public class Player extends Character {
         Gdx.app.log("flow", "Player");
 
         // Initialize start position
-        getStartPosition().x = 200;
-        playerLevel = getCharacterGroundLevel();
-        getStartPosition().y = playerLevel;
+        getStartPosition().x    = 200;
+        playerLevel             = LevelFactory.getCurrentGroundLevel();
         setDirection(Direction.RIGHT);
 
         weaponAnimations    = new HashMap<>();
@@ -117,11 +86,13 @@ public class Player extends Character {
         rifleAnimations.put("hurtAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Hurt - Rifle.png", 4, 3, 12));
         rifleAnimations.put("dyingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Dying - Rifle.png", 4, 3, 12));
 
+        weaponAnimations = handgunAnimations;  // Set default animations
+
         jumpSound   = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Jump.mp3"));
         hurtSound   = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Hurt.mp3"));
         dieSound    = Gdx.audio.newSound(Gdx.files.internal("Audio/Sounds/Dying.mp3"));
 
-        super.getProjectileOffset().put("leftOffset", new Vector2(100, 0));
+        super.getProjectileOffset().put("leftOffset", new Vector2(0, 100));
         super.getProjectileOffset().put("rightOffset", new Vector2(200, 100));
         super.setProjectileSpawner(new ProjectileSpawner("Game Characters/Player/PlayerProjectile.png", "Audio/Sounds/shot.mp3",
                 new Vector2(45, 25), handgunReloadSpeed));
@@ -161,10 +132,10 @@ public class Player extends Character {
     public void healthCheck(int damage) {
 
         // The player can only get hurt or die when on the ground.
-//        if(grounded) {
-//            super.healthCheck(damage);
-//            GameScreen.getInstance().getUiController().getPlayerHealthBar().modifyHealth(getHealth());
-//        }
+        if(grounded) {
+            super.healthCheck(damage);
+            GameScreen.getInstance().getUiController().getPlayerHealthBar().modifyHealth(getHealth());
+        }
     }
 
     // ===================================================================================================================
@@ -181,35 +152,6 @@ public class Player extends Character {
     // A state machine. Applies the correct animations, movement and other conditions to the various player states.
     public void switchStates() {
 
-        // Normal player animations have a handgun equipped, but if a power up is enabled, all the animations are set to the more powerful rifle weapon.
-//        if (powerUp) {
-//            idleAnimation               = idleRifleAnimation;
-//            runningAnimation            = runningRifleAnimation;
-//            jumpingStartAnimation       = jumpingStartRifleAnimation;
-//            jumpingLoopAnimation        = jumpingLoopRifleAnimation;
-//            attackingAnimation          = attackingRifleAnimation;
-//            hurtAnimation               = hurtRifleAnimation;
-//            dyingAnimation              = dyingRifleAnimation;
-//
-//            // The rifle is faster and does more damage
-//            super.setDamage(rifleDamage);
-//            super.getProjectileSpawner().setMovementSpeed(rifleSpeed);
-//            super.getProjectileSpawner().setProjectileReloadSpeed(rifleReloadSpeed);
-//        }
-//        else {
-//            idleAnimation               = idleHandgunAnimation;
-//            runningAnimation            = runningHandgunAnimation;
-//            jumpingStartAnimation       = jumpingStartHandgunAnimation;
-//            jumpingLoopAnimation        = jumpingLoopHandgunAnimation;
-//            attackingAnimation          = attackingHandgunAnimation;
-//            hurtAnimation               = hurtHandgunAnimation;
-//            dyingAnimation              = dyingHandgunAnimation;
-//
-//            super.setDamage(handgunDamage);
-//            super.getProjectileSpawner().setMovementSpeed(handgunSpeed);
-//            super.getProjectileSpawner().setProjectileReloadSpeed(handgunReloadSpeed);
-//        }
-
         // Controls the animations that are performed in different states as well as applies any additional conditions to the states.
         switch (super.getCharacterState()) {
             case IDLE:
@@ -217,7 +159,8 @@ public class Player extends Character {
                 super.setCURRENT_MOVEMENT_SPEED(0);
                 playDieSound = true;
                 playHurtSound = true;
-                super.loopingAnimation(weaponAnimations.get("idleAnimation"));
+                Animation<TextureRegion> animation = weaponAnimations.get("idleAnimation");
+                super.loopingAnimation(animation);
                 break;
 
             case MOVING:
@@ -251,10 +194,10 @@ public class Player extends Character {
                 playJumpSound = true;
 
                 // Once the player has returned back to ground level, it is set at ground level to prevent falling offscreen.
-                if (getSprite().getY() < getCharacterGroundLevel()) {
-                    getSprite().setPosition(getSprite().getX(), getCharacterGroundLevel());
+                if (getSprite().getY() < LevelFactory.getCurrentGroundLevel()) {
+                    getSprite().setPosition(getSprite().getX(), LevelFactory.getCurrentGroundLevel());
                     grounded = true;
-                    playerLevel = getCharacterGroundLevel();
+                    playerLevel = LevelFactory.getCurrentGroundLevel();
                     super.setCharacterState(CharacterState.IDLE);
                 }
                 break;
@@ -344,11 +287,15 @@ public class Player extends Character {
 
     // ===================================================================================================================
 
-    public void setWeapon() {
+    /**
+     *  Changes the weapon for the player if they collected a power up.
+     **/
+    public void setWeapon(WeaponType weaponType) {
 
         switch (weaponType) {
             case HANDGUN:
                 weaponAnimations = handgunAnimations;
+                this.weaponType = weaponType;
                 super.setDamage(handgunDamage);
                 super.getProjectileSpawner().setMovementSpeed(handgunSpeed);
                 super.getProjectileSpawner().setProjectileReloadSpeed(handgunReloadSpeed);
@@ -356,44 +303,13 @@ public class Player extends Character {
 
             case RIFLE:
                 weaponAnimations = rifleAnimations;
+                this.weaponType = weaponType;
                 super.setDamage(rifleDamage);
                 super.getProjectileSpawner().setMovementSpeed(rifleSpeed);
                 super.getProjectileSpawner().setProjectileReloadSpeed(rifleReloadSpeed);
                 break;
         }
     }
-
-
-//    public void setRifle() {
-//        idleAnimation               = idleRifleAnimation;
-//        runningAnimation            = runningRifleAnimation;
-//        jumpingStartAnimation       = jumpingStartRifleAnimation;
-//        jumpingLoopAnimation        = jumpingLoopRifleAnimation;
-//        attackingAnimation          = attackingRifleAnimation;
-//        hurtAnimation               = hurtRifleAnimation;
-//        dyingAnimation              = dyingRifleAnimation;
-//
-//        // The rifle is faster and does more damage
-//        super.setDamage(rifleDamage);
-//        super.getProjectileSpawner().setMovementSpeed(rifleSpeed);
-//        super.getProjectileSpawner().setProjectileReloadSpeed(rifleReloadSpeed);
-//    }
-
-    // ===================================================================================================================
-
-//    public void setHandgun() {
-//        idleAnimation               = idleHandgunAnimation;
-//        runningAnimation            = runningHandgunAnimation;
-//        jumpingStartAnimation       = jumpingStartHandgunAnimation;
-//        jumpingLoopAnimation        = jumpingLoopHandgunAnimation;
-//        attackingAnimation          = attackingHandgunAnimation;
-//        hurtAnimation               = hurtHandgunAnimation;
-//        dyingAnimation              = dyingHandgunAnimation;
-//
-//        super.setDamage(handgunDamage);
-//        super.getProjectileSpawner().setMovementSpeed(handgunSpeed);
-//        super.getProjectileSpawner().setProjectileReloadSpeed(handgunReloadSpeed);
-//    }
 
     // ======================================== SOUNDS =================================================================
 
@@ -440,6 +356,4 @@ public class Player extends Character {
     public void setPlayerLevel(float playerLevel) { this.playerLevel = playerLevel; }
 
     public WeaponType getWeaponType() { return weaponType; }
-
-    public void setWeaponType(WeaponType weaponType) { this.weaponType = weaponType; }
 }

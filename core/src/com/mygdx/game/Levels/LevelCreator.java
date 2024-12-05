@@ -1,6 +1,4 @@
 package com.mygdx.game.Levels;
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -15,7 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Actors.Characters.Player.Player;
-import com.mygdx.game.Screens.GameScreen;
+
 
 
 /**
@@ -25,7 +23,6 @@ import com.mygdx.game.Screens.GameScreen;
 @SuppressWarnings("FieldCanBeLocal")
 public class LevelCreator {
 
-
     private final int graphicsWidth;
     private final int graphicsHeight;
 
@@ -34,7 +31,6 @@ public class LevelCreator {
     // Map Renderer
     private TiledMapRenderer foregroundTiledMapRenderer;
     private TiledMapRenderer backgroundTiledMapRenderer;
-
 
     // Viewports
     private FitViewport foregroundViewport1;
@@ -49,13 +45,13 @@ public class LevelCreator {
     Rectangle[] collisionRectangle;
     Sprite[] collisionSprites1;
     Sprite[] collisionSprites2;
-
-//    private levelStart;
+    Sprite currentPlatform;
 
     private float groundLevel;
-    private Sprite currentPlatform;
+    private final int platformClearanceFactor = 50;      // The additional clearance needed to be off of a platform to avoid confusion between two states
 
     private int enemyKilledExitThreshold;
+    private int levelXBoundary = 0;
 
 
     // ===================================================================================================================
@@ -64,28 +60,29 @@ public class LevelCreator {
         Gdx.app.log("flow", "LevelCreator");
 
         // Convenient to set up getWidth() and getHeight() here so they are easier to use.
-        graphicsWidth = Gdx.graphics.getWidth();
-        graphicsHeight = Gdx.graphics.getHeight();
+        graphicsWidth   = Gdx.graphics.getWidth();
+        graphicsHeight  = Gdx.graphics.getHeight();
     }
 
     // ===================================================================================================================
 
-    public void createLevel(String filePath, int[] foregroundLayers, int[] backgroundLayers, int numberOfCollisionObjects) {
+    public void createLevel(String filePath, int[] foregroundLayers, int[] backgroundLayers, int numberOfCollisionObjects, int levelXBoundary) {
         Gdx.app.log("flow", "createLevel");
 
+        this.levelXBoundary = levelXBoundary;
         loadedMap = new TmxMapLoader().load(filePath);
 
-        foregroundTiledMapRenderer = new OrthogonalTiledMapRenderer(loadedMap);
-        backgroundTiledMapRenderer = new OrthogonalTiledMapRenderer(loadedMap);
-        backgroundMapLayers = backgroundLayers;
-        foregroundMapLayers = foregroundLayers;
+        foregroundTiledMapRenderer  = new OrthogonalTiledMapRenderer(loadedMap);
+        backgroundTiledMapRenderer  = new OrthogonalTiledMapRenderer(loadedMap);
+        backgroundMapLayers         = backgroundLayers;
+        foregroundMapLayers         = foregroundLayers;
+        currentPlatform             = new Sprite();
 
         /*
          * Map scrolling is first implemented with two viewports that will both draw the level. The first and second viewport will be drawn.
          * Once viewport 1 leaves the screen drawing stops, then the camera is teleported back behind viewport 2 while viewport 2 is being drawn.
          * Once viewport 2 leaves the screen it is teleported behind viewport 1 etc. If the player moves in the opposite direction it is the same but in reverse.
          */
-
         // --------- CAMERAS ------------------------------------
 
         // Foreground cameras. Two cameras used to execute map scrolling
@@ -125,19 +122,18 @@ public class LevelCreator {
 
 
         // ----  Platform Collision  --------------------------------
-        collisionRectangle = new Rectangle[numberOfCollisionObjects];
-        collisionSprites1 = new Sprite[numberOfCollisionObjects];
-        collisionSprites2 = new Sprite[numberOfCollisionObjects];
-        currentPlatform = new Sprite();
+        collisionRectangle  = new Rectangle[numberOfCollisionObjects];
+        collisionSprites1   = new Sprite[numberOfCollisionObjects];
+        collisionSprites2   = new Sprite[numberOfCollisionObjects];
 
         // Extract all the collision objects from the map, and duplicate them ready for infinite map scrolling.
         MapLayer collisionLayer = loadedMap.getLayers().get("PlatformCollision");
         for(int i = 0; i < collisionLayer.getObjects().getCount(); i++) {
             if(collisionLayer.getObjects().get(i) instanceof RectangleMapObject) {
-                RectangleMapObject rmo = (RectangleMapObject) collisionLayer.getObjects().get(i);
-                collisionRectangle[i] = rmo.getRectangle();
-                collisionSprites1[i] = new Sprite();
-                collisionSprites2[i] = new Sprite();
+                RectangleMapObject rmo  = (RectangleMapObject) collisionLayer.getObjects().get(i);
+                collisionRectangle[i]   = rmo.getRectangle();
+                collisionSprites1[i]    = new Sprite();
+                collisionSprites2[i]    = new Sprite();
 
                 collisionSprites1[i].setBounds(collisionRectangle[i].getX(), collisionRectangle[i].getY(),
                         collisionRectangle[i].getWidth(), collisionRectangle[i].getHeight());
@@ -151,12 +147,12 @@ public class LevelCreator {
 
     // ===================================================================================================================
 
-    /*
-    * Goes through both sets of platforms for the map and applies the platform mechanics.
-    */
+    /**
+    *  Goes through both sets of platforms for the map and applies the platform mechanics.
+    **/
     public void checkMapPlatformCollision(Player player) {
-        Gdx.app.log("flow", "checkMapPlatformCollision");
-
+//        Gdx.app.log("flow", "checkMapPlatformCollision");
+        
         for (Sprite collisionSprite : collisionSprites1) {
             platformMechanics(player, collisionSprite);
         }
@@ -168,37 +164,35 @@ public class LevelCreator {
 
     // ===================================================================================================================
 
-    /*
-    * Checks and applies if the player overlaps a platform and is high enough then it is set to the platform.
-    * If the player exceeds the bounds of the platform it starts falling.
-    */
+    /**
+    *  Checks and applies if the player overlaps a platform and is high enough then it is set to the platform.
+    *  If the player exceeds the bounds of the platform it starts falling.
+    *  @ collisionSprite = the current platfom that the player is on
+    **/
     public void platformMechanics(Player player, Sprite collisionSprite) {
-        Gdx.app.log("flow", "platformMechanics");
+//        Gdx.app.log("flow", "platformMechanics");
 
-        if(player.getSprite().getBoundingRectangle().overlaps(collisionSprite.getBoundingRectangle())) {
+        if(!player.getIsGrounded() && player.getSprite().getBoundingRectangle().overlaps(collisionSprite.getBoundingRectangle()) && player.getCharacterState() == Character.CharacterState.FALLING) {
 
             // If the player is at a high enough level to the platform
-            if (player.getSprite().getY() > collisionSprite.getY()) {
+            if (player.getSprite().getY() > collisionSprite.getY()) {     // There must be enough sprite to overlap (why collisionSprite.getHeight is not included)
 
                 // Assign the player to the platform.
-                currentPlatform = collisionSprite;
-
-                player.getSprite().setY(currentPlatform.getY() + currentPlatform.getHeight());
-                player.setPlayerLevel(currentPlatform.getY() + currentPlatform.getHeight());
+                player.getSprite().setY(collisionSprite.getY() + collisionSprite.getHeight());
+                player.setPlayerLevel(collisionSprite.getY() + collisionSprite.getHeight());
 
                 player.setIsGrounded(true);
                 player.setCharacterState(Character.CharacterState.IDLE);
+                currentPlatform = collisionSprite;          // Store the platform the player collided with to check when it is cleared
             }
         }
 
         // The player is on a platform not the ground
-        if(player.getIsGrounded() && player.getPlayerLevel() > player.getCharacterGroundLevel()) {
+        if(player.getIsGrounded() && player.getPlayerLevel() > LevelFactory.getCurrentGroundLevel()) {
 
             // If the player moves off the platform to the left or right
-            if (GameScreen.getInstance().getHelper().getCenteredSpritePosition(player.getSprite()).x < currentPlatform.getX() - 10 ||
-
-                    (GameScreen.getInstance().getHelper().getCenteredSpritePosition(player.getSprite()).x >
-                            currentPlatform.getX() + currentPlatform.getWidth() + 10)) {
+            if ((player.getSprite().getX() + player.getSprite().getWidth()) < (currentPlatform.getX() - platformClearanceFactor) ||
+                    (player.getSprite().getX() > (currentPlatform.getX() + currentPlatform.getWidth() + platformClearanceFactor))) {
                 player.setCharacterState(Character.CharacterState.FALLING);
             }
         }
@@ -223,7 +217,7 @@ public class LevelCreator {
 
     // ===================================================================================================================
 
-    /*
+    /**
     * Moves the camera over the map.
     */
     public void moveCamera(Player player) {
@@ -275,7 +269,8 @@ public class LevelCreator {
              */
             if (backgroundViewport2.getCamera().position.x > graphicsWidth + (graphicsWidth / 2f)) {
                 backgroundViewport2.getCamera().position.x = (-graphicsWidth / 2f);
-            } else {
+            }
+            else {
                 backgroundViewport2.update(graphicsWidth, graphicsHeight);
                 backgroundTiledMapRenderer.setView((OrthographicCamera) backgroundViewport2.getCamera());
                 backgroundTiledMapRenderer.render(backgroundMapLayers);
@@ -382,4 +377,10 @@ public class LevelCreator {
     public void setEnemyKilledExitThreshold(int enemyKilledExitThreshold) {
         this.enemyKilledExitThreshold = enemyKilledExitThreshold;
     }
+
+    public int getLevelXBoundary() { return levelXBoundary; }
+
+    public Sprite[] getCollisionSprites1() { return collisionSprites1; }
+
+    public Sprite[] getCollisionSprites2() { return collisionSprites2; }
 }
