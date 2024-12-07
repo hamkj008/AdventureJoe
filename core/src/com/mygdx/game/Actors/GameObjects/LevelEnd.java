@@ -3,9 +3,8 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Actors.Characters.Player.Player;
-import com.mygdx.game.Game.GameStateController;
-import com.mygdx.game.Levels.LevelFactory;
 import com.mygdx.game.Screens.GameScreen;
+import com.mygdx.game.UI.UICounters;
 
 
 public class LevelEnd extends Character {
@@ -15,7 +14,6 @@ public class LevelEnd extends Character {
 
     private GoalType goalType       = GoalType.BABY;
     private GoalState goalState     = GoalState.IDLE;
-    private boolean endReached      = false;
 
     // ---- ANIMATIONS CONTAINERS -------------------------
     private Animation<TextureRegion> idleAnimation;
@@ -26,6 +24,8 @@ public class LevelEnd extends Character {
     private final Animation<TextureRegion> princessSpellAnimation;
     private final Animation<TextureRegion> babyIdleAnimation;
     private final Animation<TextureRegion> babySpellAnimation;
+
+    private boolean endLevel;
 
 
     // ===================================================================================================================
@@ -55,14 +55,6 @@ public class LevelEnd extends Character {
 
     // ===================================================================================================================
 
-    public void reset() {
-
-        super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
-        endReached = false;
-    }
-
-    // ===================================================================================================================
-
     public void switchStates() {
 
         if (goalType == GoalType.PRINCESS) {
@@ -82,7 +74,7 @@ public class LevelEnd extends Character {
         if(goalState == GoalState.SPELL) {
             if(super.nonLoopingAnimation(spellAnimation)) {
                 // change level
-                endReached = true;
+                endLevel = true;
             }
         }
     }
@@ -104,7 +96,7 @@ public class LevelEnd extends Character {
         // ----- End Level Condition -------------------
         // If the players reaches the endGoal such that the bounding boxes intersect, then the level end goal has been reached.
         if(GameScreen.getInstance().getGameStateController().getPlayer().getSprite().getBoundingRectangle().overlaps(getSprite().getBoundingRectangle())) {
-            if(GameStateController.enemiesKilled == GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getEnemyKilledExitThreshold()) {
+            if(UICounters.enemiesKilled == GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getEnemyKilledExitThreshold()) {
                 goalState = GoalState.SPELL;
             }
         }
@@ -112,9 +104,8 @@ public class LevelEnd extends Character {
 
     // ===================================================================================================================
 
-    public boolean getIsEndReached() { return endReached; }
 
-    public GoalType getGoalType() { return goalType; }
+    public boolean getEndLevel() { return endLevel; }
 
     public void setGoalType(GoalType goalType) { this.goalType = goalType; }
 }

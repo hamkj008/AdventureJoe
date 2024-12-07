@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Actors.Characters.Player.Player;
+import com.mygdx.game.UI.UICounters;
 
 
 public class Coin extends Actor {
@@ -18,7 +19,7 @@ public class Coin extends Actor {
     private final Animation<Texture> animation;
     private final Sprite sprite;
 
-    protected int value;
+    private final int value = 1;
 
     private final Sound coinCollectedSound;
     private boolean playCoinCollectedSound = false;
@@ -53,6 +54,7 @@ public class Coin extends Actor {
             Gdx.app.log("debug", "overlap" + collected);
             playCoinCollectedSound();
             collected = true;
+            UICounters.treasureScore += this.value;
         }
         else {
             playCoinCollectedSound = true;

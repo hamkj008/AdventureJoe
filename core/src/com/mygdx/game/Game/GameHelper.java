@@ -1,10 +1,14 @@
 package com.mygdx.game.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.Actors.Characters.Character;
 
@@ -97,5 +101,30 @@ public class GameHelper {
                 }
             }, 0, intervalSeconds); // Delay of 0 seconds, repeats every intervalSeconds
         }
+    }
+
+    /**
+     *  Creates a table layout with a colored padding around content
+     * @param padding  the amount of colored space bordered around the content
+     * @param color    the color of the background
+     */
+    public Table getBackgroundTable(int padding) {
+
+        Table table = new Table();
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.CYAN);
+        pixmap.fill();
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+        table.background(new TextureRegionDrawable(new TextureRegion(texture)));
+
+        table.pad(padding);     // the padding is applied but cant be seen untill getPrefWidth
+        table.setSize(table.getPrefWidth(), table.getPrefHeight());  // this is the essential part to create the padding, otherwise it automatically sizes to the content
+        return table;
+    }
+
+    public void getTest() {
+
+        Gdx.app.log("", "");
     }
 }

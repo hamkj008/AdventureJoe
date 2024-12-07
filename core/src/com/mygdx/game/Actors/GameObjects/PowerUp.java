@@ -16,7 +16,7 @@ import com.mygdx.game.Actors.Characters.Player.Player;
 public class PowerUp extends Actor {
 
     public enum PowerUpState {ACTIVE, INACTIVE}
-    private PowerUpState powerUpState = PowerUpState.INACTIVE;
+    private static PowerUpState powerUpState = PowerUpState.INACTIVE;           // All power ups share the same state
 
     private final Sprite sprite;
 
@@ -90,12 +90,6 @@ public class PowerUp extends Actor {
                 playPowerDownSound();
                 break;
         }
-    }
-
-    // ===================================================================================================================
-
-    public void reset() {
-//        sprite.setPosition(startPosition.x, startPosition.y);
     }
 
     // ===================================================================================================================

@@ -5,6 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Actors.Characters.Player.Player;
+import com.mygdx.game.Screens.GameScreen;
+import com.mygdx.game.UI.UIController;
+import com.mygdx.game.UI.UICounters;
 
 
 /**
@@ -48,6 +51,7 @@ public class Chest extends Actor {
         if(player.getSprite().getBoundingRectangle().overlaps(animations[0].getBoundingRectangle())) {
             playChestCollectedSound();
             state = ChestState.OPEN;
+            UICounters.treasureScore += this.value;
         }
         else {
             playChestCollectedSound = true;

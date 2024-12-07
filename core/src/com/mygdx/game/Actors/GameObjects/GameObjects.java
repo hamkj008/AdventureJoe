@@ -20,8 +20,10 @@ public class GameObjects extends Actor {
     private final Chest[] chestList;
     private final PowerUp[] powerUpList;
     private final LevelEnd levelEnd;
-
     private final ArrayList<Coin> removedCoins;
+    private final ArrayList<Vector2> positions;
+    private int minPositionDistance = 1500;
+    ArrayList<Object> combinedList;
 
     // ===================================================================================================================
 
@@ -32,22 +34,40 @@ public class GameObjects extends Actor {
         powerUpList         = new PowerUp[numberOfPowerUps];
         levelEnd            = new LevelEnd();
         removedCoins        = new ArrayList<>();
+        positions           = new ArrayList<>();
+        combinedList        = new ArrayList<>();
 
-        for(int i = 0; i < numberOfCoins; i++) {
-            coinList.add(new Coin());
-            Vector2 position = createRandomPosition(levelXBoundary);
-            coinList.get(i).getSprite().setPosition(position.x, position.y);
-            Gdx.app.log("debug", "" + position.x);
-        }
+        // Create all the objects
         for(int i = 0; i < numberOfChests; i++) {
-            chestList[i]        = ChestCreator.createRandomChest();
-            Vector2 position    = createRandomPosition(levelXBoundary);
-            chestList[i].setAnimations(position.x, position.y);
+            chestList[i]   = ChestCreator.createRandomChest();
+            combinedList.add(chestList[i]);
         }
         for(int i = 0; i < numberOfPowerUps; i++) {
-            powerUpList[i]      = new PowerUp();
-            Vector2 position    = createRandomPosition(levelXBoundary);
-            powerUpList[i].getSprite().setPosition(position.x, position.y);
+            powerUpList[i] = new PowerUp();
+            combinedList.add(powerUpList[i]);
+        }
+        for(int i = 0; i < 40; i++) {
+            coinList.add(new Coin());
+            combinedList.add(coinList.get(i));
+        }
+
+        // Gernerate all the positions
+        generateRandomMinDistancePositions(levelXBoundary);
+
+        // Assign positions to objects
+        for(int i =0; i < combinedList.size(); i++) {
+
+            if(combinedList.get(i) instanceof Chest) {
+                ((Chest) combinedList.get(i)).setAnimations(positions.get(i).x, positions.get(i).y);
+            }
+
+            else if(combinedList.get(i) instanceof PowerUp) {
+                ((PowerUp) combinedList.get(i)).getSprite().setPosition(positions.get(i).x, positions.get(i).y);
+            }
+
+            else if(combinedList.get(i) instanceof Coin) {
+                ((Coin) combinedList.get(i)).getSprite().setPosition(positions.get(i).x, positions.get(i).y);
+            }
         }
     }
 
@@ -121,17 +141,6 @@ public class GameObjects extends Actor {
 
     // ===================================================================================================================
 
-    public void reset() {
-
-//        for(PowerUp powerUp : powerUpList) {
-//            powerUp.reset();
-//        }
-
-        levelEnd.reset();
-    }
-
-    // ===================================================================================================================
-
     public void checkCollided(Player player) {
 
         for(Coin coin : coinList) {
@@ -171,6 +180,52 @@ public class GameObjects extends Actor {
     // ===================================================================================================================
 
     /**
+     *  Generates a set of random positions for all the objects in the game with a maximum X boundary the end of the level,
+     *  and a minimum y boundary of the ground level (so objects should not appear in the ground).
+     *  Also sets a minimum distance that any object can be from the next object
+     *  @param levelXBoundary the end boundary of the level
+     */
+    public void generateRandomMinDistancePositions(int levelXBoundary) {
+
+        for(int i =0; i < combinedList.size(); i++) {
+            int retries = 0;
+            int maxRetries = 10;
+            Vector2 position = createRandomPosition(levelXBoundary);
+
+            while (!isValidPosition(position)) {
+                retries++;
+                if (retries == maxRetries) {
+                    Gdx.app.log("position", "Min distance reduced");
+                    minPositionDistance -= 50;
+                    retries = 0;
+                }
+                if (minPositionDistance <= 50) {
+                    Gdx.app.log("position", "cannot place object. Min distance reached");
+                    break;
+                }
+                position = createRandomPosition(levelXBoundary);
+            }
+            positions.add(position);
+        }
+    }
+
+    public boolean isValidPosition(Vector2 positionToCheck) {
+
+        for(Vector2 position : positions) {
+            Gdx.app.log("position", "pos: " + positionToCheck.x + "   range: " + (position.x - minPositionDistance) + " <-> " + (position.x + minPositionDistance));
+            if(positionToCheck.x > position.x - minPositionDistance && positionToCheck.x < position.x + minPositionDistance) {
+//            if(positionToCheck.dst(position) <= minPositionDistance) {
+                Gdx.app.log("position", "false");
+                return false;
+            }
+        }
+        Gdx.app.log("position", "true");
+        return true;
+    }
+
+    // ===================================================================================================================
+
+    /**
      * Creates a random position for game objects, making sure they are above ground level
      * and dispersed along the x up to the x boundarylimit
      **/
@@ -179,6 +234,7 @@ public class GameObjects extends Actor {
         Random rand     = new Random();
         float randX     = 200 + (levelXBoundary - 200) * rand.nextFloat();
         float randY     = LevelFactory.getCurrentGroundLevel() + ((Gdx.graphics.getHeight() - 100) - LevelFactory.getCurrentGroundLevel()) * rand.nextFloat();
+
         return new Vector2(randX, randY);
     }
 

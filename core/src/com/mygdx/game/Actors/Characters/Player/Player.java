@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Actors.ProjectileSpawner;
-import com.mygdx.game.Game.GameStateController;
 import com.mygdx.game.Levels.LevelFactory;
 import com.mygdx.game.Screens.GameScreen;
+import com.mygdx.game.UI.UICounters;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -225,7 +226,7 @@ public class Player extends Character {
                 if (super.nonLoopingAnimation(weaponAnimations.get("dyingAnimation"))) {
                     super.setIsAlive(false);
                     super.setCharacterState(CharacterState.DEAD);
-                    GameStateController.playerLives -= 1;
+                    UICounters.playerLives -= 1;
                 }
                 break;
         }

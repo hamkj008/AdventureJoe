@@ -34,7 +34,7 @@ public class LevelFactory {
         currentLevel.createLevel("Levels/Level1/Level1-MyPhone.tmx", foreground, background, 4, 20000);
         currentGroundLevel = currentLevel.getGroundLevel();
 
-        currentLevelObjects = new GameObjects(20, 4, 2, currentLevel.getLevelXBoundary());
+        currentLevelObjects = new GameObjects(40, 4, 2, currentLevel.getLevelXBoundary());
         currentLevelObjects.getLevelEnd().setGoalType(LevelEnd.GoalType.BABY);
 
         currentLevel.setEnemyKilledExitThreshold(3);

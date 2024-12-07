@@ -9,18 +9,15 @@ import com.mygdx.game.Actors.Characters.Enemies.Enemy;
 import com.mygdx.game.Actors.Characters.Enemies.EnemyFactory;
 import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Levels.LevelFactory;
+import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.UI.UIController;
-
+import com.mygdx.game.UI.UICounters;
 
 
 /**
  *  Stores objects and data relevant to the game state.
  **/
 public class GameStateController {
-
-    public static int playerLives       = 3;
-    public static int enemiesKilled     = 0;
-    public static int treasureScore     = 0;
 
     private boolean start               = false;
     private final float startingPoint   = 200f;
@@ -36,6 +33,7 @@ public class GameStateController {
     private LevelFactory levelFactory;
     private final Stage stage;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private boolean checkTouch;
     private boolean keyboardPaused;
 
@@ -76,10 +74,9 @@ public class GameStateController {
         newEnemy();
         levelFactory.getGameObjects().remove();
         levelFactory.createCurrentLevel();
-        levelFactory.getGameObjects().reset();
-        enemiesKilled = 0;
         stage.addActor(levelFactory.getGameObjects());
         mapPosition = startingPoint;
+        GameScreen.getInstance().getUiController().reset();
     }
 
     // ===================================================================================================================
@@ -112,7 +109,7 @@ public class GameStateController {
         switch (gameState) {
             case PLAYING:
                 // If all lives are lost it is game over
-                if (playerLives <= 0) {
+                if (UICounters.playerLives <= 0) {
                     gameState = GameState.GAMEOVER;
                 }
 
@@ -202,7 +199,7 @@ public class GameStateController {
                 if (randomEnemy.getCharacterState() == Character.CharacterState.DEAD) {
 
                     // Add a kill count
-                    enemiesKilled += 1;
+                    UICounters.enemiesKilled += 1;
 
                     randomEnemy.remove();
                     randomEnemy = enemyFactory.spawnRandomEnemy();
@@ -312,9 +309,9 @@ public class GameStateController {
     public void checkVictoryConditions() {
 
         // Defeat the enemies, collect the treasure
-        if (enemiesKilled >= levelFactory.getCurrentLevel().getEnemyKilledExitThreshold()) {
+        if (UICounters.enemiesKilled >= levelFactory.getCurrentLevel().getEnemyKilledExitThreshold()) {
             // Rescue the levelEnd
-            if(levelFactory.getGameObjects().getLevelEnd().getIsEndReached()) {
+            if(levelFactory.getGameObjects().getLevelEnd().getEndLevel()) {
                 MyGdxGame.startScreen.setVictoryScreen1();
             }
         }

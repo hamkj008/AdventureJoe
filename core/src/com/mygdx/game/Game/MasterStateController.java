@@ -16,7 +16,7 @@ public class MasterStateController {
         music = Gdx.audio.newMusic(Gdx.files.internal("Audio/Music/back.mp3"));
         music.setLooping(true);
         music.setVolume(0.5f);
-        music.play();
+//        music.play();
     }
 
     // ===================================================================================================================
@@ -26,7 +26,7 @@ public class MasterStateController {
             music.stop();
         }
         else {
-            music.play();
+//            music.play();
         }
     }
 

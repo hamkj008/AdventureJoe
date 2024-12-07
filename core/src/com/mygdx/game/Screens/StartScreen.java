@@ -1,10 +1,11 @@
 package com.mygdx.game.Screens;
-
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -12,9 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.Game.MyGdxGame;
+
 
 
 public class StartScreen implements Screen {
@@ -45,8 +48,9 @@ public class StartScreen implements Screen {
 
         // Buttons
         Skin skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
+        BitmapFont font = new BitmapFont(Gdx.files.internal("Fonts/ComicSansMS.fnt"));
 
-        Label gameTitle                 = new Label("Adventure Joe", skin);
+        Label gameTitle                 = new Label("Adventure Joe", new Label.LabelStyle(font, Color.BLACK));
         final TextButton playButton     = new TextButton("Play", skin, "default");
         final TextButton optionsButton  = new TextButton("Options", skin, "default");
         final TextButton exitButton     = new TextButton("Exit", skin, "default");
@@ -56,14 +60,24 @@ public class StartScreen implements Screen {
         exitButton.setColor(Color.RED);
 
         gameTitle.setFontScale(3f);
-        playButton.getLabel().setFontScale(2f);
-        optionsButton.getLabel().setFontScale(2f);
-        exitButton.getLabel().setFontScale(2f);
+        playButton.getLabel().setFontScale(2.5f);
+        optionsButton.getLabel().setFontScale(2.5f);
+        exitButton.getLabel().setFontScale(2.5f);
+
 
         // Root table
         Table root = new Table();
         root.setFillParent(true);
-        root.setBackground(skin.getDrawable("dialogDim"));
+
+        // Create a texture and set it as the table's background
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.CYAN);
+        pixmap.fill();
+        root.setBackground(new TextureRegionDrawable(new Texture(pixmap)));
+
+        // Dispose the pixmap as it's no longer needed
+        pixmap.dispose();
+
 
         // Buttons Table
         Table table = new Table();

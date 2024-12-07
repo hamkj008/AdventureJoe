@@ -1,20 +1,22 @@
 package com.mygdx.game.UI;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.mygdx.game.Game.GameStateController;
 
 
-public class UICounters {
+public class UICounters extends Actor {
 
     private Label killLabel;
     private Label livesLabel;
     private Label treasureLabel;
     private final BitmapFont font;
+
+    public static int playerLives       = 3;
+    public static int enemiesKilled     = 0;
+    public static int treasureScore     = 0;
 
 
     // ===================================================================================================================
@@ -23,48 +25,52 @@ public class UICounters {
 
         font = new BitmapFont(Gdx.files.internal("Fonts/ComicSansMS.fnt"));
 
-        createKillCounter(new Vector2(50, 50));
-//        createKillCounter(new Vector2(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() - 100));
-        createLivesCounter(new Vector2(0f, Gdx.graphics.getHeight()));
-        createTreasureCounter(new Vector2(0f, Gdx.graphics.getHeight()));
+        createKillCounter();
+        createLivesCounter();
+        createTreasureCounter();
     }
 
     // ===================================================================================================================
 
-    public void draw(Batch batch, float alpha){
+    @Override
+    public void act(float delta) {
+        Gdx.app.log("act", "UiCounters.act");
 
         // Update the counters
-        killLabel.setText("Kills:" + GameStateController.enemiesKilled);
-        livesLabel.setText("Lives:" + GameStateController.playerLives);
-        treasureLabel.setText("$:" + GameStateController.treasureScore);
-
-        killLabel.draw(batch, alpha);
-        livesLabel.draw(batch, alpha);
-        treasureLabel.draw(batch, alpha);
+        killLabel.setText("Kills:" + enemiesKilled);
+        livesLabel.setText("Lives:" + playerLives);
+        treasureLabel.setText("$" + treasureScore);
     }
 
+    // ===================================================================================================================
 
-    public void createKillCounter(Vector2  position) {
-
-        killLabel = new Label("Kills:" + GameStateController.enemiesKilled, new Label.LabelStyle(font, Color.ORANGE));
-        killLabel.setFontScale(3f);
-        killLabel.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() - 100);
+    public void reset() {
+        playerLives = 3;
+        enemiesKilled = 0;
+        treasureScore = 0;
     }
 
-    public void createLivesCounter(Vector2  position) {
+    // ===================================================================================================================
 
-        livesLabel = new Label("Lives:" + GameStateController.playerLives, new Label.LabelStyle(font, Color.ORANGE));
-//        livesLabel.setFontScale(3f);
-        livesLabel.setPosition(position.x, position.y);
+    public void createKillCounter() {
+
+        killLabel = new Label("Kills:" + enemiesKilled, new Label.LabelStyle(font, Color.ORANGE));
+        killLabel.setFontScale(2f);
     }
 
-    public void createTreasureCounter(Vector2  position) {
+    public void createLivesCounter() {
 
-        treasureLabel = new Label("$:" + GameStateController.playerLives, new Label.LabelStyle(font, Color.ORANGE));
-//        treasureLabel.setFontScale(3f);
-        treasureLabel.setPosition(position.x, position.y);
+        livesLabel = new Label("Lives:" + playerLives, new Label.LabelStyle(font, Color.ORANGE));
+        livesLabel.setFontScale(2f);
     }
 
+    public void createTreasureCounter() {
+
+        treasureLabel = new Label("$" + treasureScore, new Label.LabelStyle(font, Color.RED));
+        treasureLabel.setFontScale(2f);
+    }
+
+    // ===================================================================================================================
 
     public Label getKillCounter() {
         return killLabel;

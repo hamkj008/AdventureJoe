@@ -1,22 +1,18 @@
 package com.mygdx.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.game.Actors.Particle;
-import com.mygdx.game.Actors.Projectile;
 import com.mygdx.game.Game.GameHelper;
 import com.mygdx.game.Game.GameStateController;
 import com.mygdx.game.UI.UIController;
 
-import java.util.ArrayList;
 
 
-/*
+/**
 The screen that contains the actual game. It is a singleton, allowing other classes to access its elements.
  */
 public class GameScreen implements Screen {
@@ -94,6 +90,8 @@ public class GameScreen implements Screen {
 
         update();
 
+
+        // Can slow down frames
         accumulatedDelta += delta;
 
         if (accumulatedDelta >= debugFrameDuration) {
@@ -109,16 +107,14 @@ public class GameScreen implements Screen {
                 stage.act(delta);
                 gameStateController.getLevelFactory().getCurrentLevel().renderMap(gameStateController.getPlayer());
 
-                ArrayList<Particle> particles = gameStateController.getPlayer().getProjectileSpawner().getParticles();
-
                 // ----------------- ** Render the bounding boxes. ** Very useful for debugging ** ---------------------
 //                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 //
 //                shapeRenderer.rect(gameStateController.getPlayer().getSprite().getX(), gameStateController.getPlayer().getSprite().getY(),
 //                        gameStateController.getPlayer().getSprite().getWidth(), gameStateController.getPlayer().getSprite().getHeight());
 
-//                shapeRenderer.rect(uiController.getUICounters().getKillCounter().getX(), uiController.getUICounters().getKillCounter().getY(),
-//                        uiController.getUICounters().getKillCounter().getWidth(), uiController.getUICounters().getKillCounter().getHeight());
+//                shapeRenderer.rect(uiController.getPlayerHealthBar().getSprite().getX(), uiController.getPlayerHealthBar().getSprite().getY(),
+//                        uiController.getPlayerHealthBar().getSprite().getWidth(), uiController.getPlayerHealthBar().getSprite().getHeight());
 
 //                shapeRenderer.rect(gameStateController.getPlayer().getProjectileSpawner().getProjectiles()Sprite().getX(),
 //                        gameStateController.getPlayer().getProjectile().getProjectileSprite().getY(),
@@ -165,7 +161,7 @@ public class GameScreen implements Screen {
 //                        levelFactory.getCurrentLevel().getGroundRectangle().getWidth(),
 //                        levelFactory.getCurrentLevel().getGroundRectangle().getHeight());
 //
-//                shapeRenderer.setColor(Color.RED);
+//                shapeRenderer.setColor(Color.YELLOW);
 //                shapeRenderer.end();
                 // ----------------------------------------------------------------------------------------------------
 
@@ -191,8 +187,6 @@ public class GameScreen implements Screen {
         for (Actor actor : stage.getActors()) {
             if (actor == null) {
                 Gdx.app.log("Error", "Actor is null in stage.");
-            } else {
-                Gdx.app.log("ActorLog", "Actor found: " + actor.getClass().getSimpleName());
             }
         }
     }

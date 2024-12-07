@@ -1,43 +1,38 @@
 package com.mygdx.game.UI;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class PlayerHealthBar {
+
+
+public class PlayerHealthBar extends Actor {
 
     private final Sprite playerHealthBar;
     private final Texture healthBarImage;
-//    private final Sprite playerHealthBarBackground;
-//    private final Texture healthBarBackgroundImage;
 
     // ===================================================================================================================
 
     public PlayerHealthBar(){
 
-        healthBarImage              = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Red.png");
-        playerHealthBar             = new Sprite(healthBarImage);
-//        healthBarBackgroundImage    = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cartoon Sci-Fi Game GUI_Progress Bar - Background.png");
-//        playerHealthBarBackground   = new Sprite(healthBarBackgroundImage);
+        healthBarImage   = new Texture("GUI/Cartoon Sci-Fi Game GUI/Misc/Cropped_Cartoon Sci-Fi Game GUI_Progress Bar - Red.png");
+        playerHealthBar  = new Sprite(healthBarImage);
 
-        playerHealthBar.setPosition(50, Gdx.graphics.getHeight() - healthBarImage.getHeight() - 20);
-//        playerHealthBarBackground.setPosition(0,Gdx.graphics.getHeight() - healthBarBackgroundImage.getHeight());
-    }
-
-
-    // ===================================================================================================================
-
-    public void modifyHealth(int hitPoints){
-        playerHealthBar.setSize((float) (healthBarImage.getWidth() * hitPoints / 100), healthBarImage.getHeight());
+        setSize(playerHealthBar.getWidth(), playerHealthBar.getHeight());       // Have to set a size so that the
     }
 
     // ===================================================================================================================
 
-    public void draw(Batch batch) {
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        batch.draw(healthBarImage, playerHealthBar.getX(), playerHealthBar.getY(), playerHealthBar.getWidth(), playerHealthBar.getHeight());        // getX() instead of sprite.getX() allows the hbox to manage the size and position
+    }
 
-        playerHealthBar.draw(batch);
-//        playerHealthBarBackground.draw(batch);
+    // ===================================================================================================================
+
+    public void modifyHealth(int hitPoints) {
+        playerHealthBar.setSize((playerHealthBar.getWidth() * (hitPoints / 100f)), getHeight());
     }
 
     // ===================================================================================================================
@@ -52,8 +47,9 @@ public class PlayerHealthBar {
         Gdx.app.log("dispose", "PlayerHealthBarDispose");
 
         healthBarImage.dispose();
-//        healthBarBackgroundImage.dispose();
     }
 
+    // ===================================================================================================================
 
+    public Sprite getSprite() { return playerHealthBar; }
 }
