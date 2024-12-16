@@ -44,7 +44,7 @@ public class PlayerHealthBar extends Actor {
     // ===================================================================================================================
 
     public void dispose() {
-        Gdx.app.log("dispose", "PlayerHealthBarDispose");
+        Gdx.app.log("dispose", "PlayerHealthBar.dispose");
 
         healthBarImage.dispose();
     }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -50,6 +51,10 @@ public class StartScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
         BitmapFont font = new BitmapFont(Gdx.files.internal("Fonts/ComicSansMS.fnt"));
 
+        Texture coin = new Texture("Game Objects/Chests & Coins PNG/Coins/Gold Skull Coin/01.png");
+        Image topCoinImage = new Image(coin);
+        Image bottomCoinImage = new Image(coin);
+
         Label gameTitle                 = new Label("Adventure Joe", new Label.LabelStyle(font, Color.BLACK));
         final TextButton playButton     = new TextButton("Play", skin, "default");
         final TextButton optionsButton  = new TextButton("Options", skin, "default");
@@ -86,11 +91,15 @@ public class StartScreen implements Screen {
         gameTitle.setAlignment(Align.center);
         table.add(gameTitle).width(400).height(200).expandX();
         table.row();
+        table.add(topCoinImage).height(100).width(100).pad(10).space(20);
+        table.row();
         table.add(playButton).height(150).width(300).pad(10).space(20);
         table.row();
         table.add(optionsButton).height(150).width(300).pad(10).space(20);
         table.row();
         table.add(exitButton).height(150).width(300).pad(20);
+        table.row();
+        table.add(bottomCoinImage).height(100).width(100).pad(10).space(20);
 
         // Add the table to the root and the root to the stage.
         root.add(table);

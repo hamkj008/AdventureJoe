@@ -1,6 +1,4 @@
 package com.mygdx.game.Actors.Characters.Enemies;
-
-
 import com.badlogic.gdx.math.MathUtils;
 
 
@@ -14,23 +12,28 @@ public class EnemyFactory {
             "DevilGuy",
             "Yeti",
             "Robot",
-            "Wolf"
+            "Wolf",
+            "Archer",
+            "Black Wizard",
+            "Santa",
+            "Crab",
+            "Ninja"
     };
 
 
     public EnemyFactory() {}
 
 
-    /*
-    Selects a random enemy name from the enemyArray and then creates that enemy.
-    This approach creates the enemy only when it is actually needed to save on processing, as opposed to creating and preloading all enemies at the start
-     */
+    /**
+     *  Selects a random enemy name from the enemyArray and then creates that enemy.
+     *  This approach creates the enemy only when it is actually needed to save on processing, as opposed to creating and preloading all enemies at the start
+     **/
     public Enemy spawnRandomEnemy() {
 
-        enemy = new Enemy();
+        enemy                   = new Enemy();
 
-        int randomIndex = MathUtils.random(0, enemyArray.length - 1);
-        String selectedEnemy = enemyArray[randomIndex];
+        int randomIndex         = MathUtils.random(0, enemyArray.length - 1);
+        String selectedEnemy    = enemyArray[randomIndex];
 
         switch(selectedEnemy) {
             case "Dragon":
@@ -47,6 +50,21 @@ public class EnemyFactory {
                 break;
             case "Robot":
                 enemy = createEnemyRobot();
+                break;
+            case "Archer":
+                enemy = createEnemyArcher();
+                break;
+            case "Black Wizard":
+                enemy = createEnemyBlackWizard();
+                break;
+            case "Santa":
+                enemy = createEnemySantaClaus();
+                break;
+            case "Crab":
+                enemy = createEnemyCrab();
+                break;
+            case "Ninja":
+                enemy = createEnemyNinja();
                 break;
         }
         return enemy;
@@ -75,11 +93,23 @@ public class EnemyFactory {
         return new EnemyWolf();
     }
 
+    public Enemy createEnemyArcher() {
+        return new EnemyArcher();
+    }
 
+    public Enemy createEnemyBlackWizard() {
+        return new EnemyBlackWizard();
+    }
 
+    public Enemy createEnemySantaClaus() {
+        return new EnemySantaClaus();
+    }
 
+    public Enemy createEnemyCrab() {
+        return new EnemyCrab();
+    }
 
-
-
-
+    public Enemy createEnemyNinja() {
+        return new EnemyNinja();
+    }
 }

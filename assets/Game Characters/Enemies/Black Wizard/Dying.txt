@@ -1,0 +1,110 @@
+Dying.png
+size: 3300, 1120
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Dying
+  rotate: false
+  xy: 0, 0
+  size: 419, 547
+  orig: 900, 900
+  offset: 231, 167
+  index: 0
+Dying
+  rotate: false
+  xy: 550, 0
+  size: 410, 549
+  orig: 900, 900
+  offset: 260, 173
+  index: 1
+Dying
+  rotate: false
+  xy: 1100, 0
+  size: 400, 549
+  orig: 900, 900
+  offset: 291, 180
+  index: 2
+Dying
+  rotate: false
+  xy: 1650, 0
+  size: 395, 548
+  orig: 900, 900
+  offset: 317, 186
+  index: 3
+Dying
+  rotate: false
+  xy: 2200, 0
+  size: 418, 560
+  orig: 900, 900
+  offset: 249, 202
+  index: 4
+Dying
+  rotate: false
+  xy: 2750, 0
+  size: 449, 550
+  orig: 900, 900
+  offset: 185, 224
+  index: 5
+Dying
+  rotate: false
+  xy: 0, 560
+  size: 504, 517
+  orig: 900, 900
+  offset: 140, 253
+  index: 6
+Dying
+  rotate: false
+  xy: 550, 560
+  size: 532, 483
+  orig: 900, 900
+  offset: 113, 218
+  index: 7
+Dying
+  rotate: false
+  xy: 1100, 560
+  size: 546, 437
+  orig: 900, 900
+  offset: 109, 180
+  index: 8
+Dying
+  rotate: false
+  xy: 1650, 560
+  size: 539, 400
+  orig: 900, 900
+  offset: 125, 126
+  index: 9
+Dying
+  rotate: false
+  xy: 2200, 560
+  size: 545, 399
+  orig: 900, 900
+  offset: 116, 91
+  index: 10
+Dying
+  rotate: false
+  xy: 2750, 560
+  size: 550, 417
+  orig: 900, 900
+  offset: 117, 55
+  index: 11
+Dying
+  rotate: false
+  xy: 2750, 560
+  size: 550, 417
+  orig: 900, 900
+  offset: 117, 55
+  index: 12
+Dying
+  rotate: false
+  xy: 2750, 560
+  size: 550, 417
+  orig: 900, 900
+  offset: 117, 55
+  index: 13
+Dying
+  rotate: false
+  xy: 2750, 560
+  size: 550, 417
+  orig: 900, 900
+  offset: 117, 55
+  index: 14

@@ -165,7 +165,7 @@ public class ProjectileSpawner extends Actor {
     // ===================================================================================================================
 
     public void dispose() {
-        Gdx.app.log("dispose", "projectileSpawnerDispose");
+        Gdx.app.log("dispose", "projectileSpawner.dispose");
 
         for(Projectile projectile : projectiles) {
             projectile.dispose();

@@ -17,30 +17,32 @@ import java.util.Random;
 public class GameObjects extends Actor {
 
     private final ArrayList<Coin> coinList;
-    private final Chest[] chestList;
+    private final ArrayList<Coin> removedCoins;
+    private final ArrayList<Chest> chestList;
+    private final ArrayList<Chest> removedChests;
+    private final ArrayList<Object> combinedList;
     private final PowerUp[] powerUpList;
     private final LevelEnd levelEnd;
-    private final ArrayList<Coin> removedCoins;
     private final ArrayList<Vector2> positions;
     private int minPositionDistance = 1500;
-    ArrayList<Object> combinedList;
 
     // ===================================================================================================================
 
     public GameObjects(int numberOfCoins, int numberOfChests, int numberOfPowerUps, int levelXBoundary) {
 
         coinList            = new ArrayList<>(numberOfCoins);
-        chestList           = new Chest[numberOfChests];
+        chestList           = new ArrayList<>(numberOfChests);
         powerUpList         = new PowerUp[numberOfPowerUps];
         levelEnd            = new LevelEnd();
         removedCoins        = new ArrayList<>();
+        removedChests       = new ArrayList<>();
         positions           = new ArrayList<>();
         combinedList        = new ArrayList<>();
 
         // Create all the objects
         for(int i = 0; i < numberOfChests; i++) {
-            chestList[i]   = ChestCreator.createRandomChest();
-            combinedList.add(chestList[i]);
+            chestList.add(ChestCreator.createRandomChest());
+            combinedList.add(chestList.get(i));
         }
         for(int i = 0; i < numberOfPowerUps; i++) {
             powerUpList[i] = new PowerUp();
@@ -51,7 +53,7 @@ public class GameObjects extends Actor {
             combinedList.add(coinList.get(i));
         }
 
-        // Gernerate all the positions
+        // Generate all the positions
         generateRandomMinDistancePositions(levelXBoundary);
 
         // Assign positions to objects
@@ -93,7 +95,12 @@ public class GameObjects extends Actor {
 
         for(Chest chest : chestList) {
             if(chest != null) {
-                chest.draw(batch, alpha);
+                if(!chest.getChestCollected()) {
+                    chest.draw(batch, alpha);
+                }
+                else {
+                    removedChests.add(chest);
+                }
             }
             else {
                 Gdx.app.log("error", "Error: chest is null in draw");
@@ -121,6 +128,12 @@ public class GameObjects extends Actor {
             removedCoin.dispose();
         }
         removedCoins.clear();
+
+        for(Chest removedChest: removedChests) {
+            chestList.remove(removedChest);
+            removedChest.dispose();
+        }
+        removedChests.clear();
     }
 
     // ===================================================================================================================
@@ -214,12 +227,9 @@ public class GameObjects extends Actor {
         for(Vector2 position : positions) {
             Gdx.app.log("position", "pos: " + positionToCheck.x + "   range: " + (position.x - minPositionDistance) + " <-> " + (position.x + minPositionDistance));
             if(positionToCheck.x > position.x - minPositionDistance && positionToCheck.x < position.x + minPositionDistance) {
-//            if(positionToCheck.dst(position) <= minPositionDistance) {
-                Gdx.app.log("position", "false");
                 return false;
             }
         }
-        Gdx.app.log("position", "true");
         return true;
     }
 
@@ -233,7 +243,7 @@ public class GameObjects extends Actor {
 
         Random rand     = new Random();
         float randX     = 200 + (levelXBoundary - 200) * rand.nextFloat();
-        float randY     = LevelFactory.getCurrentGroundLevel() + ((Gdx.graphics.getHeight() - 100) - LevelFactory.getCurrentGroundLevel()) * rand.nextFloat();
+        float randY     = LevelFactory.getCurrentGroundLevel() + ((Gdx.graphics.getHeight() - 200) - LevelFactory.getCurrentGroundLevel()) * rand.nextFloat();
 
         return new Vector2(randX, randY);
     }
@@ -241,13 +251,16 @@ public class GameObjects extends Actor {
     // ===================================================================================================================
 
     public void dispose() {
-        Gdx.app.log("dispose", "GameObjectsDispose");
+        Gdx.app.log("dispose", "GameObjects.dispose");
 
         for(Chest chest : chestList) {
             chest.dispose();
         }
         for(PowerUp powerUp : powerUpList) {
             powerUp.dispose();
+        }
+        for(Coin coin : coinList) {
+            coin.dispose();
         }
     }
 
@@ -257,7 +270,7 @@ public class GameObjects extends Actor {
 
     public PowerUp[] getPowerUpList() { return powerUpList; }
 
-    public Chest[] getChestList() { return chestList; }
+    public ArrayList<Chest> getChestList() { return chestList; }
 
     public ArrayList<Coin> getCoinList() { return coinList; }
 }

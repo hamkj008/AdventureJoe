@@ -35,15 +35,15 @@ public class LevelEnd extends Character {
         // Initialize size and start position
         super.setDirection(Direction.LEFT);
         super.getStartPosition().x = GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getLevelXBoundary();
-        super.getSprite().setX(getStartPosition().x);
+        super.getSprite().setPosition(getStartPosition().x, getStartPosition().y);
 
         // ---- ANIMATIONS -------------------------
         // Load all animation frames into animation objects using Game Helper.
-        princessIdleAnimation   = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Princess/Idle Blinking.png", 8, 3, 24);
-        princessSpellAnimation  = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Princess/Spell.png", 5, 3, 15);
+        princessIdleAnimation   = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Princess/Idle Blinking.png", 8, 3, 24, 0.033f);
+        princessSpellAnimation  = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Princess/Spell.png", 5, 3, 15, 0.033f);
 
-        babyIdleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Super Baby/Idle Blinking.png", 6, 3, 18);
-        babySpellAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Super Baby/Spell.png", 4, 3, 12);
+        babyIdleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Super Baby/Idle Blinking.png", 6, 3, 18, 0.033f);
+        babySpellAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Super Baby/Spell.png", 4, 3, 12, 0.033f);
     }
 
     // ===================================================================================================================

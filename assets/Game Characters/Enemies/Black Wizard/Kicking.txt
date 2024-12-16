@@ -1,0 +1,89 @@
+Kicking.png
+size: 1676, 1704
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Kicking
+  rotate: false
+  xy: 0, 0
+  size: 419, 547
+  orig: 900, 900
+  offset: 231, 167
+  index: 0
+Kicking
+  rotate: false
+  xy: 419, 0
+  size: 418, 553
+  orig: 900, 900
+  offset: 226, 167
+  index: 1
+Kicking
+  rotate: false
+  xy: 838, 0
+  size: 418, 558
+  orig: 900, 900
+  offset: 221, 167
+  index: 2
+Kicking
+  rotate: false
+  xy: 1257, 0
+  size: 417, 563
+  orig: 900, 900
+  offset: 216, 167
+  index: 3
+Kicking
+  rotate: false
+  xy: 0, 568
+  size: 417, 566
+  orig: 900, 900
+  offset: 211, 167
+  index: 4
+Kicking
+  rotate: false
+  xy: 419, 568
+  size: 417, 568
+  orig: 900, 900
+  offset: 209, 167
+  index: 5
+Kicking
+  rotate: false
+  xy: 838, 568
+  size: 417, 567
+  orig: 900, 900
+  offset: 209, 167
+  index: 6
+Kicking
+  rotate: false
+  xy: 1257, 568
+  size: 417, 567
+  orig: 900, 900
+  offset: 210, 167
+  index: 7
+Kicking
+  rotate: false
+  xy: 0, 1136
+  size: 417, 567
+  orig: 900, 900
+  offset: 210, 167
+  index: 8
+Kicking
+  rotate: false
+  xy: 419, 1136
+  size: 417, 566
+  orig: 900, 900
+  offset: 211, 167
+  index: 9
+Kicking
+  rotate: false
+  xy: 838, 1136
+  size: 418, 562
+  orig: 900, 900
+  offset: 216, 167
+  index: 10
+Kicking
+  rotate: false
+  xy: 1257, 1136
+  size: 418, 556
+  orig: 900, 900
+  offset: 223, 167
+  index: 11

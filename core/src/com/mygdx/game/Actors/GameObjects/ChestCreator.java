@@ -4,9 +4,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.Random;
 
 
+
 /**
- *  A Factory to create chests.
- *  Can create four different types of chests with animations, specified by the chest type.
+ *  A Factory to create chests randomly.
+ *  Can create four different types of chests with animations.
  **/
 public class ChestCreator {
 

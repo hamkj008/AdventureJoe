@@ -14,6 +14,7 @@ import com.mygdx.game.UI.UIController;
 import com.mygdx.game.UI.UICounters;
 
 
+
 /**
  *  Stores objects and data relevant to the game state.
  **/
@@ -48,14 +49,14 @@ public class GameStateController {
 
     public void create() {
 
-        levelFactory    = new LevelFactory();
+        levelFactory  = new LevelFactory();
         levelFactory.createCurrentLevel();
 
-        player          = new Player();
+        player        = new Player();
 
-        enemyFactory    = new EnemyFactory();
+        enemyFactory  = new EnemyFactory();
         // Have to spawn an enemy at the start so that newEnemy() has something to remove from the stage
-        randomEnemy     = enemyFactory.spawnRandomEnemy();
+        randomEnemy   = enemyFactory.spawnRandomEnemy();
 
         stage.addActor(player);
         stage.addActor(randomEnemy);
@@ -93,8 +94,8 @@ public class GameStateController {
     public void newEnemy() {
 
         randomEnemy.remove();
-        randomEnemy = enemyFactory.createEnemyYeti();
 //        randomEnemy = enemyFactory.spawnRandomEnemy();
+        randomEnemy = enemyFactory.createEnemyDragon();
         randomEnemy.reset();
         stage.addActor(randomEnemy);
     }
@@ -200,11 +201,7 @@ public class GameStateController {
 
                     // Add a kill count
                     UICounters.enemiesKilled += 1;
-
-                    randomEnemy.remove();
-                    randomEnemy = enemyFactory.spawnRandomEnemy();
-                    randomEnemy.reset();
-                    stage.addActor(randomEnemy);
+                    newEnemy();
                 }
 
                 if (!player.getIsAlive()) {
@@ -369,7 +366,8 @@ public class GameStateController {
         Gdx.app.log("dispose", "GameStateControllerDispose");
 
         levelFactory.dispose();
-        stage.dispose();
+        randomEnemy.dispose();
+        player.dispose();
     }
 
     // ====================================== GETTERS AND SETTERS ================================================================

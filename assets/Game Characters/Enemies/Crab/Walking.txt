@@ -1,0 +1,131 @@
+Walking.png
+size: 1776, 2016
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Walking
+  rotate: false
+  xy: 0, 0
+  size: 563, 327
+  orig: 840, 420
+  offset: 145, 21
+  index: 0
+Walking
+  rotate: false
+  xy: 592, 0
+  size: 586, 326
+  orig: 840, 420
+  offset: 135, 21
+  index: 1
+Walking
+  rotate: false
+  xy: 1184, 0
+  size: 591, 326
+  orig: 840, 420
+  offset: 133, 21
+  index: 2
+Walking
+  rotate: false
+  xy: 0, 336
+  size: 575, 329
+  orig: 840, 420
+  offset: 139, 21
+  index: 3
+Walking
+  rotate: false
+  xy: 592, 336
+  size: 557, 333
+  orig: 840, 420
+  offset: 146, 21
+  index: 4
+Walking
+  rotate: false
+  xy: 1184, 336
+  size: 541, 335
+  orig: 840, 420
+  offset: 152, 21
+  index: 5
+Walking
+  rotate: false
+  xy: 0, 672
+  size: 524, 335
+  orig: 840, 420
+  offset: 158, 20
+  index: 6
+Walking
+  rotate: false
+  xy: 592, 672
+  size: 538, 333
+  orig: 840, 420
+  offset: 151, 20
+  index: 7
+Walking
+  rotate: false
+  xy: 1184, 672
+  size: 556, 330
+  orig: 840, 420
+  offset: 143, 20
+  index: 8
+Walking
+  rotate: false
+  xy: 0, 1008
+  size: 573, 326
+  orig: 840, 420
+  offset: 135, 21
+  index: 9
+Walking
+  rotate: false
+  xy: 592, 1008
+  size: 588, 326
+  orig: 840, 420
+  offset: 128, 21
+  index: 10
+Walking
+  rotate: false
+  xy: 1184, 1008
+  size: 592, 328
+  orig: 840, 420
+  offset: 126, 20
+  index: 11
+Walking
+  rotate: false
+  xy: 0, 1344
+  size: 576, 332
+  orig: 840, 420
+  offset: 134, 20
+  index: 12
+Walking
+  rotate: false
+  xy: 592, 1344
+  size: 561, 335
+  orig: 840, 420
+  offset: 141, 21
+  index: 13
+Walking
+  rotate: false
+  xy: 1184, 1344
+  size: 544, 336
+  orig: 840, 420
+  offset: 149, 21
+  index: 14
+Walking
+  rotate: false
+  xy: 0, 1680
+  size: 527, 336
+  orig: 840, 420
+  offset: 157, 21
+  index: 15
+Walking
+  rotate: false
+  xy: 592, 1680
+  size: 536, 333
+  orig: 840, 420
+  offset: 154, 21
+  index: 16
+Walking
+  rotate: false
+  xy: 1184, 1680
+  size: 548, 330
+  orig: 840, 420
+  offset: 150, 21
+  index: 17

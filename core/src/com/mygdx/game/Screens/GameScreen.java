@@ -27,6 +27,7 @@ public class GameScreen implements Screen {
 
     private static GameScreen INSTANCE = null;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final float debugFrameDuration = 1.0f / 5.0f; // 5 FPS for debugging
     private float accumulatedDelta;
 
@@ -213,6 +214,7 @@ public class GameScreen implements Screen {
         // If a screens create method has not executed the stage may be null
         if(stage != null) {
             gameStateController.dispose();
+            uiController.dispose();
             uiBatch.dispose();
             stage.dispose();
         }

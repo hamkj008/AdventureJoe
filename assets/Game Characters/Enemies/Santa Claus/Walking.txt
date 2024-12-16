@@ -1,0 +1,131 @@
+Walking.png
+size: 1995, 1548
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Walking
+  rotate: false
+  xy: 0, 0
+  size: 329, 386
+  orig: 600, 480
+  offset: 124, 40
+  index: 0
+Walking
+  rotate: false
+  xy: 399, 0
+  size: 342, 387
+  orig: 600, 480
+  offset: 121, 39
+  index: 1
+Walking
+  rotate: false
+  xy: 798, 0
+  size: 359, 386
+  orig: 600, 480
+  offset: 113, 40
+  index: 2
+Walking
+  rotate: false
+  xy: 1197, 0
+  size: 379, 385
+  orig: 600, 480
+  offset: 102, 41
+  index: 3
+Walking
+  rotate: false
+  xy: 1596, 0
+  size: 398, 383
+  orig: 600, 480
+  offset: 92, 42
+  index: 4
+Walking
+  rotate: false
+  xy: 0, 387
+  size: 399, 383
+  orig: 600, 480
+  offset: 92, 42
+  index: 5
+Walking
+  rotate: false
+  xy: 399, 387
+  size: 381, 385
+  orig: 600, 480
+  offset: 101, 40
+  index: 6
+Walking
+  rotate: false
+  xy: 798, 387
+  size: 361, 386
+  orig: 600, 480
+  offset: 112, 39
+  index: 7
+Walking
+  rotate: false
+  xy: 1197, 387
+  size: 344, 387
+  orig: 600, 480
+  offset: 120, 39
+  index: 8
+Walking
+  rotate: false
+  xy: 1596, 387
+  size: 329, 387
+  orig: 600, 480
+  offset: 125, 39
+  index: 9
+Walking
+  rotate: false
+  xy: 0, 774
+  size: 319, 387
+  orig: 600, 480
+  offset: 125, 39
+  index: 10
+Walking
+  rotate: false
+  xy: 399, 774
+  size: 319, 387
+  orig: 600, 480
+  offset: 127, 39
+  index: 11
+Walking
+  rotate: false
+  xy: 798, 774
+  size: 317, 387
+  orig: 600, 480
+  offset: 130, 39
+  index: 12
+Walking
+  rotate: false
+  xy: 1197, 774
+  size: 314, 386
+  orig: 600, 480
+  offset: 134, 40
+  index: 13
+Walking
+  rotate: false
+  xy: 1596, 774
+  size: 312, 384
+  orig: 600, 480
+  offset: 135, 41
+  index: 14
+Walking
+  rotate: false
+  xy: 0, 1161
+  size: 311, 384
+  orig: 600, 480
+  offset: 134, 41
+  index: 15
+Walking
+  rotate: false
+  xy: 399, 1161
+  size: 313, 385
+  orig: 600, 480
+  offset: 131, 40
+  index: 16
+Walking
+  rotate: false
+  xy: 798, 1161
+  size: 315, 387
+  orig: 600, 480
+  offset: 128, 39
+  index: 17

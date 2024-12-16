@@ -1,11 +1,10 @@
 package com.mygdx.game.UI;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 
-// Buttons used for all UI
+// Buttons used for UI
 public class Button {
 
     private final float x;

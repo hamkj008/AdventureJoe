@@ -45,7 +45,6 @@ public class UICounters extends Actor {
     // ===================================================================================================================
 
     public void reset() {
-        playerLives = 3;
         enemiesKilled = 0;
         treasureScore = 0;
     }
@@ -68,6 +67,14 @@ public class UICounters extends Actor {
 
         treasureLabel = new Label("$" + treasureScore, new Label.LabelStyle(font, Color.RED));
         treasureLabel.setFontScale(2f);
+    }
+
+    // ===================================================================================================================
+
+    public void dispose() {
+        Gdx.app.log("dispose", "UiCounters.dispose");
+
+        font.dispose();
     }
 
     // ===================================================================================================================

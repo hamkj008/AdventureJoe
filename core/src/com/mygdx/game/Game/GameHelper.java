@@ -16,7 +16,6 @@ import com.mygdx.game.Actors.Characters.Character;
 
 public class GameHelper {
 
-    float deltaTime;
     private static boolean isLogScheduled   = false;
     private static String logTag            = "DefaultTag";
     private static String logMessage        = "DefaultMessage";
@@ -31,7 +30,7 @@ public class GameHelper {
      *  This method takes in a spritesheet, as well as how many rows, columns and total frames it has, splits it into TextureRegions,
      *  and then loads those regions into an animation. The returned animation contains all the frames.
      **/
-    public Animation<TextureRegion> processAnimation(String texturePath, int sheetCols, int sheetRows, int maxFrames) {
+    public Animation<TextureRegion> processAnimation(String texturePath, int sheetCols, int sheetRows, int maxFrames, float animationSpeed) {
 
         Texture texture                 = new Texture(texturePath);
         TextureRegion[][] temp          = TextureRegion.split(texture, texture.getWidth() / sheetCols, texture.getHeight() / sheetRows);
@@ -45,7 +44,7 @@ public class GameHelper {
                 }
             }
         }
-        return new Animation<>(0.033f, animationFrames);
+        return new Animation<>((animationSpeed / maxFrames), animationFrames);
     }
 
     // ===================================================================================================================
@@ -56,9 +55,7 @@ public class GameHelper {
     **/
     public float setMovement(float movementSpeed) {
 
-        deltaTime = Gdx.graphics.getDeltaTime();
-
-        return movementSpeed * deltaTime;
+        return movementSpeed * Gdx.graphics.getDeltaTime();
     }
 
     // ===================================================================================================================
@@ -102,6 +99,8 @@ public class GameHelper {
             }, 0, intervalSeconds); // Delay of 0 seconds, repeats every intervalSeconds
         }
     }
+
+    // ===================================================================================================================
 
     /**
      *  Creates a table layout with a colored padding around content

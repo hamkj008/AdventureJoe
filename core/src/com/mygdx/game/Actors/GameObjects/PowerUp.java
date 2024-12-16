@@ -142,6 +142,8 @@ public class PowerUp extends Actor {
     // ===================================================================================================================
 
     public void dispose() {
+        Gdx.app.log("dispose", "powerup.dispose");
+
         powerUpSound.dispose();
         powerDownSound.dispose();
     }

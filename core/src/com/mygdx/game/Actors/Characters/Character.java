@@ -24,7 +24,7 @@ public class Character extends Actor {
     public enum Direction { LEFT, RIGHT }
 
     public enum CharacterState { IDLE, MOVING, JUMPING, FALLING, ATTACKING, HURT, DYING, DEAD }
-    private CharacterState characterState = CharacterState.IDLE;
+    private CharacterState characterState       = CharacterState.IDLE;
 
     // ---- CHARACTER STATS -------------------------
     private boolean isAlive                     = true;
@@ -46,7 +46,7 @@ public class Character extends Actor {
     private float loopingStateTime;
     private float nonLoopingStateTime;
 
-    private ProjectileSpawner projectileSpawner = null;
+    private ProjectileSpawner projectileSpawner  = null;
     private final Map<String, Vector2> projectileOffset;
 
 
@@ -111,12 +111,10 @@ public class Character extends Actor {
     @Override
     public void act(float delta) {
 
-        Gdx.app.log("timer", "" + projectileSpawner.getStartTimer());
         if(projectileSpawner != null) {
 
             if (characterState == Character.CharacterState.ATTACKING && projectileSpawner.getCanSpawn()) {
                 spawnProjectile();
-                Gdx.app.log("newtimer", "spawnProjectile");
             }
 
             if(projectileSpawner.getStartTimer()) {
@@ -196,7 +194,7 @@ public class Character extends Actor {
     // ===================================================================================================================
 
     public void dispose() {
-        Gdx.app.log("dispose", "playerDispose");
+        Gdx.app.log("dispose", "character.dispose");
 
         if(projectileSpawner != null) {
             projectileSpawner.dispose();

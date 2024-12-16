@@ -40,11 +40,11 @@ public class EnemyDragon extends Enemy {
         super.setAttackState(AttackState.PROJECTILE);
 
         // ---- ANIMATIONS -------------------------
-        idleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Idle.png", 3, 6, 18);
-        walkingAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Walking.png", 3, 6, 9);
-        attackingAnimation  = GameScreen.getInstance().getHelper().processAnimation( "Game Characters/Enemies/Cartoon Dragon 01/Attacking.png", 3, 6, 18);
-        hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Hurt.png", 3, 6, 18);
-        dyingAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Dragon 01/Dying.png", 3, 3, 9);
+        idleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Dragon 01/Idle.png", 3, 6, 18, 0.6f);
+        walkingAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Dragon 01/Walking.png", 3, 6, 9, 0.6f);
+        attackingAnimation  = GameScreen.getInstance().getHelper().processAnimation( "Game Characters/Enemies/Dragon 01/Attacking.png", 3, 6, 18, 0.5f);
+        hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Dragon 01/Hurt.png", 3, 6, 18, 0.6f);
+        dyingAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Dragon 01/Dying.png", 3, 3, 9, 0.6f);
 
         super.getProjectileOffset().put("leftOffset", new Vector2(-10, 90));
         super.getProjectileOffset().put("rightOffset", new Vector2(200, 90));
@@ -66,7 +66,7 @@ public class EnemyDragon extends Enemy {
     @Override
     public void act(float delta) {
 
-        super.act(delta);
+        super.act(delta);           // Only enemies with projectiles have to call super
         switchCustomStates();
     }
 

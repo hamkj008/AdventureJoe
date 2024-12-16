@@ -1,0 +1,173 @@
+Idle.png
+size: 1953, 970
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Walking
+  rotate: true
+  xy: 1, 1
+  size: 240, 321
+  orig: 440, 400
+  offset: 113, 58
+  index: 0
+Walking
+  rotate: true
+  xy: 324, 1
+  size: 240, 322
+  orig: 440, 400
+  offset: 111, 59
+  index: 1
+Walking
+  rotate: true
+  xy: 648, 1
+  size: 240, 323
+  orig: 440, 400
+  offset: 110, 59
+  index: 2
+Walking
+  rotate: true
+  xy: 973, 1
+  size: 240, 323
+  orig: 440, 400
+  offset: 108, 60
+  index: 3
+Walking
+  rotate: true
+  xy: 1298, 1
+  size: 240, 326
+  orig: 440, 400
+  offset: 107, 56
+  index: 4
+Walking
+  rotate: true
+  xy: 1308, 485
+  size: 241, 325
+  orig: 440, 400
+  offset: 105, 55
+  index: 5
+Walking
+  rotate: true
+  xy: 1626, 1
+  size: 240, 320
+  orig: 440, 400
+  offset: 104, 58
+  index: 6
+Walking
+  rotate: true
+  xy: 1, 727
+  size: 241, 321
+  orig: 440, 400
+  offset: 105, 56
+  index: 7
+Walking
+  rotate: true
+  xy: 1, 243
+  size: 240, 320
+  orig: 440, 400
+  offset: 107, 56
+  index: 8
+Walking
+  rotate: true
+  xy: 1635, 485
+  size: 241, 317
+  orig: 440, 400
+  offset: 108, 58
+  index: 9
+Walking
+  rotate: true
+  xy: 323, 243
+  size: 240, 320
+  orig: 440, 400
+  offset: 110, 56
+  index: 10
+Walking
+  rotate: true
+  xy: 324, 727
+  size: 241, 322
+  orig: 440, 400
+  offset: 111, 56
+  index: 11
+Walking
+  rotate: true
+  xy: 645, 243
+  size: 240, 322
+  orig: 440, 400
+  offset: 113, 58
+  index: 12
+Walking
+  rotate: true
+  xy: 969, 243
+  size: 240, 325
+  orig: 440, 400
+  offset: 112, 56
+  index: 13
+Walking
+  rotate: true
+  xy: 648, 727
+  size: 241, 327
+  orig: 440, 400
+  offset: 110, 56
+  index: 14
+Walking
+  rotate: true
+  xy: 1296, 243
+  size: 240, 327
+  orig: 440, 400
+  offset: 109, 57
+  index: 15
+Walking
+  rotate: true
+  xy: 1, 485
+  size: 240, 328
+  orig: 440, 400
+  offset: 107, 55
+  index: 16
+Walking
+  rotate: true
+  xy: 977, 727
+  size: 241, 326
+  orig: 440, 400
+  offset: 105, 55
+  index: 17
+Walking
+  rotate: true
+  xy: 1625, 243
+  size: 240, 323
+  orig: 440, 400
+  offset: 104, 56
+  index: 18
+Walking
+  rotate: true
+  xy: 331, 485
+  size: 240, 323
+  orig: 440, 400
+  offset: 105, 55
+  index: 19
+Walking
+  rotate: true
+  xy: 1305, 728
+  size: 241, 321
+  orig: 440, 400
+  offset: 106, 55
+  index: 20
+Walking
+  rotate: true
+  xy: 1628, 728
+  size: 241, 320
+  orig: 440, 400
+  offset: 108, 55
+  index: 21
+Walking
+  rotate: true
+  xy: 656, 485
+  size: 240, 323
+  orig: 440, 400
+  offset: 110, 53
+  index: 22
+Walking
+  rotate: true
+  xy: 981, 485
+  size: 240, 325
+  orig: 440, 400
+  offset: 111, 53
+  index: 23

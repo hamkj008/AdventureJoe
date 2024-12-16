@@ -5,18 +5,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Actors.Characters.Player.Player;
-import com.mygdx.game.Screens.GameScreen;
-import com.mygdx.game.UI.UIController;
 import com.mygdx.game.UI.UICounters;
+
 
 
 /**
  * A Treasure chest collectible that can be collected by the player.
  */
 public class Chest extends Actor {
-
-    public enum ChestType { Chest01, Chest02, Chest03, Chest04 }
-    private final ChestType chestType = ChestType.Chest01;
 
     // Chest animations
     protected Sprite[] animations;
@@ -26,14 +22,14 @@ public class Chest extends Actor {
 
     private final Sound chestCollectedSound;
     private boolean playChestCollectedSound = false;
+    private boolean chestCollected          = false;
 
     // Chest states
     protected enum ChestState{ OPEN, CLOSE }
+    private ChestState state                = ChestState.CLOSE;
 
-    private ChestState state = ChestState.CLOSE;
-
-    private float elapsedTime = 0f;
-    private final float cycleTime = 0.5f;
+    private float elapsedTime               = 0f;
+    private final float cycleTime           = 0.5f;
 
 
     // ===================================================================================================================
@@ -51,7 +47,6 @@ public class Chest extends Actor {
         if(player.getSprite().getBoundingRectangle().overlaps(animations[0].getBoundingRectangle())) {
             playChestCollectedSound();
             state = ChestState.OPEN;
-            UICounters.treasureScore += this.value;
         }
         else {
             playChestCollectedSound = true;
@@ -80,6 +75,10 @@ public class Chest extends Actor {
         if(animationIndex < (animations.length - 1)) {
             animations[animationIndex].draw(batch);
         }
+        else {                                                  // The chest has gotto the end of the animations and is considered collected
+            chestCollected = true;
+            UICounters.treasureScore += this.value;
+        }
     }
 
     // ===================================================================================================================
@@ -104,12 +103,6 @@ public class Chest extends Actor {
 
     // ===================================================================================================================
 
-    public int getValue() {
-        return value;
-    }
-
-    // ===================================================================================================================
-
     public void setAnimations(float positionX, float positionY) {
 
         for (Sprite sprite : animations){
@@ -121,11 +114,18 @@ public class Chest extends Actor {
     // ===================================================================================================================
 
     public void dispose(){
+        Gdx.app.log("dispose", "chest.dispose");
 
         this.chestCollectedSound.dispose();
     }
 
     // ===================================================================================================================
 
+    public int getValue() {
+        return value;
+    }
+
     public void setValue(int value) { this.value = value; }
+
+    public boolean getChestCollected() { return chestCollected; }
 }

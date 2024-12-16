@@ -1,0 +1,89 @@
+Attacking.png
+size: 1950, 1540
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Attacking
+  rotate: false
+  xy: 0, 0
+  size: 572, 342
+  orig: 840, 420
+  offset: 160, 21
+  index: 0
+Attacking
+  rotate: false
+  xy: 650, 0
+  size: 569, 370
+  orig: 840, 420
+  offset: 135, 21
+  index: 1
+Attacking
+  rotate: false
+  xy: 1300, 0
+  size: 558, 385
+  orig: 840, 420
+  offset: 113, 21
+  index: 2
+Attacking
+  rotate: false
+  xy: 0, 385
+  size: 525, 368
+  orig: 840, 420
+  offset: 108, 21
+  index: 3
+Attacking
+  rotate: false
+  xy: 650, 385
+  size: 594, 357
+  orig: 840, 420
+  offset: 133, 21
+  index: 4
+Attacking
+  rotate: false
+  xy: 1300, 385
+  size: 644, 335
+  orig: 840, 420
+  offset: 162, 21
+  index: 5
+Attacking
+  rotate: false
+  xy: 0, 770
+  size: 650, 340
+  orig: 840, 420
+  offset: 178, 21
+  index: 6
+Attacking
+  rotate: false
+  xy: 650, 770
+  size: 646, 339
+  orig: 840, 420
+  offset: 185, 21
+  index: 7
+Attacking
+  rotate: false
+  xy: 1300, 770
+  size: 638, 336
+  orig: 840, 420
+  offset: 180, 21
+  index: 8
+Attacking
+  rotate: false
+  xy: 0, 1155
+  size: 624, 333
+  orig: 840, 420
+  offset: 175, 21
+  index: 9
+Attacking
+  rotate: false
+  xy: 650, 1155
+  size: 603, 331
+  orig: 840, 420
+  offset: 170, 21
+  index: 10
+Attacking
+  rotate: false
+  xy: 1300, 1155
+  size: 587, 328
+  orig: 840, 420
+  offset: 165, 21
+  index: 11

@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 
 
+
 public class UIController extends Actor {
 
     private final UIControlsOverlay uiControlsOverlay;
@@ -50,7 +51,7 @@ public class UIController extends Actor {
     // ===================================================================================================================
 
     public void dispose() {
-        Gdx.app.log("dispose", "UiControllerDispose");
+        Gdx.app.log("dispose", "UiController.dispose");
 
         uiControlsOverlay.dispose();
         playerHealthBar.dispose();

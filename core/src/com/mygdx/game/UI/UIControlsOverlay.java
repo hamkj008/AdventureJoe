@@ -180,7 +180,7 @@ public class UIControlsOverlay extends Actor {
         // --------------------------------------------------------------
 
         public void dispose(){
-            Gdx.app.log("dispose", "UIControlsOverlayDispose");
+            Gdx.app.log("dispose", "UIControlsOverlay.dispose");
 
             this.enabledTexture.dispose();
             this.disabledTexture.dispose();

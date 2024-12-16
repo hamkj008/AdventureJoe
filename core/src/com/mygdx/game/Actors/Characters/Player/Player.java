@@ -9,7 +9,6 @@ import com.mygdx.game.Actors.ProjectileSpawner;
 import com.mygdx.game.Levels.LevelFactory;
 import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.UI.UICounters;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,21 +70,21 @@ public class Player extends Character {
 
         // ---- ANIMATIONS -------------------------
         // Load all animation frames into animation objects using Game Helper.
-        handgunAnimations.put("idleAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Idle Blinking - Handgun.png", 9, 2, 18));
-        handgunAnimations.put("runningAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Running - Handgun.png", 9, 2, 18));
-        handgunAnimations.put("jumpingStartAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Start - Handgun.png", 3, 2, 6));
-        handgunAnimations.put("jumpingLoopAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Loop - Handgun.png", 3, 2, 6));
-        handgunAnimations.put("attackingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Attacking - Handgun.png", 3, 3, 9));
-        handgunAnimations.put("hurtAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Hurt - Handgun.png", 4, 3, 12));
-        handgunAnimations.put("dyingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Dying - Handgun.png", 3, 4, 12));
+        handgunAnimations.put("idleAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Idle Blinking - Handgun.png", 9, 2, 18, 0.8f));
+        handgunAnimations.put("runningAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Running - Handgun.png", 9, 2, 18, 0.6f));
+        handgunAnimations.put("jumpingStartAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Start - Handgun.png", 3, 2, 6, 0.8f));
+        handgunAnimations.put("jumpingLoopAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Loop - Handgun.png", 3, 2, 6, 0.8f));
+        handgunAnimations.put("attackingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Attacking - Handgun.png", 3, 3, 9, 0.6f));
+        handgunAnimations.put("hurtAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Hurt - Handgun.png", 4, 3, 12, 0.5f));
+        handgunAnimations.put("dyingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Dying - Handgun.png", 3, 4, 12, 0.8f));
 
-        rifleAnimations.put("idleAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Idle Blinking - Rifle.png", 6, 3, 18));
-        rifleAnimations.put("runningAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Running - Rifle.png", 6, 3, 18));
-        rifleAnimations.put("jumpingStartAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Start - Rifle.png", 3, 2, 6));
-        rifleAnimations.put("jumpingLoopAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Loop - Rifle.png", 3, 2, 6));
-        rifleAnimations.put("attackingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Attacking - Rifle.png", 4, 1, 4));
-        rifleAnimations.put("hurtAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Hurt - Rifle.png", 4, 3, 12));
-        rifleAnimations.put("dyingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Dying - Rifle.png", 4, 3, 12));
+        rifleAnimations.put("idleAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Idle Blinking - Rifle.png", 6, 3, 18, 0.8f));
+        rifleAnimations.put("runningAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Running - Rifle.png", 6, 3, 18, 0.6f));
+        rifleAnimations.put("jumpingStartAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Start - Rifle.png", 3, 2, 6, 0.8f));
+        rifleAnimations.put("jumpingLoopAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Loop - Rifle.png", 3, 2, 6, 0.8f));
+        rifleAnimations.put("attackingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Attacking - Rifle.png", 4, 1, 4, 0.6f));
+        rifleAnimations.put("hurtAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Hurt - Rifle.png", 4, 3, 12, 0.5f));
+        rifleAnimations.put("dyingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Dying - Rifle.png", 4, 3, 12, 0.8f));
 
         weaponAnimations = handgunAnimations;  // Set default animations
 
@@ -338,7 +337,7 @@ public class Player extends Character {
     // ===================================================================================================================
 
     public void dispose() {
-        Gdx.app.log("dispose", "playerDispose");
+        Gdx.app.log("dispose", "player.dispose");
 
         super.dispose();
         jumpSound.dispose();

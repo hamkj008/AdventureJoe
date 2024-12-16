@@ -1,0 +1,173 @@
+Walking.png
+size: 1928, 984
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Walking
+  rotate: false
+  xy: 0, 0
+  size: 240, 321
+  orig: 440, 400
+  offset: 113, 58
+  index: 0
+Walking
+  rotate: false
+  xy: 241, 0
+  size: 240, 322
+  orig: 440, 400
+  offset: 111, 59
+  index: 1
+Walking
+  rotate: false
+  xy: 482, 0
+  size: 240, 323
+  orig: 440, 400
+  offset: 110, 59
+  index: 2
+Walking
+  rotate: false
+  xy: 723, 0
+  size: 240, 323
+  orig: 440, 400
+  offset: 108, 60
+  index: 3
+Walking
+  rotate: false
+  xy: 964, 0
+  size: 240, 326
+  orig: 440, 400
+  offset: 107, 56
+  index: 4
+Walking
+  rotate: false
+  xy: 1205, 0
+  size: 241, 325
+  orig: 440, 400
+  offset: 105, 55
+  index: 5
+Walking
+  rotate: false
+  xy: 1446, 0
+  size: 240, 320
+  orig: 440, 400
+  offset: 104, 58
+  index: 6
+Walking
+  rotate: false
+  xy: 1687, 0
+  size: 241, 321
+  orig: 440, 400
+  offset: 105, 56
+  index: 7
+Walking
+  rotate: false
+  xy: 0, 328
+  size: 240, 320
+  orig: 440, 400
+  offset: 107, 56
+  index: 8
+Walking
+  rotate: false
+  xy: 241, 328
+  size: 241, 317
+  orig: 440, 400
+  offset: 108, 58
+  index: 9
+Walking
+  rotate: false
+  xy: 482, 328
+  size: 240, 320
+  orig: 440, 400
+  offset: 110, 56
+  index: 10
+Walking
+  rotate: false
+  xy: 723, 328
+  size: 241, 322
+  orig: 440, 400
+  offset: 111, 56
+  index: 11
+Walking
+  rotate: false
+  xy: 964, 328
+  size: 240, 322
+  orig: 440, 400
+  offset: 113, 58
+  index: 12
+Walking
+  rotate: false
+  xy: 1205, 328
+  size: 240, 325
+  orig: 440, 400
+  offset: 112, 56
+  index: 13
+Walking
+  rotate: false
+  xy: 1446, 328
+  size: 241, 327
+  orig: 440, 400
+  offset: 110, 56
+  index: 14
+Walking
+  rotate: false
+  xy: 1687, 328
+  size: 240, 327
+  orig: 440, 400
+  offset: 109, 57
+  index: 15
+Walking
+  rotate: false
+  xy: 0, 656
+  size: 240, 328
+  orig: 440, 400
+  offset: 107, 55
+  index: 16
+Walking
+  rotate: false
+  xy: 241, 656
+  size: 241, 326
+  orig: 440, 400
+  offset: 105, 55
+  index: 17
+Walking
+  rotate: false
+  xy: 482, 656
+  size: 240, 323
+  orig: 440, 400
+  offset: 104, 56
+  index: 18
+Walking
+  rotate: false
+  xy: 723, 656
+  size: 240, 323
+  orig: 440, 400
+  offset: 105, 55
+  index: 19
+Walking
+  rotate: false
+  xy: 964, 656
+  size: 241, 321
+  orig: 440, 400
+  offset: 106, 55
+  index: 20
+Walking
+  rotate: false
+  xy: 1205, 656
+  size: 241, 320
+  orig: 440, 400
+  offset: 108, 55
+  index: 21
+Walking
+  rotate: false
+  xy: 1446, 656
+  size: 240, 323
+  orig: 440, 400
+  offset: 110, 53
+  index: 22
+Walking
+  rotate: false
+  xy: 1687, 656
+  size: 240, 325
+  orig: 440, 400
+  offset: 111, 53
+  index: 23

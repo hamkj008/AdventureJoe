@@ -1,0 +1,89 @@
+Hurt.png
+size: 2000, 1683
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Hurt
+  rotate: false
+  xy: 0, 0
+  size: 419, 547
+  orig: 900, 900
+  offset: 231, 167
+  index: 0
+Hurt
+  rotate: false
+  xy: 500, 0
+  size: 398, 551
+  orig: 900, 900
+  offset: 287, 167
+  index: 1
+Hurt
+  rotate: false
+  xy: 1000, 0
+  size: 401, 557
+  orig: 900, 900
+  offset: 277, 167
+  index: 2
+Hurt
+  rotate: false
+  xy: 1500, 0
+  size: 430, 561
+  orig: 900, 900
+  offset: 199, 167
+  index: 3
+Hurt
+  rotate: false
+  xy: 0, 561
+  size: 470, 553
+  orig: 900, 900
+  offset: 136, 167
+  index: 4
+Hurt
+  rotate: false
+  xy: 500, 561
+  size: 497, 542
+  orig: 900, 900
+  offset: 108, 167
+  index: 5
+Hurt
+  rotate: false
+  xy: 1000, 561
+  size: 500, 537
+  orig: 900, 900
+  offset: 107, 167
+  index: 6
+Hurt
+  rotate: false
+  xy: 1500, 561
+  size: 485, 541
+  orig: 900, 900
+  offset: 120, 167
+  index: 7
+Hurt
+  rotate: false
+  xy: 0, 1122
+  size: 466, 545
+  orig: 900, 900
+  offset: 137, 167
+  index: 8
+Hurt
+  rotate: false
+  xy: 500, 1122
+  size: 444, 548
+  orig: 900, 900
+  offset: 156, 167
+  index: 9
+Hurt
+  rotate: false
+  xy: 1000, 1122
+  size: 439, 549
+  orig: 900, 900
+  offset: 177, 167
+  index: 10
+Hurt
+  rotate: false
+  xy: 1500, 1122
+  size: 431, 549
+  orig: 900, 900
+  offset: 201, 167
+  index: 11

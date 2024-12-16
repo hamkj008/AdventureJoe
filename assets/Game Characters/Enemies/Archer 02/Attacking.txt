@@ -1,0 +1,75 @@
+Attacking.png
+size: 1335, 624
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Shooting
+  rotate: false
+  xy: 0, 0
+  size: 267, 311
+  orig: 440, 400
+  offset: 72, 59
+  index: 0
+Shooting
+  rotate: false
+  xy: 267, 0
+  size: 263, 311
+  orig: 440, 400
+  offset: 73, 59
+  index: 1
+Shooting
+  rotate: false
+  xy: 534, 0
+  size: 261, 311
+  orig: 440, 400
+  offset: 73, 59
+  index: 2
+Shooting
+  rotate: false
+  xy: 801, 0
+  size: 258, 311
+  orig: 440, 400
+  offset: 73, 59
+  index: 3
+Shooting
+  rotate: false
+  xy: 1068, 0
+  size: 254, 312
+  orig: 440, 400
+  offset: 74, 59
+  index: 4
+Shooting
+  rotate: false
+  xy: 0, 312
+  size: 252, 312
+  orig: 440, 400
+  offset: 75, 59
+  index: 5
+Shooting
+  rotate: false
+  xy: 267, 312
+  size: 240, 312
+  orig: 440, 400
+  offset: 75, 59
+  index: 6
+Shooting
+  rotate: false
+  xy: 534, 312
+  size: 241, 312
+  orig: 440, 400
+  offset: 74, 59
+  index: 7
+Shooting
+  rotate: false
+  xy: 801, 312
+  size: 240, 311
+  orig: 440, 400
+  offset: 74, 59
+  index: 8
+Shooting
+  rotate: false
+  xy: 1068, 312
+  size: 240, 311
+  orig: 440, 400
+  offset: 73, 59
+  index: 9

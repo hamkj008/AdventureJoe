@@ -1,0 +1,89 @@
+Attacking.png
+size: 1380, 921
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Slashing
+  rotate: false
+  xy: 0, 0
+  size: 219, 304
+  orig: 480, 480
+  offset: 129, 118
+  index: 0
+Slashing
+  rotate: false
+  xy: 345, 0
+  size: 226, 306
+  orig: 480, 480
+  offset: 114, 118
+  index: 1
+Slashing
+  rotate: false
+  xy: 690, 0
+  size: 220, 307
+  orig: 480, 480
+  offset: 100, 118
+  index: 2
+Slashing
+  rotate: false
+  xy: 1035, 0
+  size: 229, 306
+  orig: 480, 480
+  offset: 87, 118
+  index: 3
+Slashing
+  rotate: false
+  xy: 0, 307
+  size: 345, 307
+  orig: 480, 480
+  offset: 117, 117
+  index: 4
+Slashing
+  rotate: false
+  xy: 345, 307
+  size: 325, 304
+  orig: 480, 480
+  offset: 138, 118
+  index: 5
+Slashing
+  rotate: false
+  xy: 690, 307
+  size: 319, 303
+  orig: 480, 480
+  offset: 143, 118
+  index: 6
+Slashing
+  rotate: false
+  xy: 1035, 307
+  size: 323, 303
+  orig: 480, 480
+  offset: 139, 118
+  index: 7
+Slashing
+  rotate: false
+  xy: 0, 614
+  size: 324, 303
+  orig: 480, 480
+  offset: 138, 118
+  index: 8
+Slashing
+  rotate: false
+  xy: 345, 614
+  size: 321, 303
+  orig: 480, 480
+  offset: 141, 118
+  index: 9
+Slashing
+  rotate: false
+  xy: 690, 614
+  size: 275, 304
+  orig: 480, 480
+  offset: 142, 118
+  index: 10
+Slashing
+  rotate: false
+  xy: 1035, 614
+  size: 234, 304
+  orig: 480, 480
+  offset: 136, 118
+  index: 11

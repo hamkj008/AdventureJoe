@@ -41,11 +41,11 @@ public class LevelCreator {
     private int[] foregroundMapLayers;
     private int[] backgroundMapLayers;
 
-    Rectangle groundRectangle;
-    Rectangle[] collisionRectangle;
-    Sprite[] collisionSprites1;
-    Sprite[] collisionSprites2;
-    Sprite currentPlatform;
+    private Rectangle groundRectangle;
+    private Rectangle[] collisionRectangle;
+    private Sprite[] collisionSprites1;
+    private Sprite[] collisionSprites2;
+    private Sprite currentPlatform;
 
     private float groundLevel;
     private final int platformClearanceFactor = 50;      // The additional clearance needed to be off of a platform to avoid confusion between two states
@@ -151,7 +151,6 @@ public class LevelCreator {
     *  Goes through both sets of platforms for the map and applies the platform mechanics.
     **/
     public void checkMapPlatformCollision(Player player) {
-//        Gdx.app.log("flow", "checkMapPlatformCollision");
         
         for (Sprite collisionSprite : collisionSprites1) {
             platformMechanics(player, collisionSprite);
@@ -170,7 +169,6 @@ public class LevelCreator {
     *  @ collisionSprite = the current platfom that the player is on
     **/
     public void platformMechanics(Player player, Sprite collisionSprite) {
-//        Gdx.app.log("flow", "platformMechanics");
 
         if(!player.getIsGrounded() && player.getSprite().getBoundingRectangle().overlaps(collisionSprite.getBoundingRectangle()) && player.getCharacterState() == Character.CharacterState.FALLING) {
 
@@ -365,14 +363,16 @@ public class LevelCreator {
     // ===================================================================================================================
 
     public void dispose() {
+        Gdx.app.log("dispose", "levelCreator.dispose");
+
         loadedMap.dispose();
     }
 
+    // ======================================= GETTERS AND SETTERS ==================================================================
+
     public float getGroundLevel() { return groundLevel; }
 
-    public int getEnemyKilledExitThreshold() {
-        return enemyKilledExitThreshold;
-    }
+    public int getEnemyKilledExitThreshold() { return enemyKilledExitThreshold; }
 
     public void setEnemyKilledExitThreshold(int enemyKilledExitThreshold) {
         this.enemyKilledExitThreshold = enemyKilledExitThreshold;

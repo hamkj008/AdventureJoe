@@ -1,4 +1,5 @@
 package com.mygdx.game.Levels;
+import com.badlogic.gdx.Gdx;
 import com.mygdx.game.Actors.GameObjects.GameObjects;
 import com.mygdx.game.Actors.GameObjects.LevelEnd;
 import com.mygdx.game.Game.MyGdxGame;
@@ -47,12 +48,13 @@ public class LevelFactory {
         int[] background = { 0, 1 };
         int[] foreground = { 2, 3, 4, 5, 6, 7, 8 };
         currentLevel = new LevelCreator();
-        currentLevel.createLevel("Levels/Level3/Level3.tmx", foreground, background, 3, 100);
+        currentLevel.createLevel("Levels/Level3/Level3.tmx", foreground, background, 3, 20000);
+        currentGroundLevel = currentLevel.getGroundLevel();
 
         currentLevelObjects = new GameObjects(20, 4, 2, currentLevel.getLevelXBoundary());
         currentLevelObjects.getLevelEnd().setGoalType(LevelEnd.GoalType.PRINCESS);
 
-        currentLevel.setEnemyKilledExitThreshold(5);
+        currentLevel.setEnemyKilledExitThreshold(3);
     }
 
     // ===================================================================================================================
@@ -70,7 +72,10 @@ public class LevelFactory {
     // ===================================================================================================================
 
     public void dispose() {
+        Gdx.app.log("dispose", "levelFactory.dispose");
+
         currentLevel.dispose();
+        currentLevelObjects.dispose();
     }
 
 

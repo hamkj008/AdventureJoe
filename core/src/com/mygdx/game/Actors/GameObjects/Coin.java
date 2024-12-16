@@ -92,7 +92,7 @@ public class Coin extends Actor {
     // ===================================================================================================================
 
     public void dispose(){
-        Gdx.app.log("dispose", "CoinDispose");
+        Gdx.app.log("dispose", "Coin.dispose");
 
         this.coinCollectedSound.dispose();
         for(Texture texture : keyframes) {

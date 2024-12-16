@@ -1,0 +1,89 @@
+Attacking.png
+size: 3846, 1106
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Swinging Rod
+  rotate: false
+  xy: 0, 0
+  size: 441, 550
+  orig: 900, 900
+  offset: 194, 167
+  index: 0
+Swinging Rod
+  rotate: false
+  xy: 641, 0
+  size: 431, 549
+  orig: 900, 900
+  offset: 203, 167
+  index: 1
+Swinging Rod
+  rotate: false
+  xy: 1282, 0
+  size: 641, 550
+  orig: 900, 900
+  offset: 236, 168
+  index: 2
+Swinging Rod
+  rotate: false
+  xy: 1923, 0
+  size: 576, 548
+  orig: 900, 900
+  offset: 301, 169
+  index: 3
+Swinging Rod
+  rotate: false
+  xy: 2564, 0
+  size: 574, 541
+  orig: 900, 900
+  offset: 303, 169
+  index: 4
+Swinging Rod
+  rotate: false
+  xy: 3205, 0
+  size: 574, 540
+  orig: 900, 900
+  offset: 303, 169
+  index: 5
+Swinging Rod
+  rotate: false
+  xy: 0, 553
+  size: 574, 539
+  orig: 900, 900
+  offset: 303, 169
+  index: 6
+Swinging Rod
+  rotate: false
+  xy: 641, 553
+  size: 574, 538
+  orig: 900, 900
+  offset: 303, 169
+  index: 7
+Swinging Rod
+  rotate: false
+  xy: 1282, 553
+  size: 567, 542
+  orig: 900, 900
+  offset: 303, 168
+  index: 8
+Swinging Rod
+  rotate: false
+  xy: 1923, 553
+  size: 561, 549
+  orig: 900, 900
+  offset: 304, 168
+  index: 9
+Swinging Rod
+  rotate: false
+  xy: 2564, 553
+  size: 580, 552
+  orig: 900, 900
+  offset: 274, 168
+  index: 10
+Swinging Rod
+  rotate: false
+  xy: 3205, 553
+  size: 606, 553
+  orig: 900, 900
+  offset: 234, 167
+  index: 11

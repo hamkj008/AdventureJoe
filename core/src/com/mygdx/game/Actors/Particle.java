@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.mygdx.game.Screens.GameScreen;
+
 
 
 public class Particle extends Actor {
@@ -41,9 +41,7 @@ public class Particle extends Actor {
     public void create() {
 
         spriteSheet = new Texture("explosion.png");
-//        explosionAnimation = GameScreen.getInstance().getHelper().processAnimation("explosion.png", 5, 2, 10);
-//
-//        explosionAnimation.setFrameDuration(0.1f);
+
         explosionFrames[0]  = new TextureRegion(spriteSheet, 2, 2, 87, 87);
         explosionFrames[1]  = new TextureRegion(spriteSheet, 94, 2, 87, 87);
         explosionFrames[2]  = new TextureRegion(spriteSheet, 186, 2, 87, 87);
@@ -97,7 +95,9 @@ public class Particle extends Actor {
     // ===================================================================================================================
 
     public void dispose() {
-//        spriteSheet.dispose();
+        Gdx.app.log("dispose", "particle.dispose");
+
+        spriteSheet.dispose();
     }
 
     // ===================================================================================================================

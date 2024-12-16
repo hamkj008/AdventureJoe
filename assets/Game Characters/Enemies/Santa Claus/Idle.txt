@@ -1,0 +1,89 @@
+Idle.png
+size: 1412, 1182
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Idle
+  rotate: false
+  xy: 0, 0
+  size: 328, 386
+  orig: 600, 480
+  offset: 126, 40
+  index: 0
+Idle
+  rotate: false
+  xy: 353, 0
+  size: 331, 387
+  orig: 600, 480
+  offset: 124, 40
+  index: 1
+Idle
+  rotate: false
+  xy: 706, 0
+  size: 336, 388
+  orig: 600, 480
+  offset: 121, 40
+  index: 2
+Idle
+  rotate: false
+  xy: 1059, 0
+  size: 341, 390
+  orig: 600, 480
+  offset: 118, 40
+  index: 3
+Idle
+  rotate: false
+  xy: 0, 394
+  size: 345, 391
+  orig: 600, 480
+  offset: 115, 40
+  index: 4
+Idle
+  rotate: false
+  xy: 353, 394
+  size: 349, 392
+  orig: 600, 480
+  offset: 113, 40
+  index: 5
+Idle
+  rotate: false
+  xy: 706, 394
+  size: 353, 394
+  orig: 600, 480
+  offset: 110, 40
+  index: 6
+Idle
+  rotate: false
+  xy: 1059, 394
+  size: 350, 393
+  orig: 600, 480
+  offset: 112, 40
+  index: 7
+Idle
+  rotate: false
+  xy: 0, 788
+  size: 347, 391
+  orig: 600, 480
+  offset: 114, 40
+  index: 8
+Idle
+  rotate: false
+  xy: 353, 788
+  size: 342, 390
+  orig: 600, 480
+  offset: 117, 40
+  index: 9
+Idle
+  rotate: false
+  xy: 706, 788
+  size: 337, 389
+  orig: 600, 480
+  offset: 120, 40
+  index: 10
+Idle
+  rotate: false
+  xy: 1059, 788
+  size: 333, 387
+  orig: 600, 480
+  offset: 123, 40
+  index: 11
