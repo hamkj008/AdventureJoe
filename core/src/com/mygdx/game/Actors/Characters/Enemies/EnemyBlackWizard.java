@@ -23,12 +23,6 @@ public class EnemyBlackWizard extends Enemy {
     private final Animation<TextureRegion> dyingAnimation;
 
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private final float projectileMovementSpeed = 400f;
-    @SuppressWarnings("FieldCanBeLocal")
-    private final float projectileReloadSpeed   = 2f;
-
-
     // ===================================================================================================================
 
     public EnemyBlackWizard() {
@@ -84,6 +78,18 @@ public class EnemyBlackWizard extends Enemy {
                 checkDamage();
                 super.setCharacterState(CharacterState.MOVING);
             }
+        }
+    }
+
+    // ===================================================================================================================
+
+    @Override
+    public void setAIStates(Player player) {
+
+        super.setAIStates(player);
+
+        if (distanceFromPlayer(player) < 200) {
+            super.setCharacterState(CharacterState.ATTACKING);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.mygdx.game.Actors.Characters.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -74,7 +75,7 @@ public class Player extends Character {
         handgunAnimations.put("runningAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Running - Handgun.png", 9, 2, 18, 0.6f));
         handgunAnimations.put("jumpingStartAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Start - Handgun.png", 3, 2, 6, 0.8f));
         handgunAnimations.put("jumpingLoopAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Loop - Handgun.png", 3, 2, 6, 0.8f));
-        handgunAnimations.put("attackingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Attacking - Handgun.png", 3, 3, 9, 0.6f));
+        handgunAnimations.put("attackingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Attacking - Handgun.png", 3, 3, 9, 0.5f));
         handgunAnimations.put("hurtAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Hurt - Handgun.png", 4, 3, 12, 0.5f));
         handgunAnimations.put("dyingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Dying - Handgun.png", 3, 4, 12, 0.8f));
 
@@ -82,7 +83,7 @@ public class Player extends Character {
         rifleAnimations.put("runningAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Running - Rifle.png", 6, 3, 18, 0.6f));
         rifleAnimations.put("jumpingStartAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Start - Rifle.png", 3, 2, 6, 0.8f));
         rifleAnimations.put("jumpingLoopAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Jump Loop - Rifle.png", 3, 2, 6, 0.8f));
-        rifleAnimations.put("attackingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Attacking - Rifle.png", 4, 1, 4, 0.6f));
+        rifleAnimations.put("attackingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Attacking - Rifle.png", 4, 1, 4, 0.5f));
         rifleAnimations.put("hurtAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Hurt - Rifle.png", 4, 3, 12, 0.5f));
         rifleAnimations.put("dyingAnimation", GameScreen.getInstance().getHelper().processAnimation("Game Characters/Player/Dying - Rifle.png", 4, 3, 12, 0.8f));
 
@@ -94,16 +95,9 @@ public class Player extends Character {
 
         super.getProjectileOffset().put("leftOffset", new Vector2(0, 100));
         super.getProjectileOffset().put("rightOffset", new Vector2(200, 100));
-        super.setProjectileSpawner(new ProjectileSpawner("Game Characters/Player/PlayerProjectile.png", "Audio/Sounds/shot.mp3",
+        super.setProjectileSpawner(new ProjectileSpawner(this, "Game Characters/Player/PlayerProjectile.png", "Audio/Sounds/shot.mp3",
                 new Vector2(45, 25), handgunReloadSpeed));
         super.getProjectileSpawner().setMovementSpeed(handgunSpeed);
-    }
-
-    // ===================================================================================================================
-
-    @Override
-    public void spawnProjectile() {
-        super.getProjectileSpawner().spawnProjectile(this, GameScreen.getInstance().getGameStateController().getRandomEnemy());
     }
 
     // ===================================================================================================================
@@ -132,10 +126,10 @@ public class Player extends Character {
     public void healthCheck(int damage) {
 
         // The player can only get hurt or die when on the ground.
-        if(grounded) {
-            super.healthCheck(damage);
-            GameScreen.getInstance().getUiController().getPlayerHealthBar().modifyHealth(getHealth());
-        }
+//        if(grounded) {
+//            super.healthCheck(damage);
+//            GameScreen.getInstance().getUiController().getPlayerHealthBar().modifyHealth(getHealth());
+//        }
     }
 
     // ===================================================================================================================
@@ -144,7 +138,23 @@ public class Player extends Character {
     public void act(float delta) {
 
         super.act(delta);
+        restrictBounds();
         switchStates();
+    }
+
+    // ===================================================================================================================
+
+    public void restrictBounds() {
+
+        // Restrict left
+        if(getSprite().getX() < 200) {
+            getSprite().setX(200);
+        }
+
+        // Restrict right
+        if(getSprite().getX() > (Gdx.graphics.getWidth() - 600)) {
+            getSprite().setX(Gdx.graphics.getWidth() - 600);
+        }
     }
 
     // ===================================================================================================================
@@ -157,7 +167,7 @@ public class Player extends Character {
             case IDLE:
                 // Set the speed and animation for idle
                 super.setCURRENT_MOVEMENT_SPEED(0);
-                playDieSound = true;
+                playDieSound  = true;
                 playHurtSound = true;
                 Animation<TextureRegion> animation = weaponAnimations.get("idleAnimation");
                 super.loopingAnimation(animation);
@@ -234,10 +244,10 @@ public class Player extends Character {
     // ========================================== MOVEMENT =================================================================
 
     /**
-     Takes the current movement speed and uses Game Helper to apply deltaTime giving the total speed.
-     Can then apply this to find the new position for the sprite which is then translated to that position.
-     Player needs its own version of moveCharacter.
-     It overrides the super.moveCharacter so that other characters don't have the camera speed added to their movement
+     *  Takes the current movement speed and uses Game Helper to apply deltaTime giving the total speed.
+     *  Can then apply this to find the new position for the sprite which is then translated to that position.
+     *  Player needs its own version of moveCharacter.
+     *  It overrides the super.moveCharacter so that other characters don't have the camera speed added to their movement
      */
     @Override
     public void moveCharacter() {
@@ -343,6 +353,13 @@ public class Player extends Character {
         jumpSound.dispose();
         hurtSound.dispose();
         dieSound.dispose();
+
+        for(Animation<TextureRegion> animation : handgunAnimations.values()) {
+            animation.getKeyFrames()[0].getTexture().dispose();
+        }
+        for(Animation<TextureRegion> animation : rifleAnimations.values()) {
+            animation.getKeyFrames()[0].getTexture().dispose();
+        }
     }
 
     // =========================================== GETTERS AND SETTERS ========================================================

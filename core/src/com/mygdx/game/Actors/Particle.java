@@ -17,6 +17,7 @@ public class Particle extends Actor {
 
     private Animation<TextureRegion> explosionAnimation;
     private final Vector2 position;
+    @SuppressWarnings("FieldCanBeLocal")
     private TextureRegion currentFrame;
     private final Sprite sprite;
 

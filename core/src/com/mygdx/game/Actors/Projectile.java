@@ -24,8 +24,6 @@ public class Projectile extends Actor {
 
     private final TextureRegion textureRegion;    // Used for flipping the sprite
     private final Sprite projectileSprite;
-    private final com.mygdx.game.Actors.Characters.Character owner;
-    private final com.mygdx.game.Actors.Characters.Character overlapCharacter;
     private float movementSpeedX = 0;
     private float movementSpeedY = 0;
     private final Vector2 projectileStartPosition;
@@ -33,7 +31,7 @@ public class Projectile extends Actor {
     private final Vector2 projectileStartWithOffset;
     private final Vector2 PROJECTILE_MOVEMENT;
     private boolean projectileActive = false;
-    private boolean projectileHit = false;
+    public boolean projectileHit = false;
 
     private final Sound firingSound;
     private boolean playFiringSound = true;
@@ -43,10 +41,8 @@ public class Projectile extends Actor {
 
     // ===================================================================================================================
 
-    public Projectile(com.mygdx.game.Actors.Characters.Character owner, com.mygdx.game.Actors.Characters.Character overlapCharacter, String texturePath, String firingSoundPath, Vector2 projectileStartPosition) {
+    public Projectile(String texturePath, String firingSoundPath, Vector2 projectileStartPosition) {
 
-        this.owner                      = owner;
-        this.overlapCharacter           = overlapCharacter;
         textureRegion                   = new TextureRegion(new Texture(texturePath));
         projectileSprite                = new Sprite(textureRegion);
         this.projectileStartPosition    = projectileStartPosition;
@@ -64,7 +60,6 @@ public class Projectile extends Actor {
      */
     @Override
     public void draw(Batch batch, float alpha) {
-        Gdx.app.log("draw", "projectile/draw");
 
         GameScreen.getInstance().getHelper().flipSprite(direction, textureRegion);
 
@@ -76,14 +71,6 @@ public class Projectile extends Actor {
 
     @Override
     public void act(float delta) {
-
-        setProjectileBounds();   // Monitor out of bounds
-
-        // If the projectile hits a character, the characters position is updated so the particle can be drawn on the position.
-        if(projectileHit) {
-            particle.getSprite().setPosition(GameScreen.getInstance().getHelper().getCenteredSpritePosition(overlapCharacter.getSprite()).x,
-                GameScreen.getInstance().getHelper().getCenteredSpritePosition(overlapCharacter.getSprite()).y);
-        }
 
         switchState();          // Monitor state switch
     }
@@ -110,31 +97,6 @@ public class Projectile extends Actor {
         if(playFiringSound) {
             firingSound.play();
             playFiringSound = false;
-        }
-    }
-
-    // ===================================================================================================================
-
-    // If the projectile goes off screen or hits a character it is inactive.
-    public void setProjectileBounds() {
-
-        if(getProjectileSprite().getX() > Gdx.graphics.getWidth()) {
-            projectileActive = false;
-        }
-        else if(getProjectileSprite().getX() < 0) {
-            projectileActive = false;
-        }
-
-        if(this.projectileSprite.getBoundingRectangle().overlaps(overlapCharacter.getSprite().getBoundingRectangle())) {
-            if(this.projectileState == Projectile.ProjectileState.FIRING && overlapCharacter.getIsAlive()) {
-
-                overlapCharacter.healthCheck(owner.getDamage());
-
-                // Spawn a particle where the overlap occurred
-                projectileHit = true;
-                particle.spawnParticle();
-                projectileActive = false;
-            }
         }
     }
 

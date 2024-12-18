@@ -48,17 +48,10 @@ public class EnemyDragon extends Enemy {
 
         super.getProjectileOffset().put("leftOffset", new Vector2(-10, 90));
         super.getProjectileOffset().put("rightOffset", new Vector2(200, 90));
-        super.setProjectileSpawner(new ProjectileSpawner("Game Objects/DragonProjectile.png", "Audio/Sounds/shot.mp3",
+        super.setProjectileSpawner(new ProjectileSpawner(this, "Game Objects/DragonProjectile.png", "Audio/Sounds/shot.mp3",
                 new Vector2(70, 50), projectileReloadSpeed));
         super.getProjectileSpawner().setMovementSpeed(projectileMovementSpeed);
 
-    }
-
-    // ===================================================================================================================
-
-    public void spawnProjectile() {
-
-        super.getProjectileSpawner().spawnProjectile(this, GameScreen.getInstance().getGameStateController().getPlayer());
     }
 
     // ===================================================================================================================
@@ -85,14 +78,9 @@ public class EnemyDragon extends Enemy {
         if(super.getCharacterState() == CharacterState.ATTACKING) {
             super.setCURRENT_MOVEMENT_SPEED(0);
             if (super.nonLoopingAnimation(attackingAnimation)) {
+                Gdx.app.log("dist", "              attack finished");
                 super.setCharacterState(CharacterState.MOVING);
-                startTimer = true;
-                canChange = false;
             }
-        }
-
-        if(startTimer) {
-            super.setTimer();
         }
     }
 
@@ -103,9 +91,11 @@ public class EnemyDragon extends Enemy {
 
         super.setAIStates(player);
 
-        // The dragon fires at the enemy wherever it is
-        if (distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 500 && canChange) {
+        Gdx.app.log("dist", " " + super.getCharacterState());
+        Gdx.app.log("dist", "distance: " + distanceFromPlayer(player));
 
+        // The dragon fires at the enemy wherever it is
+        if (distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 500 && super.getProjectileSpawner().getCanSpawn()) {
             super.setCharacterState(CharacterState.ATTACKING);
             super.getProjectileSpawner().setStartTimer(true);
         }

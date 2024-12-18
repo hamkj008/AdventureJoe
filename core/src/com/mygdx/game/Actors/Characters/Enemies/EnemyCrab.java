@@ -2,12 +2,13 @@ package com.mygdx.game.Actors.Characters.Enemies;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Screens.GameScreen;
 
 
 
 /**
- * Devil guy has a melee attack
+ * Crab has a melee attack
  */
 public class EnemyCrab extends Enemy {
 
@@ -78,4 +79,17 @@ public class EnemyCrab extends Enemy {
             }
         }
     }
+
+    // ===================================================================================================================
+
+    @Override
+    public void setAIStates(Player player) {
+
+        super.setAIStates(player);
+
+        if (distanceFromPlayer(player) < 200) {
+            super.setCharacterState(CharacterState.ATTACKING);
+        }
+    }
+
 }

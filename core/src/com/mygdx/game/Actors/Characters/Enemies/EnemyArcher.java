@@ -43,22 +43,15 @@ public class EnemyArcher extends Enemy {
         idleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Archer 02/Idle.png", 4, 6, 24, 0.8f);
         walkingAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Archer 02/Walking.png", 8, 3, 24, 0.8f);
         attackingAnimation  = GameScreen.getInstance().getHelper().processAnimation( "Game Characters/Enemies/Archer 02/Attacking.png", 5, 2, 10, 0.8f);
-        hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Archer 02/Hurt.png", 4, 3, 12, 0.8f);
+        hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Archer 02/Hurt.png", 6, 2, 12, 0.8f);
         dyingAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Archer 02/Dying.png", 6, 2, 12, 0.8f);
 
         super.getProjectileOffset().put("leftOffset", new Vector2(-10, 90));
         super.getProjectileOffset().put("rightOffset", new Vector2(200, 90));
-        super.setProjectileSpawner(new ProjectileSpawner("Game Objects/DragonProjectile.png", "Audio/Sounds/shot.mp3",
+        super.setProjectileSpawner(new ProjectileSpawner(this, "Game Objects/DragonProjectile.png", "Audio/Sounds/shot.mp3",
                 new Vector2(70, 50), projectileReloadSpeed));
         super.getProjectileSpawner().setMovementSpeed(projectileMovementSpeed);
 
-    }
-
-    // ===================================================================================================================
-
-    public void spawnProjectile() {
-
-        super.getProjectileSpawner().spawnProjectile(this, GameScreen.getInstance().getGameStateController().getPlayer());
     }
 
     // ===================================================================================================================
@@ -86,13 +79,7 @@ public class EnemyArcher extends Enemy {
             super.setCURRENT_MOVEMENT_SPEED(0);
             if (super.nonLoopingAnimation(attackingAnimation)) {
                 super.setCharacterState(CharacterState.MOVING);
-                startTimer = true;
-                canChange = false;
             }
-        }
-
-        if(startTimer) {
-            super.setTimer();
         }
     }
 
@@ -104,8 +91,7 @@ public class EnemyArcher extends Enemy {
         super.setAIStates(player);
 
         // The dragon fires at the enemy wherever it is
-        if (distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 500 && canChange) {
-
+        if (distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 500 && super.getProjectileSpawner().getCanSpawn()) {
             super.setCharacterState(CharacterState.ATTACKING);
             super.getProjectileSpawner().setStartTimer(true);
         }

@@ -10,7 +10,7 @@ import com.mygdx.game.Screens.GameScreen;
 
 
 /**
- * Yeti has a projectile attack and a melee attack
+ * Santa has a projectile attack and a melee attack
  */
 public class EnemySantaClaus extends Enemy {
 
@@ -57,16 +57,9 @@ public class EnemySantaClaus extends Enemy {
 
         super.getProjectileOffset().put("leftOffset", new Vector2(-10, 100));
         super.getProjectileOffset().put("rightOffset", new Vector2(200, 100));
-        super.setProjectileSpawner(new ProjectileSpawner("Game Objects/Cartoon Yeti_Snow Ball.png", "Audio/Sounds/shot.mp3",
+        super.setProjectileSpawner(new ProjectileSpawner(this, "Game Objects/Cartoon Yeti_Snow Ball.png", "Audio/Sounds/shot.mp3",
                 new Vector2(70, 50), projectileReloadSpeed));
         super.getProjectileSpawner().setMovementSpeed(projectileMovementSpeed);
-    }
-
-    // ===================================================================================================================
-
-    public void spawnProjectile() {
-
-        getProjectileSpawner().spawnProjectile(this, GameScreen.getInstance().getGameStateController().getPlayer());
     }
 
     // ===================================================================================================================
@@ -107,22 +100,15 @@ public class EnemySantaClaus extends Enemy {
                     checkDamage();
                     // Set the state to enter into after animation has played.
                     super.setCharacterState(CharacterState.MOVING);
-                    startTimer = true;
-                    canChange = false;
                 }
             }
-            if (super.getAttackState() == AttackState.PROJECTILE) {
+            else if (super.getAttackState() == AttackState.PROJECTILE) {
                 // If the animation has finished
                 if (super.nonLoopingAnimation(throwingAnimation)) {
                     // Set the state to enter into after animation has played.
                     super.setCharacterState(CharacterState.MOVING);
-                    startTimer = true;
-                    canChange = false;
                 }
             }
-        }
-        if(startTimer) {
-            super.setTimer();
         }
     }
 
@@ -135,14 +121,22 @@ public class EnemySantaClaus extends Enemy {
         super.setAIStates(player);
 
         // The yeti has a projectile attack and a melee attack. If it is far enough away from the player it uses the projectile attack.
-        if ( distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 700 && canChange) {
-            setAttackState(AttackState.PROJECTILE);
-            super.setCharacterState(CharacterState.ATTACKING);
-            super.getProjectileSpawner().setStartTimer(true);
+        if ( distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 700) {
+            if(super.getProjectileSpawner().getCanSpawn()) {
+                setAttackState(AttackState.PROJECTILE);
+                super.setCharacterState(CharacterState.ATTACKING);
+                super.getProjectileSpawner().setStartTimer(true);
+                super.getProjectileSpawner().setProjectileAttack(true);
+            }
         }
         else {
-            // If it is close enough to the player, it uses the melee attack
-            setAttackState(AttackState.MELEE);
+            super.getProjectileSpawner().setProjectileAttack(false);
+
+            // If the enemy is close enough to melee attack.
+            if (distanceFromPlayer(player) < 200) {
+                super.setAttackState(AttackState.MELEE);
+                super.setCharacterState(CharacterState.ATTACKING);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.mygdx.game.Actors.Characters.Enemies;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Screens.GameScreen;
 
 
@@ -34,12 +35,12 @@ public class EnemyDevilGuy extends Enemy {
         super.setHasRunningState(true);
 
         // ---- ANIMATIONS -------------------------
-        idleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Idle.png", 3, 6, 18, 0.033f);
-        walkingAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Walking.png", 4, 6, 24, 0.033f);
-        runningAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Running.png", 4, 3, 12, 0.033f);
-        attackingAnimation  = GameScreen.getInstance().getHelper().processAnimation( "Game Characters/Enemies/Devil Masked Guy/Attacking.png", 3, 4, 12, 0.033f);
-        hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Hurt.png", 4, 3, 12, 0.033f);
-        dyingAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Dying.png", 3, 4, 12, 0.033f);
+        idleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Idle.png", 3, 6, 18, 0.8f);
+        walkingAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Walking.png", 4, 6, 24, 0.8f);
+        runningAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Running.png", 4, 3, 12, 0.6f);
+        attackingAnimation  = GameScreen.getInstance().getHelper().processAnimation( "Game Characters/Enemies/Devil Masked Guy/Attacking.png", 3, 4, 12, 0.6f);
+        hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Hurt.png", 4, 3, 12, 0.8f);
+        dyingAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Devil Masked Guy/Dying.png", 3, 4, 12, 0.8f);
     }
 
     // ===================================================================================================================
@@ -75,6 +76,18 @@ public class EnemyDevilGuy extends Enemy {
                 checkDamage();
                 super.setCharacterState(CharacterState.MOVING);
             }
+        }
+    }
+
+    // ===================================================================================================================
+
+    @Override
+    public void setAIStates(Player player) {
+
+        super.setAIStates(player);
+
+        if (distanceFromPlayer(player) < 200) {
+            super.setCharacterState(CharacterState.ATTACKING);
         }
     }
 }

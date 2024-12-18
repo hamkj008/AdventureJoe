@@ -81,10 +81,6 @@ public class Character extends Actor {
 
     // ===================================================================================================================
 
-    public void spawnProjectile() {}
-
-    // ===================================================================================================================
-
     /**
     * The default drawing method. It flips the sprites to face the correct direction.
     * Child classes that may need to override this will still have a call to super to access this method.
@@ -112,14 +108,6 @@ public class Character extends Actor {
     public void act(float delta) {
 
         if(projectileSpawner != null) {
-
-            if (characterState == Character.CharacterState.ATTACKING && projectileSpawner.getCanSpawn()) {
-                spawnProjectile();
-            }
-
-            if(projectileSpawner.getStartTimer()) {
-                projectileSpawner.setTimer();
-            }
             projectileSpawner.act(delta);
         }
     }
@@ -189,6 +177,10 @@ public class Character extends Actor {
     public void compensateCamera(float cameraPositionAmount) {
 
         sprite.translate(cameraPositionAmount, positionAmount.y);
+
+        if(projectileSpawner != null) {
+            projectileSpawner.compensateCamera(cameraPositionAmount);
+        }
     }
 
     // ===================================================================================================================

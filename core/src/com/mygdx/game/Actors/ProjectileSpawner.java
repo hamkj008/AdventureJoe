@@ -4,12 +4,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Actors.Characters.Character;
+import com.mygdx.game.Screens.GameScreen;
+
 import java.util.ArrayList;
 
 
 
 public class ProjectileSpawner extends Actor {
 
+    private final com.mygdx.game.Actors.Characters.Character owner;
     private final ArrayList<Projectile> projectiles;
     private final ArrayList<Projectile> removedProjectiles; // List collects inactive projectiles for deletion
     private final ArrayList<Particle> particles;
@@ -19,17 +22,19 @@ public class ProjectileSpawner extends Actor {
     private final Vector2 size;
     private float projectileReloadSpeed;
     private float timePeriod                        = 0f;
-    public float timer;
+    private float timer;
     private boolean startTimer                      = false;
     private boolean canSpawn                        = true;     // sets whether a projectile is allowed to be spawned
+    public boolean projectileAttack                = true;     // A guard for enemies with projectile and melee attacks so that a melee attack doesnt spawn projectiles. Characters without both attacks will default to true, but characters with both will switch
     @SuppressWarnings("FieldCanBeLocal")
     private final int maxNumberOfProjectiles        = 5;
     private float movementSpeed                     = 0f;
 
     // ===================================================================================================================
 
-    public ProjectileSpawner(String texturePath, String firingSoundPath, Vector2 size, Float projectileReloadSpeed) {
+    public ProjectileSpawner(com.mygdx.game.Actors.Characters.Character owner, String texturePath, String firingSoundPath, Vector2 size, Float projectileReloadSpeed) {
 
+        this.owner                  = owner;
         this.texturePath            = texturePath;
         this.firingSoundPath        = firingSoundPath;
         this.size                   = size;
@@ -43,12 +48,12 @@ public class ProjectileSpawner extends Actor {
 
     // ===================================================================================================================
 
-    public void spawnProjectile(com.mygdx.game.Actors.Characters.Character owner, com.mygdx.game.Actors.Characters.Character overlapCharacter) {
-        Gdx.app.log("timer", "spawnProjectile");
+    public void spawnProjectile() {
+        Gdx.app.log("state", "spawnProjectile");
 
         if(projectiles.size() < maxNumberOfProjectiles) {     // Limit the number of projectiles that can be active at once
 
-            Projectile projectile = new Projectile(owner, overlapCharacter, texturePath, firingSoundPath,
+            Projectile projectile = new Projectile(texturePath, firingSoundPath,
                     new Vector2(owner.getSprite().getX(), owner.getSprite().getY()));
 
             projectile.getProjectileSprite().setSize(size.x, size.y);
@@ -87,7 +92,7 @@ public class ProjectileSpawner extends Actor {
                 timer       = projectileReloadSpeed;
                 canSpawn    = true;
                 startTimer  = false;
-                Gdx.app.log("timer", "timerFinished");
+                Gdx.app.log("state", "                               timerFinished");
             }
         }
     }
@@ -146,7 +151,51 @@ public class ProjectileSpawner extends Actor {
     public void act(float delta) {
 
         for(Projectile projectile : projectiles) {
+            setProjectileBounds(projectile);
             projectile.act(delta);
+        }
+
+        if (owner.getCharacterState() == Character.CharacterState.ATTACKING && canSpawn && projectileAttack) {
+            spawnProjectile();
+        }
+
+        if(startTimer) {
+            setTimer();
+        }
+    }
+
+    // ===================================================================================================================
+
+    public void checkCollided(Character overlapCharacter) {
+
+        for(Projectile projectile : projectiles) {
+            if(projectile.getProjectileSprite().getBoundingRectangle().overlaps(overlapCharacter.getSprite().getBoundingRectangle())) {
+                if(projectile.getProjectileState() == Projectile.ProjectileState.FIRING && overlapCharacter.getIsAlive()) {
+
+                    overlapCharacter.healthCheck(owner.getDamage());
+
+                    // Spawn a particle where the overlap occurred
+                    projectile.setProjectileActive(false);
+                    projectile.getParticle().spawnParticle();
+
+                    // Update the characters position is updated so the particle can be drawn on the position.
+                    projectile.getParticle().getSprite().setPosition(GameScreen.getInstance().getHelper().getCenteredSpritePosition(overlapCharacter.getSprite()).x,
+                            GameScreen.getInstance().getHelper().getCenteredSpritePosition(overlapCharacter.getSprite()).y);
+                }
+            }
+        }
+    }
+
+    // ===================================================================================================================
+
+    // If the projectile goes off screen or hits a character it is inactive.
+    public void setProjectileBounds(Projectile projectile) {
+
+        if(projectile.getProjectileSprite().getX() > Gdx.graphics.getWidth()) {
+            projectile.setProjectileActive(false);
+        }
+        else if(projectile.getProjectileSprite().getX() < 0) {
+            projectile.setProjectileActive(false);
         }
     }
 
@@ -154,10 +203,19 @@ public class ProjectileSpawner extends Actor {
 
     // Enemies arent included in the compensation. Only the player amount is ever entered as the cameraPositionAmount
     public void compensateCamera(float cameraPositionAmount) {
+
         for(Projectile projectile : projectiles) {
+
             if(projectile.getProjectileActive()) {
-                projectile.compensateCamera(cameraPositionAmount);
-                projectile.getParticle().compensateCamera(cameraPositionAmount);
+
+                if(owner.getDirection() == Character.Direction.LEFT) {
+                    projectile.compensateCamera(cameraPositionAmount);
+                    projectile.getParticle().compensateCamera(cameraPositionAmount);
+                }
+                else if(owner.getDirection() == Character.Direction.RIGHT) {
+                    projectile.compensateCamera(cameraPositionAmount);
+                    projectile.getParticle().compensateCamera(cameraPositionAmount);
+                }
             }
         }
     }
@@ -192,7 +250,7 @@ public class ProjectileSpawner extends Actor {
 
     public ArrayList<Particle> getParticles() { return particles; }
 
-    public boolean getStartTimer() { return startTimer; }
-
     public void setStartTimer(boolean startTimer) { this.startTimer = startTimer; }
+
+    public void setProjectileAttack(boolean projectileAttack) { this.projectileAttack = projectileAttack; }
 }

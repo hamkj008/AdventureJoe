@@ -1,15 +1,26 @@
 package com.mygdx.game.Actors.Characters.Enemies;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.mygdx.game.Actors.Characters.Character;
+import com.mygdx.game.Levels.LevelFactory;
+import com.mygdx.game.Screens.GameScreen;
+import com.mygdx.game.UI.UICounters;
+import java.util.ArrayList;
+import java.util.Objects;
 
 
-public class EnemyFactory {
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private Enemy enemy;
+public class EnemyFactory extends Actor {
 
-    private final String[] enemyArray = {
+    ArrayList<Enemy> enemyArray;
+    ArrayList<Enemy> removedEnemies;
+
+    private final String[] enemyNameList = {
             "Dragon",
-            "DevilGuy",
+            "Devil Guy",
             "Yeti",
             "Robot",
             "Wolf",
@@ -20,8 +31,71 @@ public class EnemyFactory {
             "Ninja"
     };
 
+    // ===================================================================================================================
 
     public EnemyFactory() {}
+
+    // ===================================================================================================================
+
+
+    public void spawnEnemies(int levelXBoundary, int numberOfEnemies, int minPositionDistance) {
+
+        enemyArray                      = new ArrayList<>(numberOfEnemies);
+        removedEnemies                  = new ArrayList<>();
+        ArrayList<Vector2> positions    = GameScreen.getInstance().getHelper().generateRandomMinDistancePositions(
+                                                                            levelXBoundary,numberOfEnemies, minPositionDistance);
+        for(int i = 0; i < numberOfEnemies; i++) {
+            Enemy enemy = spawnRandomEnemy();
+            enemy.getSprite().setPosition(positions.get(i).x, LevelFactory.getCurrentGroundLevel());
+            enemyArray.add(enemy);
+        }
+    }
+
+    // ===================================================================================================================
+
+    @Override
+    public void draw(Batch batch, float alpha) {
+
+        for (Enemy enemy : enemyArray) {
+            enemy.draw(batch, alpha);
+        }
+    }
+
+    // ===================================================================================================================
+
+    @Override
+    public void act(float delta) {
+
+        for(Enemy enemy : enemyArray) {
+            enemy.act(delta);
+
+            if (enemy.getCharacterState() == Character.CharacterState.DEAD) {
+                UICounters.enemiesKilled += 1;          // Add a kill count
+                removedEnemies.add(enemy);              // remove enemy from the list
+            }
+        }
+
+        for(Enemy removedEnemy: removedEnemies) {
+            enemyArray.remove(removedEnemy);
+            removedEnemy.dispose();
+        }
+        removedEnemies.clear();
+    }
+
+    // ===================================================================================================================
+
+    /**
+     *  Moves the characters in the opposite direction to oppose the cameras movement,
+     *  giving the impression that they are not moving if they are static objects.
+     **/
+    public void compensateCamera(float cameraPositionAmount) {
+
+        for(Enemy enemy : enemyArray) {
+            enemy.compensateCamera(cameraPositionAmount);
+        }
+    }
+
+    // ===================================================================================================================
 
 
     /**
@@ -30,86 +104,57 @@ public class EnemyFactory {
      **/
     public Enemy spawnRandomEnemy() {
 
-        enemy                   = new Enemy();
+        Enemy enemy           = new Enemy();
 
-        int randomIndex         = MathUtils.random(0, enemyArray.length - 1);
-        String selectedEnemy    = enemyArray[randomIndex];
+        int randomIndex       = MathUtils.random(0, enemyNameList.length - 1);
+        String selectedEnemy  = enemyNameList[randomIndex];
 
-        switch(selectedEnemy) {
-            case "Dragon":
-                enemy = createEnemyDragon();
-                break;
-            case "DevilGuy":
-                enemy = createEnemyDevilGuy();
-                break;
-            case "Wolf":
-                enemy = createEnemyWolf();
-                break;
-            case "Yeti":
-                enemy = createEnemyYeti();
-                break;
-            case "Robot":
-                enemy = createEnemyRobot();
-                break;
-            case "Archer":
-                enemy = createEnemyArcher();
-                break;
-            case "Black Wizard":
-                enemy = createEnemyBlackWizard();
-                break;
-            case "Santa":
-                enemy = createEnemySantaClaus();
-                break;
-            case "Crab":
-                enemy = createEnemyCrab();
-                break;
-            case "Ninja":
-                enemy = createEnemyNinja();
-                break;
+        if(Objects.equals(selectedEnemy, "Dragon")) {
+            return new EnemyDragon();
+        }
+        else if(Objects.equals(selectedEnemy, "Devil Guy")) {
+            return new EnemyDevilGuy();
+        }
+        else if(Objects.equals(selectedEnemy, "Wolf")) {
+            return new EnemyWolf();
+        }
+        else if(Objects.equals(selectedEnemy, "Yeti")) {
+            return new EnemyYeti();
+        }
+        else if(Objects.equals(selectedEnemy, "Robot")) {
+            return new EnemyRobot();
+        }
+        else if(Objects.equals(selectedEnemy, "Archer")) {
+            return new EnemyArcher();
+        }
+        else if(Objects.equals(selectedEnemy, "Black Wizard")) {
+            return new EnemyBlackWizard();
+        }
+        else if(Objects.equals(selectedEnemy, "Santa")) {
+            return new EnemySantaClaus();
+        }
+        else if(Objects.equals(selectedEnemy, "Crab")) {
+            return new EnemyCrab();
+        }
+        else if(Objects.equals(selectedEnemy, "Ninja")) {
+            return new EnemyNinja();
         }
         return enemy;
     }
 
+    // ===================================================================================================================
 
+    public void dispose() {
+        Gdx.app.log("dispose", "enemyFactory.dispose");
 
-    // --- CREATE ENEMIES ----------------------------
-    public Enemy createEnemyDragon() {
-        return new EnemyDragon();
+        if(enemyArray != null) {
+            for(Enemy enemy : enemyArray) {
+                enemy.dispose();
+            }
+        }
     }
 
-    public Enemy createEnemyDevilGuy() {
-        return new EnemyDevilGuy();
-    }
+    // ===================================================================================================================
 
-    public Enemy createEnemyYeti() {
-        return new EnemyYeti();
-    }
-
-    public Enemy createEnemyRobot() {
-        return new EnemyRobot();
-    }
-
-    public Enemy createEnemyWolf() {
-        return new EnemyWolf();
-    }
-
-    public Enemy createEnemyArcher() {
-        return new EnemyArcher();
-    }
-
-    public Enemy createEnemyBlackWizard() {
-        return new EnemyBlackWizard();
-    }
-
-    public Enemy createEnemySantaClaus() {
-        return new EnemySantaClaus();
-    }
-
-    public Enemy createEnemyCrab() {
-        return new EnemyCrab();
-    }
-
-    public Enemy createEnemyNinja() {
-        return new EnemyNinja();
-    }
+    public ArrayList<Enemy> getEnemies() { return enemyArray; }
 }

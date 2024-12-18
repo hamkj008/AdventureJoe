@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Levels.LevelFactory;
+import com.mygdx.game.Screens.GameScreen;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -20,11 +22,14 @@ public class GameObjects extends Actor {
     private final ArrayList<Coin> removedCoins;
     private final ArrayList<Chest> chestList;
     private final ArrayList<Chest> removedChests;
+    @SuppressWarnings("FieldCanBeLocal")
     private final ArrayList<Object> combinedList;
     private final PowerUp[] powerUpList;
     private final LevelEnd levelEnd;
+    @SuppressWarnings("FieldCanBeLocal")
     private final ArrayList<Vector2> positions;
-    private int minPositionDistance = 1500;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final int minPositionDistance = 500;
 
     // ===================================================================================================================
 
@@ -36,7 +41,6 @@ public class GameObjects extends Actor {
         levelEnd            = new LevelEnd();
         removedCoins        = new ArrayList<>();
         removedChests       = new ArrayList<>();
-        positions           = new ArrayList<>();
         combinedList        = new ArrayList<>();
 
         // Create all the objects
@@ -48,13 +52,13 @@ public class GameObjects extends Actor {
             powerUpList[i] = new PowerUp();
             combinedList.add(powerUpList[i]);
         }
-        for(int i = 0; i < 40; i++) {
+        for(int i = 0; i < numberOfCoins; i++) {
             coinList.add(new Coin());
             combinedList.add(coinList.get(i));
         }
 
         // Generate all the positions
-        generateRandomMinDistancePositions(levelXBoundary);
+        positions = GameScreen.getInstance().getHelper().generateRandomMinDistancePositions(levelXBoundary, combinedList.size(), minPositionDistance);
 
         // Assign positions to objects
         for(int i =0; i < combinedList.size(); i++) {
@@ -188,64 +192,6 @@ public class GameObjects extends Actor {
         }
 
         levelEnd.compensateCamera(cameraPositionAmount);
-    }
-
-    // ===================================================================================================================
-
-    /**
-     *  Generates a set of random positions for all the objects in the game with a maximum X boundary the end of the level,
-     *  and a minimum y boundary of the ground level (so objects should not appear in the ground).
-     *  Also sets a minimum distance that any object can be from the next object
-     *  @param levelXBoundary the end boundary of the level
-     */
-    public void generateRandomMinDistancePositions(int levelXBoundary) {
-
-        for(int i =0; i < combinedList.size(); i++) {
-            int retries = 0;
-            int maxRetries = 10;
-            Vector2 position = createRandomPosition(levelXBoundary);
-
-            while (!isValidPosition(position)) {
-                retries++;
-                if (retries == maxRetries) {
-                    Gdx.app.log("position", "Min distance reduced");
-                    minPositionDistance -= 50;
-                    retries = 0;
-                }
-                if (minPositionDistance <= 50) {
-                    Gdx.app.log("position", "cannot place object. Min distance reached");
-                    break;
-                }
-                position = createRandomPosition(levelXBoundary);
-            }
-            positions.add(position);
-        }
-    }
-
-    public boolean isValidPosition(Vector2 positionToCheck) {
-
-        for(Vector2 position : positions) {
-            Gdx.app.log("position", "pos: " + positionToCheck.x + "   range: " + (position.x - minPositionDistance) + " <-> " + (position.x + minPositionDistance));
-            if(positionToCheck.x > position.x - minPositionDistance && positionToCheck.x < position.x + minPositionDistance) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // ===================================================================================================================
-
-    /**
-     * Creates a random position for game objects, making sure they are above ground level
-     * and dispersed along the x up to the x boundarylimit
-     **/
-    public static Vector2 createRandomPosition(int levelXBoundary) {
-
-        Random rand     = new Random();
-        float randX     = 200 + (levelXBoundary - 200) * rand.nextFloat();
-        float randY     = LevelFactory.getCurrentGroundLevel() + ((Gdx.graphics.getHeight() - 200) - LevelFactory.getCurrentGroundLevel()) * rand.nextFloat();
-
-        return new Vector2(randX, randY);
     }
 
     // ===================================================================================================================

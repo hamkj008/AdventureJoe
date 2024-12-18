@@ -1,5 +1,6 @@
 package com.mygdx.game.Levels;
 import com.badlogic.gdx.Gdx;
+import com.mygdx.game.Actors.Characters.Enemies.EnemyFactory;
 import com.mygdx.game.Actors.GameObjects.GameObjects;
 import com.mygdx.game.Actors.GameObjects.LevelEnd;
 import com.mygdx.game.Game.MyGdxGame;
@@ -15,14 +16,17 @@ public class LevelFactory {
 
     public enum LevelNum { Level1, Level2 }
 
-    private LevelCreator currentLevel;
+    private final LevelCreator currentLevel;
     private GameObjects currentLevelObjects;
     private static float currentGroundLevel;
+    private final EnemyFactory enemyFactory;
+    private float playerYStartPosition = 0;
 
     // ===================================================================================================================
 
     public LevelFactory() {
         currentLevel = new LevelCreator();
+        enemyFactory = new EnemyFactory();
     }
 
     // ===================================================================================================================
@@ -31,14 +35,14 @@ public class LevelFactory {
 
         int[] background = { 0, 1, 2, 3, 4 };
         int[] foreground = { 5, 6, 7, 8, 9, 10, 11 };
-        currentLevel = new LevelCreator();
         currentLevel.createLevel("Levels/Level1/Level1-MyPhone.tmx", foreground, background, 4, 20000);
         currentGroundLevel = currentLevel.getGroundLevel();
+        playerYStartPosition = currentGroundLevel;
 
         currentLevelObjects = new GameObjects(40, 4, 2, currentLevel.getLevelXBoundary());
         currentLevelObjects.getLevelEnd().setGoalType(LevelEnd.GoalType.BABY);
 
-        currentLevel.setEnemyKilledExitThreshold(3);
+        enemyFactory.spawnEnemies(currentLevel.getLevelXBoundary(), 20, 200);
     }
 
     // ===================================================================================================================
@@ -47,25 +51,28 @@ public class LevelFactory {
 
         int[] background = { 0, 1 };
         int[] foreground = { 2, 3, 4, 5, 6, 7, 8 };
-        currentLevel = new LevelCreator();
         currentLevel.createLevel("Levels/Level3/Level3.tmx", foreground, background, 3, 20000);
         currentGroundLevel = currentLevel.getGroundLevel();
+        playerYStartPosition = currentGroundLevel;
 
-        currentLevelObjects = new GameObjects(20, 4, 2, currentLevel.getLevelXBoundary());
+        currentLevelObjects = new GameObjects(30, 4, 2, currentLevel.getLevelXBoundary());
         currentLevelObjects.getLevelEnd().setGoalType(LevelEnd.GoalType.PRINCESS);
 
-        currentLevel.setEnemyKilledExitThreshold(3);
+        enemyFactory.spawnEnemies(currentLevel.getLevelXBoundary(), 10, 1000);
     }
 
     // ===================================================================================================================
 
     // Creates whatever level MyGdxGame calls the current level
     public void createCurrentLevel() {
-        if(MyGdxGame.levelNum == LevelNum.Level1) {
-            createLevel1();
-        }
-        if(MyGdxGame.levelNum == LevelNum.Level2) {
-            createLevel2();
+        switch(MyGdxGame.levelNum) {
+            case Level1:
+                createLevel1();
+                break;
+
+            case Level2:
+                createLevel2();
+                break;
         }
     }
 
@@ -75,7 +82,11 @@ public class LevelFactory {
         Gdx.app.log("dispose", "levelFactory.dispose");
 
         currentLevel.dispose();
-        currentLevelObjects.dispose();
+        enemyFactory.dispose();
+
+        if(currentLevelObjects != null) {
+            currentLevelObjects.dispose();
+        }
     }
 
 
@@ -86,4 +97,8 @@ public class LevelFactory {
     public GameObjects getGameObjects() { return currentLevelObjects; }
 
     public static float getCurrentGroundLevel() { return currentGroundLevel; }
+
+    public EnemyFactory getEnemyFactory() { return enemyFactory; }
+
+    public float getPlayerYStartPosition() { return playerYStartPosition; }
 }

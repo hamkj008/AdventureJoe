@@ -2,6 +2,7 @@ package com.mygdx.game.Actors.Characters.Enemies;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Screens.GameScreen;
 
 
@@ -35,12 +36,12 @@ public class EnemyRobot extends Enemy {
 
         // ---- ANIMATIONS -------------------------
         // Load all animation frames into animation objects using Game Helper.
-        idleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Idle.png", 6, 3, 18, 0.033f);
-        walkingAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Walking.png", 6, 4, 24, 0.033f);
-        runningAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Running.png", 3, 6, 18, 0.033f);
-        attackingAnimation  = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Attacking.png", 4, 3, 12, 0.033f);
-        hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Hurt.png", 3, 4, 12, 0.033f);
-        dyingAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Dying.png", 3, 4, 12, 0.033f);
+        idleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Idle.png", 6, 3, 18, 0.8f);
+        walkingAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Walking.png", 6, 4, 24, 0.8f);
+        runningAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Running.png", 3, 6, 18, 0.8f);
+        attackingAnimation  = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Attacking.png", 4, 3, 12, 0.8f);
+        hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Hurt.png", 3, 4, 12, 0.8f);
+        dyingAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Giant Robot/Dying.png", 3, 4, 12, 0.8f);
     }
 
     // ===================================================================================================================
@@ -76,6 +77,18 @@ public class EnemyRobot extends Enemy {
                 checkDamage();
                 super.setCharacterState(CharacterState.MOVING);
             }
+        }
+    }
+
+    // ===================================================================================================================
+
+    @Override
+    public void setAIStates(Player player) {
+
+        super.setAIStates(player);
+
+        if (distanceFromPlayer(player) < 200) {
+            super.setCharacterState(CharacterState.ATTACKING);
         }
     }
 }

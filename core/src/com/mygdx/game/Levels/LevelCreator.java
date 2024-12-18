@@ -50,7 +50,7 @@ public class LevelCreator {
     private float groundLevel;
     private final int platformClearanceFactor = 50;      // The additional clearance needed to be off of a platform to avoid confusion between two states
 
-    private int enemyKilledExitThreshold;
+    private int numberOfEnemies;
     private int levelXBoundary = 0;
 
 
@@ -365,18 +365,18 @@ public class LevelCreator {
     public void dispose() {
         Gdx.app.log("dispose", "levelCreator.dispose");
 
-        loadedMap.dispose();
+        if(loadedMap != null) {
+            loadedMap.dispose();
+        }
     }
 
     // ======================================= GETTERS AND SETTERS ==================================================================
 
     public float getGroundLevel() { return groundLevel; }
 
-    public int getEnemyKilledExitThreshold() { return enemyKilledExitThreshold; }
+    public int getNumberOfEnemies() { return numberOfEnemies; }
 
-    public void setEnemyKilledExitThreshold(int enemyKilledExitThreshold) {
-        this.enemyKilledExitThreshold = enemyKilledExitThreshold;
-    }
+    public void setNumberOfEnemies(int numberOfEnemies) { this.numberOfEnemies = numberOfEnemies; }
 
     public int getLevelXBoundary() { return levelXBoundary; }
 

@@ -47,26 +47,19 @@ public class EnemyYeti extends Enemy {
 
         // ---- ANIMATIONS -------------------------
         // Load all animation frames into animation objects using Game Helper.
-        idleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Idle.png", 6, 3, 18, 0.033f);
-        walkingAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Walking.png", 5, 4, 18, 0.033f);
-        runningAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Running.png", 5, 3, 15, 0.033f);
-        meleeAnimation      = GameScreen.getInstance().getHelper().processAnimation( "Game Characters/Enemies/Cartoon Yeti/Attacking.png", 4, 3, 12, 0.033f);
-        throwingAnimation   = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Throwing.png", 4, 3, 12, 0.033f);
-        hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Hurt.png", 4, 3, 12, 0.033f);
-        dyingAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Dying.png", 4, 3, 12, 0.033f);
+        idleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Idle.png", 6, 3, 18, 0.8f);
+        walkingAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Walking.png", 5, 4, 18, 0.8f);
+        runningAnimation    = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Running.png", 5, 3, 15, 0.8f);
+        meleeAnimation      = GameScreen.getInstance().getHelper().processAnimation( "Game Characters/Enemies/Cartoon Yeti/Attacking.png", 4, 3, 12, 0.6f);
+        throwingAnimation   = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Throwing.png", 4, 3, 12, 0.6f);
+        hurtAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Hurt.png", 4, 3, 12, 0.8f);
+        dyingAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/Enemies/Cartoon Yeti/Dying.png", 4, 3, 12, 0.8f);
 
         super.getProjectileOffset().put("leftOffset", new Vector2(-10, 100));
         super.getProjectileOffset().put("rightOffset", new Vector2(200, 100));
-        super.setProjectileSpawner(new ProjectileSpawner("Game Objects/Cartoon Yeti_Snow Ball.png", "Audio/Sounds/shot.mp3",
+        super.setProjectileSpawner(new ProjectileSpawner(this, "Game Objects/Cartoon Yeti_Snow Ball.png", "Audio/Sounds/shot.mp3",
                 new Vector2(70, 50), projectileReloadSpeed));
         super.getProjectileSpawner().setMovementSpeed(projectileMovementSpeed);
-    }
-
-    // ===================================================================================================================
-
-    public void spawnProjectile() {
-
-        getProjectileSpawner().spawnProjectile(this, GameScreen.getInstance().getGameStateController().getPlayer());
     }
 
     // ===================================================================================================================
@@ -104,25 +97,18 @@ public class EnemyYeti extends Enemy {
             if (super.getAttackState() == AttackState.MELEE) {
                 // If the animation has finished
                 if (super.nonLoopingAnimation(meleeAnimation)) {
-                    checkDamage();
+                    checkDamage();                                     // At the moment this uses the enemies bounding box so checkDamage is used. ProjectileSpawner checks its own collisions and manages damage
                     // Set the state to enter into after animation has played.
                     super.setCharacterState(CharacterState.MOVING);
-                    startTimer = true;
-                    canChange = false;
                 }
             }
-            if (super.getAttackState() == AttackState.PROJECTILE) {
+            else if (super.getAttackState() == AttackState.PROJECTILE) {
                 // If the animation has finished
                 if (super.nonLoopingAnimation(throwingAnimation)) {
                     // Set the state to enter into after animation has played.
                     super.setCharacterState(CharacterState.MOVING);
-                    startTimer = true;
-                    canChange = false;
                 }
             }
-        }
-        if(startTimer) {
-            super.setTimer();
         }
     }
 
@@ -135,14 +121,23 @@ public class EnemyYeti extends Enemy {
         super.setAIStates(player);
 
         // The yeti has a projectile attack and a melee attack. If it is far enough away from the player it uses the projectile attack.
-        if ( distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 700 && canChange) {
-            setAttackState(AttackState.PROJECTILE);
-            super.setCharacterState(CharacterState.ATTACKING);
-            super.getProjectileSpawner().setStartTimer(true);
+        if (distanceFromPlayer(player) < 1000 && distanceFromPlayer(player) > 700) {
+            if(super.getProjectileSpawner().getCanSpawn()) {
+                Gdx.app.log("projectile", "can spawn");
+                setAttackState(AttackState.PROJECTILE);
+                super.setCharacterState(CharacterState.ATTACKING);
+                super.getProjectileSpawner().setStartTimer(true);
+                super.getProjectileSpawner().setProjectileAttack(true);
+            }
         }
         else {
-            // If it is close enough to the player, it uses the melee attack
-            setAttackState(AttackState.MELEE);
+            super.getProjectileSpawner().setProjectileAttack(false);
+
+            // If the enemy is close enough to melee attack.
+            if (distanceFromPlayer(player) < 200) {
+                super.setAttackState(AttackState.MELEE);
+                super.setCharacterState(CharacterState.ATTACKING);
+            }
         }
     }
 }

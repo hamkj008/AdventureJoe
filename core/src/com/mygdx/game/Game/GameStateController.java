@@ -6,12 +6,12 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Actors.Characters.Enemies.Enemy;
-import com.mygdx.game.Actors.Characters.Enemies.EnemyFactory;
 import com.mygdx.game.Actors.Characters.Player.Player;
 import com.mygdx.game.Levels.LevelFactory;
 import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.UI.UIController;
 import com.mygdx.game.UI.UICounters;
+
 
 
 
@@ -29,9 +29,8 @@ public class GameStateController {
     private GameState gameState = GameState.PLAYING;
 
     private Player player;
-    private EnemyFactory enemyFactory;
-    private Enemy randomEnemy;
     private LevelFactory levelFactory;
+
     private final Stage stage;
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -49,17 +48,10 @@ public class GameStateController {
 
     public void create() {
 
-        levelFactory  = new LevelFactory();
-        levelFactory.createCurrentLevel();
-
-        player        = new Player();
-
-        enemyFactory  = new EnemyFactory();
-        // Have to spawn an enemy at the start so that newEnemy() has something to remove from the stage
-        randomEnemy   = enemyFactory.spawnRandomEnemy();
+        levelFactory    = new LevelFactory();
+        player          = new Player();
 
         stage.addActor(player);
-        stage.addActor(randomEnemy);
         stage.addListener(new MyInputListener());
     }
 
@@ -71,11 +63,15 @@ public class GameStateController {
     public void newLevel() {
 
         gameState = GameState.PLAYING;
-        player.reset();
-        newEnemy();
-        levelFactory.getGameObjects().remove();
+
+        levelFactory.dispose();
         levelFactory.createCurrentLevel();
+
         stage.addActor(levelFactory.getGameObjects());
+        stage.addActor(levelFactory.getEnemyFactory());
+
+        player.getStartPosition().y = levelFactory.getPlayerYStartPosition();
+        player.reset();
         mapPosition = startingPoint;
         GameScreen.getInstance().getUiController().reset();
     }
@@ -90,18 +86,6 @@ public class GameStateController {
 
     // ===================================================================================================================
 
-    // Remove the old enemy from the stage and spawn a new one, then add it back to the stage.
-    public void newEnemy() {
-
-        randomEnemy.remove();
-//        randomEnemy = enemyFactory.spawnRandomEnemy();
-        randomEnemy = enemyFactory.createEnemyDragon();
-        randomEnemy.reset();
-        stage.addActor(randomEnemy);
-    }
-
-    // ===================================================================================================================
-
     public void update(UIController uiController) {
 
         checkTouch = Gdx.input.isTouched();
@@ -109,17 +93,6 @@ public class GameStateController {
 
         switch (gameState) {
             case PLAYING:
-                // If all lives are lost it is game over
-                if (UICounters.playerLives <= 0) {
-                    gameState = GameState.GAMEOVER;
-                }
-
-                // Check for collisions
-                levelFactory.getGameObjects().checkCollided(player);
-                levelFactory.getCurrentLevel().checkMapPlatformCollision(player);
-
-                // Check if the conditions have been met to clear the level.
-                checkVictoryConditions();
 
                 // ----------------- RESTRICT PLAYER MOVEMENT --------------------------
                 // Prevent player from going off screen to the left, or Prevent player from going too far to the right
@@ -131,17 +104,6 @@ public class GameStateController {
                 }
                 else {
                     start = false;
-                }
-
-                // -- Screen bounds --
-                // Restrict left
-                if(player.getSprite().getX() < 200) {
-                    player.getSprite().setX(200);
-                }
-
-                // Restrict right
-                if(player.getSprite().getX() > (Gdx.graphics.getWidth() - 600)) {
-                    player.getSprite().setX(Gdx.graphics.getWidth() - 600);
                 }
 
                 // -------------------- TOUCH CONTROLS ---------------------------------------------
@@ -164,9 +126,11 @@ public class GameStateController {
                         playerShoot();
                     }
                 }
-                // If the screen is no longer being touched while the character is running, the
-                // running immediately stops and is idle.
-                // Other animation states have to play out their animations before stopping.
+                /*
+                 *  If the screen is no longer being touched while the character is running, the
+                 *  running immediately stops and is idle.
+                 *  Other animation states have to play out their animations before stopping.
+                 */
                 if (!checkTouch) {
                     if (player.getCharacterState() == Character.CharacterState.MOVING) {
                         player.setCharacterState(Character.CharacterState.IDLE);
@@ -192,25 +156,39 @@ public class GameStateController {
                     playerShoot();
                 }
 
-                // ------- ENEMY ------------------------------------------------------------
-                randomEnemy.setAIStates(player);
-                levelFactory.getGameObjects().getLevelEnd().setAIStates(player);
+                // ---------- GAME CONDITIONS ----------------------
 
-                // If the enemy has died, remove from the stage and respawn a new enemy.
-                if (randomEnemy.getCharacterState() == Character.CharacterState.DEAD) {
-
-                    // Add a kill count
-                    UICounters.enemiesKilled += 1;
-                    newEnemy();
+                // If all lives are lost it is game over
+                if (UICounters.playerLives <= 0) {
+                    gameState = GameState.GAMEOVER;
                 }
 
                 if (!player.getIsAlive()) {
                     playerDied();
                 }
 
+                // Check if the conditions have been met to clear the level.
+//                checkVictoryConditions();
+
+
+                // ------------ Check for collisions and setAI states--------------------
+                levelFactory.getGameObjects().checkCollided(player);
+                levelFactory.getCurrentLevel().checkMapPlatformCollision(player);
+                levelFactory.getGameObjects().getLevelEnd().setAIStates(player);
+
+                // Check if projectiles have collided enemies
+                for(Enemy enemy : levelFactory.getEnemyFactory().getEnemies()) {
+                    enemy.setAIStates(player);
+
+                    player.getProjectileSpawner().checkCollided(enemy);         // Check if player projectile collided with enemy
+                    if(enemy.getProjectileSpawner() != null) {
+                        enemy.getProjectileSpawner().checkCollided(player);     // Check if enemy projectile collided with player
+                    }
+                }
                 break;
 
             // -------------------------------------------------------------------------------------
+
             case RESTART:
                 newLevel();
                 break;
@@ -241,15 +219,9 @@ public class GameStateController {
                 // Move the camera with the player, and compensate for the movement on other objects
                 levelFactory.getCurrentLevel().moveCamera(player);
                 levelFactory.getCurrentLevel().collisionCompensateCamera(player.getPositionAmount().x);
-                randomEnemy.compensateCamera(player.getPositionAmount().x);
                 levelFactory.getGameObjects().compensateCamera(player.getPositionAmount().x);
-
+                levelFactory.getEnemyFactory().compensateCamera(player.getPositionAmount().x);
                 player.getProjectileSpawner().compensateCamera(player.getPositionAmount().x);
-
-                // Check that the enemy has a projectile
-                if (randomEnemy.getProjectileSpawner() != null) {
-                    randomEnemy.getProjectileSpawner().compensateCamera(player.getPositionAmount().x);
-                }
             }
         }
     }
@@ -271,15 +243,9 @@ public class GameStateController {
             // Move the camera with the player, and compensate for the movement on other objects
             levelFactory.getCurrentLevel().moveCamera(player);
             levelFactory.getCurrentLevel().collisionCompensateCamera(-player.getPositionAmount().x);
-            randomEnemy.compensateCamera(-player.getPositionAmount().x);
             levelFactory.getGameObjects().compensateCamera(-player.getPositionAmount().x);
-
+            levelFactory.getEnemyFactory().compensateCamera(-player.getPositionAmount().x);
             player.getProjectileSpawner().compensateCamera(-player.getPositionAmount().x);
-
-            // Check that the enemy has a projectile
-            if (randomEnemy.getProjectileSpawner() != null) {
-                randomEnemy.getProjectileSpawner().compensateCamera(-player.getPositionAmount().x);
-            }
         }
     }
 
@@ -305,12 +271,9 @@ public class GameStateController {
     // The player must kill the correct number of enemies, collect enough treasure. Only after that can rescue the levelEnd.
     public void checkVictoryConditions() {
 
-        // Defeat the enemies, collect the treasure
-        if (UICounters.enemiesKilled >= levelFactory.getCurrentLevel().getEnemyKilledExitThreshold()) {
-            // Rescue the levelEnd
-            if(levelFactory.getGameObjects().getLevelEnd().getEndLevel()) {
-                MyGdxGame.startScreen.setVictoryScreen1();
-            }
+        // Rescue the levelEnd
+        if(levelFactory.getGameObjects().getLevelEnd().getEndLevel()) {
+            MyGdxGame.startScreen.setVictoryScreen1();
         }
     }
 
@@ -366,15 +329,12 @@ public class GameStateController {
         Gdx.app.log("dispose", "GameStateControllerDispose");
 
         levelFactory.dispose();
-        randomEnemy.dispose();
         player.dispose();
     }
 
     // ====================================== GETTERS AND SETTERS ================================================================
 
     public Player getPlayer() { return player; }
-
-    public Enemy getRandomEnemy() { return randomEnemy; }
 
     public LevelFactory getLevelFactory() { return levelFactory; }
 }

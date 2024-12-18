@@ -39,11 +39,11 @@ public class LevelEnd extends Character {
 
         // ---- ANIMATIONS -------------------------
         // Load all animation frames into animation objects using Game Helper.
-        princessIdleAnimation   = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Princess/Idle Blinking.png", 8, 3, 24, 0.033f);
-        princessSpellAnimation  = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Princess/Spell.png", 5, 3, 15, 0.033f);
+        princessIdleAnimation   = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Princess/Idle Blinking.png", 8, 3, 24, 0.8f);
+        princessSpellAnimation  = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Princess/Spell.png", 5, 3, 15, 0.8f);
 
-        babyIdleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Super Baby/Idle Blinking.png", 6, 3, 18, 0.033f);
-        babySpellAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Super Baby/Spell.png", 4, 3, 12, 0.033f);
+        babyIdleAnimation       = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Super Baby/Idle Blinking.png", 6, 3, 18, 0.8f);
+        babySpellAnimation      = GameScreen.getInstance().getHelper().processAnimation("Game Characters/LevelEnd/Super Baby/Spell.png", 4, 3, 12, 0.8f);
     }
 
     // ===================================================================================================================
@@ -96,9 +96,9 @@ public class LevelEnd extends Character {
         // ----- End Level Condition -------------------
         // If the players reaches the endGoal such that the bounding boxes intersect, then the level end goal has been reached.
         if(GameScreen.getInstance().getGameStateController().getPlayer().getSprite().getBoundingRectangle().overlaps(getSprite().getBoundingRectangle())) {
-            if(UICounters.enemiesKilled == GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getEnemyKilledExitThreshold()) {
-                goalState = GoalState.SPELL;
-            }
+//            if(UICounters.enemiesKilled == GameScreen.getInstance().getGameStateController().getLevelFactory().getCurrentLevel().getEnemyKilledExitThreshold()) {
+            goalState = GoalState.SPELL;
+//            }
         }
     }
 
