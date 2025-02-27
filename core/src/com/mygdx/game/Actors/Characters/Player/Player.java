@@ -1,7 +1,6 @@
 package com.mygdx.game.Actors.Characters.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -126,10 +125,10 @@ public class Player extends Character {
     public void healthCheck(int damage) {
 
         // The player can only get hurt or die when on the ground.
-//        if(grounded) {
-//            super.healthCheck(damage);
-//            GameScreen.getInstance().getUiController().getPlayerHealthBar().modifyHealth(getHealth());
-//        }
+        if(grounded) {
+            super.healthCheck(damage);
+            GameScreen.getInstance().getUiController().getPlayerHealthBar().modifyHealth(getHealth());
+        }
     }
 
     // ===================================================================================================================

@@ -33,9 +33,9 @@ public class LevelFactory {
 
     public void createLevel1() {
 
-        int[] background = { 0, 1, 2, 3, 4 };
-        int[] foreground = { 5, 6, 7, 8, 9, 10, 11 };
-        currentLevel.createLevel("Levels/Level1/Level1-MyPhone.tmx", foreground, background, 4, 20000);
+        int[] background = { 0, 1, 2, 3, 4, 5 };
+        int[] foreground = { 6, 7, 8, 9, 10 };
+        currentLevel.createLevel("Levels/Level1/Level1_Pixel3_master.tmx", foreground, background, 4, 20000);
         currentGroundLevel = currentLevel.getGroundLevel();
         playerYStartPosition = currentGroundLevel;
 

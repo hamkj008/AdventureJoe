@@ -7,7 +7,7 @@ import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Screens.GameScreen;
 
 import java.util.ArrayList;
-
+import java.util.Iterator;
 
 
 public class ProjectileSpawner extends Actor {
@@ -29,6 +29,8 @@ public class ProjectileSpawner extends Actor {
     @SuppressWarnings("FieldCanBeLocal")
     private final int maxNumberOfProjectiles        = 5;
     private float movementSpeed                     = 0f;
+    Iterator<Projectile> projectileIterator;
+    Iterator<Particle> particleIterator;
 
     // ===================================================================================================================
 
@@ -44,6 +46,8 @@ public class ProjectileSpawner extends Actor {
         this.removedProjectiles     = new ArrayList<>();
         this.particles              = new ArrayList<>();
         this.removedParticles       = new ArrayList<>();
+        projectileIterator = projectiles.iterator();
+        particleIterator = particles.iterator();
     }
 
     // ===================================================================================================================
@@ -106,6 +110,35 @@ public class ProjectileSpawner extends Actor {
         removedParticles.clear();
 
         // Draw active projectiles
+//        while(projectileIterator.hasNext()) {
+//            if(projectileIterator.next() != null) {
+//                if (projectileIterator.next().getParticle().getActive()) {
+//                    particles.add(projectileIterator.next().getParticle());     // Add the particles to a separate list so that the projectile can be removed without affecting the particle
+//                }
+//
+//                if (projectileIterator.next().getProjectileActive()) {
+//                    projectileIterator.next().draw(batch, alpha);
+//                }
+//                else {
+//                    projectileIterator.remove();
+//                }
+//            }
+//        }
+//
+//        // Draw active particles
+//        while(particleIterator.hasNext()) {
+//            if(particleIterator.next() != null) {
+//                if (particleIterator.next().getActive()) {
+//                    particleIterator.next().draw(batch, alpha);
+//                }
+//                else {
+//                    particleIterator.remove();
+//                }
+//            }
+//        }
+
+
+
         for(Projectile projectile : projectiles) {
             if(projectile != null) {
                 if (projectile.getParticle().getActive()) {
