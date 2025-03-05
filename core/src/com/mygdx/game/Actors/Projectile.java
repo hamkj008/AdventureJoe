@@ -31,7 +31,6 @@ public class Projectile extends Actor {
     private final Vector2 projectileStartWithOffset;
     private final Vector2 PROJECTILE_MOVEMENT;
     private boolean projectileActive = false;
-    public boolean projectileHit = false;
 
     private final Sound firingSound;
     private boolean playFiringSound = true;

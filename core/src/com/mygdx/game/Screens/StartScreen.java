@@ -42,18 +42,23 @@ public class StartScreen implements Screen {
 
     // ===============================================================================================================
 
+    @Override
+    public void show() {
+        create();
+    }
+
     public void create() {
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         // Buttons
-        Skin skin = new Skin(Gdx.files.internal("GUI/uiskin.json"));
-        BitmapFont font = new BitmapFont(Gdx.files.internal("Fonts/ComicSansMS.fnt"));
+        Skin skin                       = new Skin(Gdx.files.internal("GUI/uiskin.json"));
+        BitmapFont font                 = new BitmapFont(Gdx.files.internal("Fonts/ComicSansMS.fnt"));
 
-        Texture coin = new Texture("Game Objects/Chests & Coins PNG/Coins/Gold Skull Coin/01.png");
-        Image topCoinImage = new Image(coin);
-        Image bottomCoinImage = new Image(coin);
+        Texture coin                    = new Texture("Game Objects/Chests & Coins PNG/Coins/Gold Skull Coin/01.png");
+        Image topCoinImage              = new Image(coin);
+        Image bottomCoinImage           = new Image(coin);
 
         Label gameTitle                 = new Label("Adventure Joe", new Label.LabelStyle(font, Color.BLACK));
         final TextButton playButton     = new TextButton("Play", skin, "default");
@@ -141,11 +146,6 @@ public class StartScreen implements Screen {
     public void setVictoryScreen2() { game.setScreen(MyGdxGame.startScreen.victoryScreen2); }
 
     // ===============================================================================================================
-
-    @Override
-    public void show() {
-        create();
-    }
 
     @Override
     public void render(float delta) {

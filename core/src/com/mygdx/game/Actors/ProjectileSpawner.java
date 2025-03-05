@@ -1,5 +1,6 @@
 package com.mygdx.game.Actors;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,7 +26,7 @@ public class ProjectileSpawner extends Actor {
     private float timer;
     private boolean startTimer                      = false;
     private boolean canSpawn                        = true;     // sets whether a projectile is allowed to be spawned
-    public boolean projectileAttack                = true;     // A guard for enemies with projectile and melee attacks so that a melee attack doesnt spawn projectiles. Characters without both attacks will default to true, but characters with both will switch
+    public boolean projectileAttack                 = true;     // A guard for enemies with projectile and melee attacks so that a melee attack doesnt spawn projectiles. Characters without both attacks will default to true, but characters with both will switch
     @SuppressWarnings("FieldCanBeLocal")
     private final int maxNumberOfProjectiles        = 5;
     private float movementSpeed                     = 0f;
@@ -46,8 +47,8 @@ public class ProjectileSpawner extends Actor {
         this.removedProjectiles     = new ArrayList<>();
         this.particles              = new ArrayList<>();
         this.removedParticles       = new ArrayList<>();
-        projectileIterator = projectiles.iterator();
-        particleIterator = particles.iterator();
+//        projectileIterator          = projectiles.iterator();
+//        particleIterator            = particles.iterator();
     }
 
     // ===================================================================================================================
@@ -136,7 +137,6 @@ public class ProjectileSpawner extends Actor {
 //                }
 //            }
 //        }
-
 
 
         for(Projectile projectile : projectiles) {
@@ -272,6 +272,7 @@ public class ProjectileSpawner extends Actor {
     public void setMovementSpeed(float movementSpeed) {
         this.movementSpeed = movementSpeed;
     }
+
     public float getProjectileReloadSpeed() { return projectileReloadSpeed; }
 
     public void setProjectileReloadSpeed(float projectileReloadSpeed) {

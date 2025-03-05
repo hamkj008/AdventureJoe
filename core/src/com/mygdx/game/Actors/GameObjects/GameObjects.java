@@ -18,22 +18,26 @@ import java.util.Random;
  */
 public class GameObjects extends Actor {
 
-    private final ArrayList<Coin> coinList;
-    private final ArrayList<Coin> removedCoins;
-    private final ArrayList<Chest> chestList;
-    private final ArrayList<Chest> removedChests;
+    private ArrayList<Coin>     coinList;
+    private ArrayList<Coin>     removedCoins;
+    private ArrayList<Chest>    chestList;
+    private ArrayList<Chest>    removedChests;
     @SuppressWarnings("FieldCanBeLocal")
-    private final ArrayList<Object> combinedList;
-    private final PowerUp[] powerUpList;
-    private final LevelEnd levelEnd;
+    private ArrayList<Object>   combinedList;
+    private PowerUp[]           powerUpList;
+    private LevelEnd            levelEnd;
     @SuppressWarnings("FieldCanBeLocal")
-    private final ArrayList<Vector2> positions;
+    private ArrayList<Vector2>  positions;
     @SuppressWarnings("FieldCanBeLocal")
-    private final int minPositionDistance = 500;
+    private final int           minPositionDistance = 500;
 
     // ===================================================================================================================
 
-    public GameObjects(int numberOfCoins, int numberOfChests, int numberOfPowerUps, int levelXBoundary) {
+    public GameObjects() {}
+
+    // ===================================================================================================================
+
+    public void spawnGameObjects(int numberOfCoins, int numberOfChests, int numberOfPowerUps, int levelXBoundary) {
 
         coinList            = new ArrayList<>(numberOfCoins);
         chestList           = new ArrayList<>(numberOfChests);
@@ -199,14 +203,21 @@ public class GameObjects extends Actor {
     public void dispose() {
         Gdx.app.log("dispose", "GameObjects.dispose");
 
-        for(Chest chest : chestList) {
-            chest.dispose();
+        if(chestList != null) {
+            for (Chest chest : chestList) {
+                chest.dispose();
+            }
         }
-        for(PowerUp powerUp : powerUpList) {
-            powerUp.dispose();
+        if(powerUpList != null) {
+            for (PowerUp powerUp : powerUpList) {
+                powerUp.dispose();
+            }
         }
-        for(Coin coin : coinList) {
-            coin.dispose();
+
+        if(coinList != null) {
+            for (Coin coin : coinList) {
+                coin.dispose();
+            }
         }
     }
 

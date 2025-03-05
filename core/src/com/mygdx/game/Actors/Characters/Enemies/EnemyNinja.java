@@ -139,4 +139,15 @@ public class EnemyNinja extends Enemy {
             }
         }
     }
+
+    public void dispose() {
+        super.dispose();
+        idleAnimation.getKeyFrames()[0].getTexture().dispose();
+        walkingAnimation.getKeyFrames()[0].getTexture().dispose();
+        runningAnimation.getKeyFrames()[0].getTexture().dispose();
+        meleeAnimation.getKeyFrames()[0].getTexture().dispose();
+        throwingAnimation.getKeyFrames()[0].getTexture().dispose();
+        hurtAnimation.getKeyFrames()[0].getTexture().dispose();
+        dyingAnimation.getKeyFrames()[0].getTexture().dispose();
+    }
 }

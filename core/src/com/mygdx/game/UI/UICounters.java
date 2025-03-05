@@ -34,7 +34,6 @@ public class UICounters extends Actor {
 
     @Override
     public void act(float delta) {
-        Gdx.app.log("act", "UiCounters.act");
 
         // Update the counters
         killLabel.setText("Kills:" + enemiesKilled);

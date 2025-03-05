@@ -1,4 +1,5 @@
 package com.mygdx.game.Actors.Characters.Enemies;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.Actors.Characters.Character;
@@ -125,11 +126,33 @@ public class Enemy extends Character {
 
         if (player.getIsAlive()) {
 
+            if (getCharacterState() != CharacterState.HURT &&
+                getCharacterState() != CharacterState.DYING &&
+                getCharacterState() != CharacterState.ATTACKING){
+
+                if(this.getSprite().getX() > Gdx.graphics.getWidth() || this.getSprite().getX() < 0) {
+                    setCharacterState(CharacterState.IDLE);
+                }
+                else {
+                    setCharacterState(CharacterState.MOVING);
+                }
+            }
+//                if(this.getSprite().getX() < (Gdx.graphics.getWidth() - 300)
+//                        && this.getSprite().getX() > 20
+//                        && getCharacterState() == CharacterState.IDLE
+//                        && !(getCharacterState() == CharacterState.HURT ||
+//                            getCharacterState() != CharacterState.DYING ||
+//                            getCharacterState() != CharacterState.ATTACKING)) {
+//                    setCharacterState(CharacterState.MOVING);
+//                }
+
+            // Enemy sees the player
             if (hasRunningState && distanceFromPlayer(player) < 900) {
                 movingState = MovingState.RUNNING;
             } else {
                 movingState = MovingState.WALKING;
             }
+
 
             // The enemy will turn around if the player goes past it.
             // It will continue to travel for a short distance before it does so, to avoid the facing both directions at the same time bug.

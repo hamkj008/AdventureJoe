@@ -1,12 +1,15 @@
 package com.mygdx.game.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.game.Actors.Characters.Character;
 import com.mygdx.game.Actors.Characters.Enemies.Enemy;
+import com.mygdx.game.Actors.Characters.Enemies.EnemyFactory;
 import com.mygdx.game.Actors.Characters.Player.Player;
+import com.mygdx.game.Actors.GameObjects.GameObjects;
 import com.mygdx.game.Levels.LevelFactory;
 import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.UI.UIController;
@@ -61,6 +64,7 @@ public class GameStateController {
      *  Starts a fresh new level with all game objects reset ready for play.
      */
     public void newLevel() {
+        Gdx.app.log("flow", "newlevel");
 
         gameState = GameState.PLAYING;
 
@@ -158,17 +162,20 @@ public class GameStateController {
 
                 // ---------- GAME CONDITIONS ----------------------
 
-                // If all lives are lost it is game over
-                if (UICounters.playerLives <= 0) {
-                    gameState = GameState.GAMEOVER;
-                }
-
                 if (!player.getIsAlive()) {
-                    playerDied();
+
+                    // If all lives are lost it is game over
+                    if (UICounters.playerLives <= 0) {
+                        UICounters.playerLives = 3;
+                        gameState = GameState.GAMEOVER;
+                    }
+                    else {
+                        playerDied();
+                    }
                 }
 
                 // Check if the conditions have been met to clear the level.
-//                checkVictoryConditions();
+                checkVictoryConditions();
 
 
                 // ------------ Check for collisions and setAI states--------------------
@@ -273,6 +280,8 @@ public class GameStateController {
 
         // Rescue the levelEnd
         if(levelFactory.getGameObjects().getLevelEnd().getEndLevel()) {
+            UICounters.playerLives = 3;
+            MyGdxGame.levelNum = LevelFactory.LevelNum.values()[(MyGdxGame.levelNum.ordinal() + 1) % LevelFactory.LevelNum.values().length];
             MyGdxGame.startScreen.setVictoryScreen1();
         }
     }

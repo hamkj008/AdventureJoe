@@ -90,4 +90,14 @@ public class EnemyDevilGuy extends Enemy {
             super.setCharacterState(CharacterState.ATTACKING);
         }
     }
+
+    public void dispose() {
+        super.dispose();
+        idleAnimation.getKeyFrames()[0].getTexture().dispose();
+        walkingAnimation.getKeyFrames()[0].getTexture().dispose();
+        runningAnimation.getKeyFrames()[0].getTexture().dispose();
+        attackingAnimation.getKeyFrames()[0].getTexture().dispose();
+        hurtAnimation.getKeyFrames()[0].getTexture().dispose();
+        dyingAnimation.getKeyFrames()[0].getTexture().dispose();
+    }
 }

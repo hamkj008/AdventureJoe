@@ -1,5 +1,4 @@
 package com.mygdx.game.Screens;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,19 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.Levels.LevelFactory;
 import com.mygdx.game.Game.MyGdxGame;
+import com.mygdx.game.UI.UICounters;
 
 
 public class VictoryScreen1 implements Screen {
 
-    private Texture texture;
-    private Texture nextBtn;
-    private Texture exitBtn;
-    private TextureRegion textureRegion;
-    private TextureRegion textureRegion1;
-    private Image backBtn;
-    private Image begin;
-    private Image exit;
-    private Stage stage;
+    private Texture backgroundTexture;
+    private Texture startTexture;
+    private Texture exitTexture;
+    private Stage   stage;
 
     private final MyGdxGame game;
 
@@ -42,36 +37,36 @@ public class VictoryScreen1 implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        texture     = new Texture("player/victory1.jpg");
-        nextBtn     = new Texture("player/next.jpg");
-        exitBtn     = new Texture("player/exit.jpg");
+        backgroundTexture               = new Texture("player/victory1.jpg");
+        startTexture                    = new Texture("player/next.jpg");
+        exitTexture                     = new Texture("player/exit.jpg");
 
-        backBtn     = new Image(texture);
-        backBtn.setSize(1920,1080);
+        Image background                = new Image(backgroundTexture);
+        background.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
-        textureRegion   = new TextureRegion(nextBtn,0,80,636,200);
-        textureRegion1  = new TextureRegion(exitBtn,0,40,600,250);
-        begin           = new Image(textureRegion);
-        exit            = new Image(textureRegion1);
+        TextureRegion textureRegion1    = new TextureRegion(startTexture,0,80,636,200);
+        TextureRegion textureRegion2    = new TextureRegion(exitTexture,0,40,600,250);
+        Image startButton               = new Image(textureRegion1);
+        Image exitButton                = new Image(textureRegion2);
 
-        begin.setSize(300,100);
-        begin.setPosition(Gdx.graphics.getWidth() / 4f,Gdx.graphics.getHeight() / 4f);
-        exit.setSize(300,100);
-        exit.setPosition(Gdx.graphics.getWidth() / 3f * 2,Gdx.graphics.getHeight() / 4f);
+        startButton.setSize(300,100);
+        startButton.setPosition(Gdx.graphics.getWidth() / 4f,Gdx.graphics.getHeight() / 4f);
+        exitButton.setSize(300,100);
+        exitButton.setPosition(Gdx.graphics.getWidth() / 3f * 2,Gdx.graphics.getHeight() / 4f);
 
-        stage.addActor(backBtn);
-        stage.addActor(begin);
-        stage.addActor(exit);
+        stage.addActor(background);
+        stage.addActor(startButton);
+        stage.addActor(exitButton);
 
-        begin.addListener(new InputListener(){
+        startButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                MyGdxGame.levelNum = LevelFactory.LevelNum.Level2;
                 game.setScreen(GameScreen.getInstance());
                 return true;
             }
         });
-        exit.addListener(new InputListener(){
+
+        exitButton.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Gdx.app.exit();
@@ -108,9 +103,10 @@ public class VictoryScreen1 implements Screen {
 
     @Override
     public void dispose() {
-        texture.dispose();
-        nextBtn.dispose();
-        exitBtn.dispose();
+
+        backgroundTexture.dispose();
+        startTexture.dispose();
+        exitTexture.dispose();
         stage.dispose();
     }
 }

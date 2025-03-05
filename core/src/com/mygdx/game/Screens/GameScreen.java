@@ -17,13 +17,13 @@ The screen that contains the actual game. It is a singleton, allowing other clas
  */
 public class GameScreen implements Screen {
 
-    private GameHelper helper;
+    private GameHelper          helper;
     private GameStateController gameStateController;
-    private Stage stage;
-    private SpriteBatch uiBatch;
-    private ShapeRenderer shapeRenderer;
+    private Stage               stage;
+    private SpriteBatch         uiBatch;
+    private ShapeRenderer       shapeRenderer;
 
-    private UIController uiController;
+    private UIController        uiController;
 
     private static GameScreen INSTANCE = null;
 
@@ -57,10 +57,10 @@ public class GameScreen implements Screen {
         Gdx.app.log("flow", "GameScreen:create");
 
         // Shape renderer to draw bounding boxes.
-        shapeRenderer = new ShapeRenderer();
+        shapeRenderer   = new ShapeRenderer();
 
-        uiBatch = new SpriteBatch();
-        helper = new GameHelper();
+        uiBatch         = new SpriteBatch();
+        helper          = new GameHelper();
 
         // ----- STAGE ----------
         stage = new Stage();

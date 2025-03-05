@@ -100,4 +100,14 @@ public class EnemyDragon extends Enemy {
             super.getProjectileSpawner().setStartTimer(true);
         }
     }
+
+
+    public void dispose() {
+        super.dispose();
+        idleAnimation.getKeyFrames()[0].getTexture().dispose();
+        walkingAnimation.getKeyFrames()[0].getTexture().dispose();
+        attackingAnimation.getKeyFrames()[0].getTexture().dispose();
+        hurtAnimation.getKeyFrames()[0].getTexture().dispose();
+        dyingAnimation.getKeyFrames()[0].getTexture().dispose();
+    }
 }

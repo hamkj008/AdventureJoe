@@ -17,7 +17,7 @@ public class LevelFactory {
     public enum LevelNum { Level1, Level2 }
 
     private final LevelCreator currentLevel;
-    private GameObjects currentLevelObjects;
+    private final GameObjects currentLevelObjects;
     private static float currentGroundLevel;
     private final EnemyFactory enemyFactory;
     private float playerYStartPosition = 0;
@@ -25,8 +25,9 @@ public class LevelFactory {
     // ===================================================================================================================
 
     public LevelFactory() {
-        currentLevel = new LevelCreator();
-        enemyFactory = new EnemyFactory();
+        currentLevel        = new LevelCreator();
+        enemyFactory        = new EnemyFactory();
+        currentLevelObjects = new GameObjects();
     }
 
     // ===================================================================================================================
@@ -39,10 +40,10 @@ public class LevelFactory {
         currentGroundLevel = currentLevel.getGroundLevel();
         playerYStartPosition = currentGroundLevel;
 
-        currentLevelObjects = new GameObjects(40, 4, 2, currentLevel.getLevelXBoundary());
+        currentLevelObjects.spawnGameObjects(5, 4, 2, currentLevel.getLevelXBoundary());
         currentLevelObjects.getLevelEnd().setGoalType(LevelEnd.GoalType.BABY);
 
-        enemyFactory.spawnEnemies(currentLevel.getLevelXBoundary(), 20, 200);
+        enemyFactory.spawnEnemies(currentLevel.getLevelXBoundary(), 10, 1000);
     }
 
     // ===================================================================================================================
@@ -55,7 +56,7 @@ public class LevelFactory {
         currentGroundLevel = currentLevel.getGroundLevel();
         playerYStartPosition = currentGroundLevel;
 
-        currentLevelObjects = new GameObjects(30, 4, 2, currentLevel.getLevelXBoundary());
+        currentLevelObjects.spawnGameObjects(30, 4, 2, currentLevel.getLevelXBoundary());
         currentLevelObjects.getLevelEnd().setGoalType(LevelEnd.GoalType.PRINCESS);
 
         enemyFactory.spawnEnemies(currentLevel.getLevelXBoundary(), 10, 1000);
@@ -83,10 +84,7 @@ public class LevelFactory {
 
         currentLevel.dispose();
         enemyFactory.dispose();
-
-        if(currentLevelObjects != null) {
-            currentLevelObjects.dispose();
-        }
+        currentLevelObjects.dispose();
     }
 
 

@@ -14,17 +14,12 @@ import com.mygdx.game.Game.MyGdxGame;
 
 
 public class RestartScreen implements Screen {
-    Texture texture;
-    Texture texture1;
-    Texture texture2;
-    TextureRegion textureRegion;
-    TextureRegion textureRegion1;
-    Image back;
-    Image begin;
-    Image exit;
-    private Stage stage;
+    private Texture texture;
+    private Texture restartTexture;
+    private Texture exitTexture;
+    private Stage   stage;
 
-    private MyGdxGame game;
+    private final MyGdxGame game;
 
     public RestartScreen(MyGdxGame game) {
         this.game = game;
@@ -34,34 +29,35 @@ public class RestartScreen implements Screen {
     private void init() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        texture=new Texture("player/defeated.jpg");
-        texture1=new Texture("player/restart.jpg");
-        texture2=new Texture("player/exit.jpg");
+        texture                         = new Texture("player/defeated.jpg");
+        restartTexture                  = new Texture("player/restart.jpg");
+        exitTexture                     = new Texture("player/exit.jpg");
 
-        textureRegion=new TextureRegion(texture1,0,80,1024,400);
-        textureRegion1=new TextureRegion(texture2,0,40,600,250);
-        back=new Image(texture);
-        back.setSize(1920,1080);
+        TextureRegion textureRegion1    = new TextureRegion(restartTexture,0,80,1024,400);
+        TextureRegion textureRegion2    = new TextureRegion(exitTexture,0,40,600,250);
+        Image background                = new Image(texture);
+        background.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 
-        begin=new Image(textureRegion);
-        exit=new Image(textureRegion1);
+        Image restart                     = new Image(textureRegion1);
+        Image exit                      = new Image(textureRegion2);
 
-        begin.setSize(300,100);
-        begin.setPosition(Gdx.graphics.getWidth() / 4,Gdx.graphics.getHeight() / 4);
+        restart.setSize(300,100);
+        restart.setPosition(Gdx.graphics.getWidth() / 4f,Gdx.graphics.getHeight() / 4f);
         exit.setSize(300,100);
-        exit.setPosition(Gdx.graphics.getWidth() / 3*2,Gdx.graphics.getHeight() / 4);
+        exit.setPosition(Gdx.graphics.getWidth() / 3f * 2,Gdx.graphics.getHeight() / 4f);
 
-        stage.addActor(back);
-        stage.addActor(begin);
+        stage.addActor(background);
+        stage.addActor(restart);
         stage.addActor(exit);
 
-        begin.addListener(new InputListener(){
+        restart.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(GameScreen.getInstance());
                 return true;
             }
         });
+
         exit.addListener(new InputListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -69,7 +65,6 @@ public class RestartScreen implements Screen {
                 return true;
             }
         });
-
     }
 
 
@@ -88,28 +83,25 @@ public class RestartScreen implements Screen {
 
 
     @Override
-    public void resize(int width, int height) {
-
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
+    public void hide() {}
 
-    }
 
     @Override
     public void dispose() {
         Gdx.app.log("dispose", "RestartScreenDispose");
+
+        texture.dispose();
+        restartTexture.dispose();
+        exitTexture.dispose();
 
         // MyGDXGame only calls a screens create method if setScreen().
         // If a screens create method has not executed the stage may be null

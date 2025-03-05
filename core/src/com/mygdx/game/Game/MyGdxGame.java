@@ -21,18 +21,18 @@ public class MyGdxGame extends Game implements ApplicationListener {
 
 	public Batch batch;
 
-	public MasterStateController masterStateController;
-	public static StartScreen startScreen;
-	public static OptionsScreen optionsScreen;
-	public static GameScreen gameScreen;
-	public static RestartScreen restartScreen;
+	public MasterStateController 	masterStateController;
+	public static StartScreen 		startScreen;
+	public static OptionsScreen 	optionsScreen;
+	public static GameScreen 		gameScreen;
+	public static RestartScreen 	restartScreen;
 
 	// ===================================================================================================================
 
 	@Override
 	public void create () {
 		Gdx.app.log("dispose", "create");
-		batch = new SpriteBatch();
+		batch 					= new SpriteBatch();
 
 		masterStateController 	= new MasterStateController();
 		startScreen 			= new StartScreen(this);
@@ -40,7 +40,7 @@ public class MyGdxGame extends Game implements ApplicationListener {
 		restartScreen 			= new RestartScreen(this);
 
 		gameScreen 				= GameScreen.getInstance();
-		levelNum 				= LevelFactory.LevelNum.Level2;
+		levelNum 				= LevelFactory.LevelNum.Level1;
 
 		setScreen(startScreen);
 	}
@@ -65,6 +65,7 @@ public class MyGdxGame extends Game implements ApplicationListener {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 	}
+
 
 	@Override
 	public void dispose () {
